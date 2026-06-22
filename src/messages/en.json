@@ -1,0 +1,66 @@
+{
+  "validation": {
+    "emailInvalid": "Please enter a valid email",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "invalidEmail": "Invalid email",
+    "passwordMismatch": "Passwords do not match",
+
+    "titleMin": "Title must be at least 3 characters",
+    "descriptionRequired": "Description is required",
+    "bannerRequired": "Please select campaign banner",
+    "imageFormat": "Only PNG, JPEG or WEBP images are allowed",
+    "fileSize": "File size must not exceed 5MB",
+
+    "companyNameRequired": "Company name is required",
+    "brandRequired": "Brand is required",
+    "modelRequired": "Model is required",
+    "transmissionRequired": "Select transmission",
+    "fuelRequired": "Select fuel type",
+    "depositRequired": "Deposit is required",
+    "carTypeRequired": "Select car type",
+
+    "deliveryPriceRequired": "Delivery price required when delivery is enabled",
+    "imageRequired": "At least one image is required",
+
+    "nameRequired": "Name is required",
+    "phoneRequired": "Phone number is required",
+    "addressRequired": "Address is required",
+    "cityRequired": "Please select your city",
+    "districtRequired": "Please select your district",
+
+    "securityDepositRequired": "Security deposit rule is required",
+    "fuelPolicyRequired": "Fuel policy rule is required",
+    "mileageLimitRequired": "Mileage limit rule is required",
+    "insuranceRequired": "Insurance rule is required",
+    "lateReturnRequired": "Late return rule is required",
+    "cancellationRequired": "Cancellation rule is required",
+
+    "numberPlateRequired": "Number plate is required",
+    "statusRequired": "Status is required",
+    "colourRequired": "Colour is required",
+
+    "currencyRequired": "Currency Required",
+
+    "commissionRequired": "Commission is required",
+    "invalidCommission": "Invalid commission value",
+    "commissionMin": "Commission must be at least 0%",
+    "commissionMax": "Commission cannot exceed 100%",
+
+    "unitRequired": "Unit is required",
+    "dateOfBirthRequired": "Date of birth is required",
+    "dropoffAfterPickup": "Dropoff must be after pickup",
+    "minimumRental": "Minimum rental is 3 days",
+    "deliveryAddressRequired": "Delivery address required",
+    "invalidPhoneNumber": "Invalid phone number"
+  },
+  "auth": {
+    "invalidEmailorPassword": "Invalid email or password"
+  },
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "loginToYourKipgoAccount": "Login to your KIPGO account",
+    "forgotYourPassword": "Forgot your password?",
+    "byClicking": "By clicking {action}, you agree to our <terms></terms> and <privacy></privacy>"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "validation": {
+    "emailInvalid": "Lütfen geçerli bir e-posta girin",
+    "emailRequired": "E-posta gereklidir",
+    "passwordRequired": "Şifre gereklidir",
+    "invalidEmail": "Geçersiz e-posta",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+
+    "titleMin": "Başlık en az 3 karakter olmalıdır",
+    "descriptionRequired": "Açıklama gereklidir",
+    "bannerRequired": "Lütfen kampanya afişi seçin",
+    "imageFormat": "Yalnızca PNG, JPEG veya WEBP formatları desteklenir",
+    "fileSize": "Dosya boyutu 5MB'ı geçmemelidir",
+
+    "companyNameRequired": "Şirket adı gereklidir",
+    "brandRequired": "Marka gereklidir",
+    "modelRequired": "Model gereklidir",
+    "transmissionRequired": "Şanzıman seçin",
+    "fuelRequired": "Yakıt türü seçin",
+    "depositRequired": "Depozito gereklidir",
+    "carTypeRequired": "Araç tipi seçin",
+
+    "deliveryPriceRequired": "Teslimat aktifken teslimat ücreti gereklidir",
+    "imageRequired": "En az bir görsel gereklidir",
+
+    "nameRequired": "Ad gereklidir",
+    "phoneRequired": "Telefon numarası gereklidir",
+    "addressRequired": "Adres gereklidir",
+    "cityRequired": "Lütfen şehir seçin",
+    "districtRequired": "Lütfen ilçe seçin",
+
+    "securityDepositRequired": "Depozito kuralı gereklidir",
+    "fuelPolicyRequired": "Yakıt politikası gereklidir",
+    "mileageLimitRequired": "Kilometre sınırı kuralı gereklidir",
+    "insuranceRequired": "Sigorta kuralı gereklidir",
+    "lateReturnRequired": "Geç iade kuralı gereklidir",
+    "cancellationRequired": "İptal kuralı gereklidir",
+
+    "numberPlateRequired": "Plaka gereklidir",
+    "statusRequired": "Durum gereklidir",
+    "colourRequired": "Renk gereklidir",
+
+    "currencyRequired": "Para birimi gerekli",
+
+    "commissionRequired": "Komisyon gereklidir",
+    "invalidCommission": "Geçersiz komisyon değeri",
+    "commissionMin": "Komisyon en az %0 olmalıdır",
+    "commissionMax": "Komisyon %100'ü geçemez",
+
+    "unitRequired": "Birim seçimi zorunludur",
+    "dateOfBirthRequired": "Doğum tarihi zorunludur",
+    "dropoffAfterPickup": "İade tarihi, alış tarihinden sonra olmalıdır",
+    "minimumRental": "Minimum kiralama süresi 3 gündür",
+    "deliveryAddressRequired": "Teslimat adresi gereklidir",
+    "invalidPhoneNumber": "Geçersiz telefon numarası"
+  },
+  "auth": {
+    "invalidEmailorPassword": "Geçersiz e-posta veya şifre"
+  },
+  "login": {
+    "welcomeBack": "Tekrar hoş geldiniz",
+    "loginToYourKipgoAccount": "KIPGO hesabınıza giriş yapın",
+    "forgotYourPassword": "Şifrenizi mi unuttunuz?",
+    "byClicking": "{action} düğmesine tıklayarak, <terms></terms> ve <privacy></privacy> şartlarını kabul etmiş olursunuz"
+  }
+}

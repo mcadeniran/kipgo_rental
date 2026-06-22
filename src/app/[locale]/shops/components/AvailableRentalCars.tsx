@@ -1,0 +1,119 @@
+import React from 'react';
+import {Car} from '../../models/Car';
+import {Badge} from "@/components/ui/badge";
+import {Icon} from '@iconify/react';
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {useDateTimeFormatter} from '@/lib/helper/formatDate';
+import Image from 'next/image';
+import {useRouter} from 'next/navigation';
+import {CarWithShop} from '@/lib/services/CarWithShop';
+import {RentalShop} from '../../models/RentalShop';
+import {BookNowButton} from '@/components/BookNowButton';
+
+export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: RentalShop;}) {
+  const router = useRouter();
+  const {formatCurrency} = useDateTimeFormatter();
+
+  if (!cars.length) return <p>No available cars</p>;
+
+  const date = new Date();
+
+  return (
+    <div className='flex flex-col gap-6'>
+      <div>
+        <h2 className="text-2xl font-bold">
+          Available Cars
+        </h2>
+
+        <p className="text-muted-foreground">
+          {cars.length} vehicles available
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          cars.map(function(car) {
+            const carShop = new CarWithShop(car, shop);
+            return (
+              <Card
+                onClick={() => router.push(`/cars/${car.id}`)}
+                className="relative mx-auto w-full max-w-sm pt-0 overflow-hidden group transition-all hover:shadow-xl hover:-translate-y-1" key={car.id}>
+                <div className="absolute inset-0 z-30 aspect-video" />
+                <div className="relative aspect-16/10">
+                  <Image
+                    fill
+                    src={car.images.find(i => i.isCover)?.url || car.images[0].url}
+                    alt={`${car.brand} ${car.model}`}
+                    className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                  {carShop.hasDiscount && <Badge className="text-sm absolute bg-white text-red-500 top-3 right-3">{shop.discount?.type === 'fixed' ? `-${formatCurrency(carShop.discountAmount, car.currency ?? shop.currency)}` : carShop.discountLabel}</Badge>}
+                </div>
+                <CardHeader>
+                  <CardAction>
+                    <div className="flex flex-row gap-1 items-center">
+                      <Icon icon="material-symbols:star" className='text-amber-400' width={14} height={14} />
+                      {car.rating}{' '}({car.totalRatings} review{car.totalRatings === 1 ? '' : "s"})
+                    </div>
+                  </CardAction>
+                  <CardTitle>{car.brand} {car.model} {car.year}</CardTitle>
+                  <CardDescription>
+                    <div className="flex flex-row justify-between">
+                      <div className='flex flex-row gap-2'>
+                        <div className="flex flex-row gap-1">
+                          <Icon icon="fluent:settings-cog-multiple-20-regular" className='' width={18} height={18} />
+                          {car.transmission}
+                        </div>
+                        <div className="flex flex-row gap-1">
+                          <Icon icon="fluent:gas-pump-20-regular" className='' width={18} height={18} />
+                          {car.fuel}
+                        </div>
+                        <div className="flex flex-row gap-1">
+                          <Icon icon="fluent:people-community-32-light" className='' width={18} height={18} />
+                          {car.seats}
+                        </div>
+                      </div>
+                      {car.isFeatured && car.featured && date > car.featured?.startAt && date < car.featured?.endAt &&
+                        <Badge variant='destructive'>Featured</Badge>}
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter className='flex justify-between items-center'>
+                  <div>
+                    <p className="text-xs text-muted-foreground">
+                      Per day
+                    </p>
+                    {
+                      !carShop.hasDiscount &&
+                      <p className="text-xl font-bold">
+                        {formatCurrency(car.pricePerDay, car.currency)}
+                      </p>
+                    }
+                    {
+                      carShop.hasDiscount && <div className="flex gap-4 items-end">
+                        <p className="text-base font-light text-red-500 line-through">
+                          {formatCurrency(carShop.basePrice, car.currency)}
+                        </p>
+                        <div className="flex gap-1">
+                          <p className="text-xl font-bold ">
+                            {formatCurrency(carShop.finalPrice, car.currency)}
+                          </p>
+
+                        </div>
+                      </div>
+                    }
+
+                  </div>
+                  <BookNowButton label='Book Now' url='' />
+                </CardFooter>
+              </Card>);
+          })
+        }
+      </div>
+    </div>
+  );
+}

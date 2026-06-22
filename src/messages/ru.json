@@ -1,0 +1,66 @@
+{
+  "validation": {
+    "emailInvalid": "Пожалуйста, введите корректный email",
+    "emailRequired": "Email обязателен",
+    "passwordRequired": "Пароль обязателен",
+    "invalidEmail": "Неверный email",
+    "passwordMismatch": "Пароли не совпадают",
+
+    "titleMin": "Название должно содержать не менее 3 символов",
+    "descriptionRequired": "Описание обязательно",
+    "bannerRequired": "Пожалуйста, выберите баннер кампании",
+    "imageFormat": "Разрешены только PNG, JPEG или WEBP",
+    "fileSize": "Размер файла не должен превышать 5MB",
+
+    "companyNameRequired": "Название компании обязательно",
+    "brandRequired": "Марка обязательна",
+    "modelRequired": "Модель обязательна",
+    "transmissionRequired": "Выберите тип трансмиссии",
+    "fuelRequired": "Выберите тип топлива",
+    "depositRequired": "Депозит обязателен",
+    "carTypeRequired": "Выберите тип автомобиля",
+
+    "deliveryPriceRequired": "Укажите стоимость доставки, если доставка включена",
+    "imageRequired": "Требуется хотя бы одно изображение",
+
+    "nameRequired": "Имя обязательно",
+    "phoneRequired": "Номер телефона обязателен",
+    "addressRequired": "Адрес обязателен",
+    "cityRequired": "Пожалуйста, выберите город",
+    "districtRequired": "Пожалуйста, выберите район",
+
+    "securityDepositRequired": "Правило депозита обязательно",
+    "fuelPolicyRequired": "Правило топлива обязательно",
+    "mileageLimitRequired": "Правило ограничения пробега обязательно",
+    "insuranceRequired": "Правило страхования обязательно",
+    "lateReturnRequired": "Правило позднего возврата обязательно",
+    "cancellationRequired": "Правило отмены обязательно",
+
+    "numberPlateRequired": "Номерной знак обязателен",
+    "statusRequired": "Статус обязателен",
+    "colourRequired": "Цвет обязателен",
+
+    "currencyRequired": "Требуется валюта",
+
+    "commissionRequired": "Комиссия обязательна",
+    "invalidCommission": "Недопустимое значение комиссии",
+    "commissionMin": "Комиссия должна быть не менее 0%",
+    "commissionMax": "Комиссия не может превышать 100%",
+
+    "unitRequired": "Необходимо выбрать единицу",
+    "dateOfBirthRequired": "Дата рождения обязательна",
+    "dropoffAfterPickup": "Дата возврата должна быть позже даты получения",
+    "minimumRental": "Минимальный срок аренды — 3 дня",
+    "deliveryAddressRequired": "Требуется адрес доставки",
+    "invalidPhoneNumber": "Неверный номер телефона"
+  },
+  "auth": {
+    "invalidEmailorPassword": "Неверный адрес электронной почты или пароль"
+  },
+  "login": {
+    "welcomeBack": "С возвращением",
+    "loginToYourKipgoAccount": "Войдите в свой аккаунт KIPGO",
+    "forgotYourPassword": "Забыли пароль?",
+    "byClicking": "Нажимая «{action}», вы соглашаетесь с <terms></terms> и <privacy></privacy>"
+  }
+}
