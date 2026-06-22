@@ -2,7 +2,6 @@
 
 import * as z from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useSearchParams} from "next/navigation";
 import {Controller, useForm} from 'react-hook-form';
 import {LoginFormSchema} from '@/schemas';
 
@@ -20,14 +19,20 @@ import {FormSuccess} from '../general/FormSuccess';
 import {Loader} from 'lucide-react';
 import {handleAuthRedirect} from '@/lib/helper/authRedirect';
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  callbackUrl?: string;
+}
+
+export const LoginForm = ({
+  callbackUrl,
+}: LoginFormProps) => {
   const t = useTranslations();
   const a = useTranslations('auth');
   const schema = LoginFormSchema(t);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const callbackUrl = searchParams.get("callbackUrl");
+  // const callbackUrl = searchParams.get("callbackUrl");
 
   const {currentUser, userDataObj, rentalDataObj, role, loading, login} = useAuth();
 

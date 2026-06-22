@@ -45,11 +45,19 @@ export default function ShopDetailsPage() {
 
   if (!shop) return <div className="">Shop not found</div>;
 
-  const isError = results.some((q) => q.isError);
+  // const isError = results.some((q) => q.isError);
 
-  if (isError) return results.find(q => {
-    <p className="">{q.error?.message}</p>;
-  });
+  // if (isError) return results.find(q => {
+  //   <p className="">{q.error?.message}</p>;
+  // });
+
+  if (results.some((q) => q.isError)) {
+    return (
+      <div className="py-10 text-center">
+        Something went wrong while loading the page.
+      </div>
+    );
+  }
 
   if (!shop) return <p className="">Company not found</p>;
 

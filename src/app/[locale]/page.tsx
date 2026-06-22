@@ -50,33 +50,52 @@ export default function Home() {
 
   const now = new Date();
 
-  const featuredShops = shops.filter(shop => {
-    if (!shop.isFeatured || shop.featured === null)
-      return;
+  // const featuredShops = shops.filter(shop => {
+  //   if (!shop.isFeatured || shop.featured === null)
+  //     return false;
 
-    const start = shop.featured!.startAt;
-    const end = shop.featured!.endAt;
+  //   const start = shop.featured!.startAt;
+  //   const end = shop.featured!.endAt;
 
-    // return now.isAfter(start!) && now.isBefore(end!);
+  //   // return now.isAfter(start!) && now.isBefore(end!);
 
-    if (shop.isFeatured) {
-      if (now > start && now < end) {
-        return shop;
-      }
-      else {return null;}
-    } else {return null;}
+  //   if (shop.isFeatured) {
+  //     if (now > start && now < end) {
+  //       return shop;
+  //     }
+  //     else {return null;}
+  //   } else {return null;}
 
+  // });
+
+  const featuredShops = shops.filter((shop) => {
+    if (!shop.isFeatured || !shop.featured) {
+      return false;
+    }
+
+    const start = shop.featured.startAt;
+    const end = shop.featured.endAt;
+
+    return now > start && now < end;
   });
 
 
   const carWithShop =
     buildCarsWithShop(cars, shops);
 
-  const isError = results.some((q) => q.isError);
+  // const isError = results.some((q) => q.isError);
 
-  if (isError) return results.find(q => {
-    <p className="">{q.error?.message}</p>;
-  });
+  // if (isError) return results.find(q => {
+  //   <p className="">{q.error?.message}</p>;
+  // });
+
+  if (results.some((q) => q.isError)) {
+    return (
+      <div className="py-10 text-center">
+        Something went wrong while loading the page.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col space-y-8">
