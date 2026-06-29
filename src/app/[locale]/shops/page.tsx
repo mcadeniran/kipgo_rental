@@ -133,6 +133,7 @@ function FeaturedShopCard({
             src={shop.bannerUrl}
             alt={shop.name}
             fill
+            sizes='100%'
             className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
           />
         </div>
@@ -144,6 +145,7 @@ function FeaturedShopCard({
               alt={shop.name}
               width={50}
               height={50}
+              sizes='100%'
               className="rounded-full border"
             />
 
@@ -211,6 +213,7 @@ function RentalShopCard({
             src={shop.bannerUrl}
             alt={shop.name}
             fill
+            sizes='100%'
             className="object-cover  transition-transform duration-300 group-hover:scale-105"
           />
 
@@ -228,6 +231,7 @@ function RentalShopCard({
               alt={shop.name}
               width={60}
               height={60}
+              sizes='100%'
               className="rounded-full border"
             />
 

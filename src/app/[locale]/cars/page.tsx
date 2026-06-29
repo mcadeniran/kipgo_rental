@@ -197,6 +197,7 @@ function FeaturedCarCard({
             src={cover!}
             alt={item.car.model}
             fill
+            sizes="100%"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
@@ -271,6 +272,7 @@ function CarCard({
             src={cover}
             alt={item.car.model}
             fill
+            sizes="100%"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
 
@@ -347,7 +349,7 @@ function CarCard({
                   </span>
                 </div>
               </div>
-              <BookNowButton label="Book Now" url="" />
+              <BookNowButton label="Book Now" url={`/bookings/new/${item.car.id}`} />
             </div>
           </div>
         </CardContent>

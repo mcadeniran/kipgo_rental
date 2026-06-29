@@ -1,4 +1,26 @@
 {
+  "common": {
+    "status": {
+      "pending": "В ожидании",
+      "approved": "Одобрено",
+      "ongoing": "В процессе",
+      "completed": "Завершено",
+      "rejected": "Отклонено",
+      "cancelled": "Отменено",
+      "booked": "Забронировано",
+      "expired": "Истекло",
+      "expiring": "Истекает",
+      "expiringSoon": "Скоро истекает",
+      "awaitingVerification": "Ожидает подтверждения",
+      "paid": "Оплачено",
+      "unpaid": "Не оплачено",
+      "failed": "Ошибка",
+      "paymentSubmitted": "Платёж отправлен",
+      "reserved": "Зарезервировано",
+      "payOnPickup": "Оплата при получении",
+      "cryptoPayment": "Криптоплатёж"
+    }
+  },
   "validation": {
     "emailInvalid": "Пожалуйста, введите корректный email",
     "emailRequired": "Email обязателен",

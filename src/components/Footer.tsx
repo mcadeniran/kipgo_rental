@@ -37,6 +37,8 @@ export default function Footer() {
                 alt="Kipgo"
                 width={140}
                 height={140}
+                sizes="100%"
+                className='w-35 h-auto'
               />
             </Link>
 
@@ -145,6 +147,8 @@ export default function Footer() {
                   alt="Get it on Google Play"
                   width={180}
                   height={54}
+                  sizes="100%"
+                  className='w-45 h-13.5'
                 />
               </Link>
 
@@ -157,6 +161,8 @@ export default function Footer() {
                   alt="Download on the App Store"
                   width={180}
                   height={54}
+                  sizes="100%"
+                  className='w-45 h-13.5'
                 />
               </Link>
             </div>

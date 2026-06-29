@@ -38,7 +38,7 @@ export default function NavBar() {
           {
             (currentUser || role) && (
               <>
-                <Link href='/about'>My Bookings</Link>
+                <Link href='/bookings'>My Bookings</Link>
               </>
             )
           }

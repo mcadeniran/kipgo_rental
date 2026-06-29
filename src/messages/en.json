@@ -1,4 +1,26 @@
 {
+  "common": {
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled",
+      "booked": "Booked",
+      "expired": "Expired",
+      "expiring": "Expiring",
+      "expiringSoon": "Expiring Soon",
+      "awaitingVerification": "Awaiting Verification",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "failed": "Failed",
+      "paymentSubmitted": "Payment Submitted",
+      "reserved": "Reserved",
+      "payOnPickup": "Pay On Pickup",
+      "cryptoPayment": "Crypto Payment"
+    }
+  },
   "validation": {
     "emailInvalid": "Please enter a valid email",
     "emailRequired": "Email is required",

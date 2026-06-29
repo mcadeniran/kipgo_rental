@@ -1,13 +1,5 @@
 import { db } from '@/app/[locale]/firebase/config';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { userProfileConverter } from '../converters/userProfileConverter';
 import { UserProfile } from '@/app/[locale]/models/UserProfile';
 import { getAuth } from 'firebase/auth';

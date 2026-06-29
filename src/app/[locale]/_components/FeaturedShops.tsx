@@ -57,7 +57,8 @@ export default function FeaturedShops({
                 alt={shop.name}
                 width={40}
                 height={40}
-                className="rounded-full"
+                sizes="100%"
+                className="rounded-full h-10 w-10"
               />
 
               <div>

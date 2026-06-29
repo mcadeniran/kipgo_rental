@@ -51,6 +51,16 @@ export const useDateTimeFormatter = () => {
     }).format(date);
   };
 
+  const formatShortDayWeekMonth = (dateString: string) => {
+    const date = parseISO(dateString);
+
+    return new Intl.DateTimeFormat(locale, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  };
+
   const formatShortDayMonth = (dateString: string) => {
     const date = parseISO(dateString);
 
@@ -67,5 +77,6 @@ export const useDateTimeFormatter = () => {
     formatShortDate,
     formatShortDayMonth,
     formatDateShortMonth,
+    formatShortDayWeekMonth,
   };
 };

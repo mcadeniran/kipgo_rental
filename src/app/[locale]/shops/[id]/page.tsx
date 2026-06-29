@@ -70,6 +70,7 @@ export default function ShopDetailsPage() {
             src={shop.bannerUrl}
             alt={shop.name}
             fill
+            sizes='100%'
             className="object-cover rounded-xl"
           />
         </AspectRatio>
@@ -82,6 +83,7 @@ export default function ShopDetailsPage() {
             alt={shop.name}
             width={96}
             height={96}
+            sizes='100%'
             className="rounded-full border-4 border-white bg-white"
           />
 

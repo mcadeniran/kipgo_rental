@@ -41,6 +41,7 @@ export interface BookingCar {
   fuel: string;
   carImage: string;
   pricePerDay: number;
+  carType?: string;
 }
 
 export interface BookingLocation {
@@ -70,14 +71,14 @@ export interface BookingDriver {
 }
 
 export interface PaymentVerification {
-  verifiedBy?: string;
-  verifiedAt?: Date;
+  verifiedBy?: string | null;
+  verifiedAt?: Date | null;
 }
 
 export interface PaymentRejection {
-  reason?: string;
-  rejectedAt?: Date;
-  rejectedBy?: string;
+  reason?: string | null;
+  rejectedAt?: Date | null;
+  rejectedBy?: string | null;
 }
 
 export interface PaymentCrypto {
@@ -93,13 +94,13 @@ export interface PaymentCrypto {
 
   txidVerified: boolean;
 
-  txidRejectedReason?: string;
+  txidRejectedReason?: string | null;
 
-  txid?: string;
+  txid?: string | null;
 
-  txidSubmittedAt?: Date;
+  txidSubmittedAt?: Date | null;
 
-  submittedAt?: Date;
+  submittedAt?: Date | null;
 }
 
 export interface BookingPayment {
@@ -111,19 +112,19 @@ export interface BookingPayment {
 
   completed: boolean;
 
-  reference?: string;
+  reference?: string | null;
 
-  transactionId?: string;
+  transactionId?: string | null;
 
-  paidAt?: Date;
+  paidAt?: Date | null;
 
-  expiresAt?: Date;
+  expiresAt?: Date | null;
 
-  crypto?: PaymentCrypto;
+  crypto?: PaymentCrypto | null;
 
-  verification?: PaymentVerification;
+  verification?: PaymentVerification | null;
 
-  rejection?: PaymentRejection;
+  rejection?: PaymentRejection | null;
 }
 
 export interface Booking {
@@ -150,6 +151,10 @@ export interface Booking {
   deliveryPrice: number;
   deposit: number;
 
+  createdBy: string;
+
+  createdById: string;
+
   taxRate: number;
   preTax: number;
   tax: number;
@@ -161,7 +166,7 @@ export interface Booking {
 
   status: BookingStatus;
 
-  rejectionReason?: string;
+  rejectionReason?: string | null;
 
   car: BookingCar;
 
@@ -175,27 +180,27 @@ export interface Booking {
 
   payment?: BookingPayment | null;
 
-  paymentReference?: string;
+  paymentReference?: string | null;
 
-  transactionId?: string;
+  transactionId?: string | null;
 
   paymentVerified: boolean;
 
   createdAt: Date;
 
-  approvedAt?: Date;
+  approvedAt?: Date | null;
 
-  startedAt?: Date;
+  startedAt?: Date | null;
 
-  completedAt?: Date;
+  completedAt?: Date | null;
 
-  rejectedAt?: Date;
+  rejectedAt?: Date | null;
 
-  paidAt?: Date;
+  paidAt?: Date | null;
 
-  reservedAt?: Date;
+  reservedAt?: Date | null;
 
-  cancelledAt?: Date;
+  cancelledAt?: Date | null;
 
-  expiredAt?: Date;
+  expiredAt?: Date | null;
 }

@@ -52,6 +52,7 @@ export default function CarDetailsPageContent({
             <Image
               src={selectedImage}
               alt={car.model}
+              sizes='100%'
               fill
               className="object-cover"
             />
@@ -81,6 +82,7 @@ export default function CarDetailsPageContent({
                 <Image
                   src={image.url}
                   alt={car.model}
+                  sizes='100%'
                   fill
                   className="object-cover"
                 />
@@ -167,7 +169,7 @@ function CarBookingCard({
             </span>
           </div>
         </div>
-        <BookNowButton label="Book Now" url='' size="lg" />
+        <BookNowButton label="Book Now" url={`/bookings/new/${car.id}`} size="lg" />
         <Link
           href={`/shops/${shop.id}`}
           className="block"

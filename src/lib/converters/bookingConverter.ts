@@ -36,6 +36,10 @@ export const bookingConverter: FirestoreDataConverter<Booking> = {
       userId: data.userId ?? '',
       driverId: data.driverId ?? '',
 
+      createdById: data.createdById ?? '',
+
+      createdBy: data.createdBy ?? '',
+
       unitId: data.unitId ?? null,
 
       pickupDate: parseTimestamp(data.pickupDate) ?? new Date(),

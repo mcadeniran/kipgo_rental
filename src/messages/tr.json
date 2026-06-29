@@ -1,4 +1,26 @@
 {
+  "common": {
+    "status": {
+      "pending": "Beklemede",
+      "approved": "Onaylandı",
+      "ongoing": "Devam ediyor",
+      "completed": "Tamamlandı",
+      "rejected": "Reddedildi",
+      "cancelled": "İptal edildi",
+      "booked": "Rezerve edildi",
+      "expired": "Süresi Doldu",
+      "expiring": "Süresi Doluyor",
+      "expiringSoon": "Yakında Süresi Dolacak",
+      "awaitingVerification": "Doğrulama Bekleniyor",
+      "paid": "Ödendi",
+      "unpaid": "Ödenmedi",
+      "failed": "Başarısız",
+      "paymentSubmitted": "Ödeme Gönderildi",
+      "reserved": "Rezerve Edildi",
+      "payOnPickup": "Teslim Alırken Öde",
+      "cryptoPayment": "Kripto Ödeme"
+    }
+  },
   "validation": {
     "emailInvalid": "Lütfen geçerli bir e-posta girin",
     "emailRequired": "E-posta gereklidir",

@@ -30,9 +30,9 @@ export default function LocaleSwitcher() {
       </SelectTrigger>
       <SelectContent align='start'>
         <SelectGroup>
-          <SelectItem value="en"><Image alt="en" src={en} width={20} height={20} /> EN</SelectItem>
-          <SelectItem value="tr"><Image alt="tr" src={tr} width={20} height={20} />TR</SelectItem>
-          <SelectItem value="ru"><Image alt="ru" src={ru} width={20} height={20} />RU</SelectItem>
+          <SelectItem value="en"><Image alt="en" src={en} width={20} height={20} sizes='100%' /> EN</SelectItem>
+          <SelectItem value="tr"><Image alt="tr" src={tr} width={20} height={20} sizes='100%' />TR</SelectItem>
+          <SelectItem value="ru"><Image alt="ru" src={ru} width={20} height={20} sizes='100%' />RU</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

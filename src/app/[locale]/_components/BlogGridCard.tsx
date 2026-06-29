@@ -16,6 +16,7 @@ export default function BlogGridCard({blog}: {blog: Blog;}) {
           src={blog.coverUrl}
           alt={blog.title}
           fill
+          sizes='100%'
           className="object-cover transition-transform duration-300 hover:scale-105"
         />
       </div>

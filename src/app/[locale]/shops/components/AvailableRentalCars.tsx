@@ -50,6 +50,7 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                     fill
                     src={car.images.find(i => i.isCover)?.url || car.images[0].url}
                     alt={`${car.brand} ${car.model}`}
+                    sizes='100%'
                     className="object-cover transition-transform duration-300 group-hover:scale-105" />
                   {carShop.hasDiscount && <Badge className="text-sm absolute bg-white text-red-500 top-3 right-3">{shop.discount?.type === 'fixed' ? `-${formatCurrency(carShop.discountAmount, car.currency ?? shop.currency)}` : carShop.discountLabel}</Badge>}
                 </div>
@@ -108,7 +109,7 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                     }
 
                   </div>
-                  <BookNowButton label='Book Now' url='' />
+                  <BookNowButton label='Book Now' url={`/bookings/new/${car.id}`} />
                 </CardFooter>
               </Card>);
           })
