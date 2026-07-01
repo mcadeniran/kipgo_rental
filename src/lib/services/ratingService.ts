@@ -62,9 +62,9 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
         throw new Error('Rental shop not found.');
       }
 
-      const aggregate = carSnap.data().rating ?? defaultVehicleAggregate;
+      const aggregate = carSnap.data().review ?? defaultVehicleAggregate;
 
-      const shopAggregate = shopSnap.data().rating ?? defaultRentalAggregate;
+      const shopAggregate = shopSnap.data().review ?? defaultRentalAggregate;
 
       const updatedAggregate = updateVehicleAggregate(
         aggregate,
@@ -105,11 +105,11 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
       });
 
       transaction.update(carRef, {
-        rating: updatedAggregate,
+        review: updatedAggregate,
       });
 
       transaction.update(shopRef, {
-        rating: updatedShopAggregate,
+        review: updatedShopAggregate,
       });
     });
   } catch (error) {

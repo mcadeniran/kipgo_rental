@@ -50,22 +50,24 @@ export default function NotificationItem({
 
     switch (notification.audience) {
       case "admin":
-        if (notification.type === 'cryptoVerification') {
-          router.push(
-            `/admin/rentals/bookings/payments`
-          );
-        }
-        else if (notification.bookingId) {
-          router.push(
-            `/admin/rentals/bookings/${notification.bookingId}`
-          );
-        }
+
+        // if (notification.type === 'cryptoVerification') {
+        //   router.push(
+        //     `/admin/rentals/bookings/payments`
+        //   );
+        // }
+        // else if (notification.bookingId) {
+        //   router.push(
+        //     `/admin/rentals/bookings/${notification.bookingId}`
+        //   );
+        // }
         break;
 
       case 'shop':
-        router.push(`/rentals/bookings/${notification.bookingId}`);
+      // router.push(`/rentals/bookings/${notification.bookingId}`);
 
       default:
+        router.push(`/bookings/${notification.bookingId}`);
         break;
     }
   };
