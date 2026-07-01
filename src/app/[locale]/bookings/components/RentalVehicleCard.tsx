@@ -91,7 +91,7 @@ export function RentalVehicleCard({
                 {formatCurrency(booking.car.pricePerDay, booking.currency)}
               </p>
             </div>
-
+            <p className="">{booking.isRated ? "RAted" : "Not Rated"}</p>
           </div>
         </div>
       </CardContent>

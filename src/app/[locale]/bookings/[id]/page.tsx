@@ -18,6 +18,7 @@ import BookingTimeline from "../components/BookingTimeline";
 import {CheckCircle2, Circle, XCircle} from "lucide-react";
 import {UserBookingStatusMessage} from "../components/UserBookingStatusMessage";
 import {BookingStatusBadge} from "@/components/badges/bookingstatusBadge";
+import ReviewDialog from "@/components/ratings/display/ReviewDialog";
 
 export default function BookingDetailsPage() {
   const params = useParams();
@@ -73,7 +74,6 @@ export default function BookingDetailsPage() {
           <div className="space-y-6 lg:sticky lg:top-20">
             <PaymentSummaryCard booking={booking} />
             <DriverDetailsCard booking={booking} />
-            <UserBookingStatusMessage booking={booking} />
             <BookingActions booking={booking} />
           </div>
         </div>
@@ -263,6 +263,7 @@ function BookingActions({
       </CardHeader>
 
       <CardContent className="space-y-3">
+        <UserBookingStatusMessage booking={booking} />
 
         {booking.status ===
           "pending" && (
@@ -291,10 +292,8 @@ function BookingActions({
           )}
 
         {booking.status ===
-          "completed" && (
-            <Button className="w-full  bg-k-primary text-white hover:bg-k-primary/80 hover:text-white/90 cursor-pointer">
-              Leave Review
-            </Button>
+          "completed" && !booking.isRated && (
+            <ReviewDialog bookingId={booking.id} />
           )}
 
       </CardContent>

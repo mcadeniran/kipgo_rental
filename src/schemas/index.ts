@@ -2,6 +2,14 @@ import * as z from 'zod';
 import { Translator } from './create-schema';
 import { addDays, differenceInCalendarDays, startOfDay } from 'date-fns';
 import { BookingDraft } from '@/app/[locale]/bookings/new/BookingDraft';
+import {
+  MAX_CONS,
+  MAX_PROS,
+  MAX_REVIEW_IMAGES,
+  MAX_REVIEW_LENGTH,
+  MAX_TAG_LENGTH,
+  MIN_REVIEW_LENGTH,
+} from '@/constants/rating';
 
 export const LoginFormSchema = (t: Translator) =>
   z.object({
@@ -151,3 +159,44 @@ export const PaymentTxidSchema = (t: Translator) =>
       .max(64, 'Invalid transaction hash.')
       .regex(/^[A-Fa-f0-9]{64}$/, 'Invalid TRON transaction hash.'),
   });
+
+const StarRatingSchema = z
+  .number()
+  .min(1, 'Please provide a rating.')
+  .max(5, 'Ratings cannot exceed 5 stars.');
+
+export const VehicleRatingSchema = z.object({
+  overall: StarRatingSchema,
+  cleanliness: StarRatingSchema,
+  comfort: StarRatingSchema,
+  condition: StarRatingSchema,
+  valueForMoney: StarRatingSchema,
+});
+
+export const RentalRatingSchema = z.object({
+  overall: StarRatingSchema,
+  communication: StarRatingSchema,
+  pickupExperience: StarRatingSchema,
+  returnExperience: StarRatingSchema,
+  professionalism: StarRatingSchema,
+});
+
+export const ReviewDetailsSchema = z.object({
+  title: z.string().trim().min(5).max(120),
+  review: z.string().trim().min(MIN_REVIEW_LENGTH).max(MAX_REVIEW_LENGTH),
+  pros: z.array(z.string().trim().min(1).max(MAX_TAG_LENGTH)).max(MAX_PROS),
+  cons: z.array(z.string().trim().min(1).max(MAX_TAG_LENGTH)).max(MAX_CONS),
+  // photos: z.array(z.instanceof(File)).max(MAX_REVIEW_IMAGES),
+  photos: z.array(z.custom<File>()).max(MAX_REVIEW_IMAGES),
+  wouldRecommend: z.boolean(),
+  wouldRentAgain: z.boolean(),
+  isAnonymous: z.boolean(),
+});
+
+export const RatingSchema = z.object({
+  vehicle: VehicleRatingSchema,
+  rental: RentalRatingSchema,
+  details: ReviewDetailsSchema,
+});
+
+export type RatingFormValues = z.infer<typeof RatingSchema>;

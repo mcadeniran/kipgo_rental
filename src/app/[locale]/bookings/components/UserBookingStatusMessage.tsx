@@ -156,7 +156,7 @@ function getBookingStatusMessage(
     return {
       color: "green",
       title: 'Rental completed.',
-      message: booking.isRated
+      message: !booking.isRated
         ? 'This rental has been completed successfully. We would appreciate your feedback about your experience.'
         : 'This rental has been completed successfully. Thank you for choosing our service.',
     };
