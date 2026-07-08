@@ -18,20 +18,24 @@ import {FormSuccess} from '../general/FormSuccess';
 import {Loader} from 'lucide-react';
 import {EmailNotVerifiedError} from './auth-errors';
 import {getFirebaseAuthError} from './firebase-auth-errors';
-import {useSearchParams} from 'next/navigation';
+// import {useSearchParams} from 'next/navigation';
 
+interface LoginFormProps {
+  callbackUrl?: string;
+}
 
-
-export const LoginForm = () => {
+export const LoginForm = ({
+  callbackUrl,
+}: LoginFormProps) => {
   const t = useTranslations();
   const a = useTranslations('auth');
   const schema = LoginFormSchema(t);
 
   const {login} = useAuth();
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const callbackUrl = searchParams.get("callbackUrl");
+  // const callbackUrl = searchParams.get("callbackUrl");
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");

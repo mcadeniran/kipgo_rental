@@ -17,16 +17,22 @@ import {FormError} from '../general/FormError';
 import {FormSuccess} from '../general/FormSuccess';
 import {Loader} from 'lucide-react';
 import {getFirebaseAuthError} from './firebase-auth-errors';
-import {useSearchParams} from 'next/navigation';
+// import {useSearchParams} from 'next/navigation';
 
-export const RegisterForm = () => {
+interface LoginFormProps {
+  callbackUrl?: string;
+}
+
+export const RegisterForm = ({
+  callbackUrl,
+}: LoginFormProps) => {
   const t = useTranslations();
   const a = useTranslations('auth');
   const schema = RegisterFormSchema(t);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const callbackUrl = searchParams.get("callbackUrl");
+  // const callbackUrl = searchParams.get("callbackUrl");
 
   const {loading, signUp} = useAuth();
 
