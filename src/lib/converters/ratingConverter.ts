@@ -34,6 +34,11 @@ export const ratingConverter: FirestoreDataConverter<Rating> = {
       // updatedAt: parseTimestamp(data.updatedAt),
       createdAt: data.createdAt,
       updatedAt: data.updatedAt ?? null,
+      createdBy: {
+        id: data.createdBy.id ?? '',
+        name: data.createdBy.name ?? '',
+        photoUrl: data.createdBy.photoUrl,
+      },
     };
   },
 };
