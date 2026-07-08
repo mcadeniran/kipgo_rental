@@ -68,6 +68,32 @@ export const rentalShopConverter: FirestoreDataConverter<RentalShop> = {
           }
         : undefined,
 
+      review: data.review
+        ? {
+            average: data.review.average,
+            communication: data.review.communication,
+            communicationTotal: data.review.communicationTotal,
+            overall: data.review.overall,
+            overallTotal: data.review.overallTotal,
+            pickupExperience: data.review.pickupExperience,
+            pickupExperienceTotal: data.review.pickupExperienceTotal,
+            professionalism: data.review.professionalism,
+            professionalismTotal: data.review.professionalismTotal,
+            recommendationCount: data.review.recommendationCount,
+            recommendationRate: data.review.recommendationRate,
+            returnExperience: data.review.returnExperience,
+            returnExperienceTotal: data.review.returnExperienceTotal,
+            totalReviews: data.review.totalReviews,
+            distribution: {
+              one: data.review.distribution.one,
+              two: data.review.distribution.two,
+              three: data.review.distribution.three,
+              four: data.review.distribution.four,
+              five: data.review.distribution.five,
+            },
+          }
+        : undefined,
+
       createdAt:
         data.createdAt instanceof Timestamp
           ? data.createdAt.toDate()

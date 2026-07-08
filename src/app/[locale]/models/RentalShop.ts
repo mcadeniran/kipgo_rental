@@ -31,6 +31,30 @@ export interface RentalShop {
     endAt: Date;
   };
 
+  review?: {
+    average: number;
+    communication: number;
+    communicationTotal: number;
+    overall: number;
+    overallTotal: number;
+    pickupExperience: number;
+    pickupExperienceTotal: number;
+    professionalism: number;
+    professionalismTotal: number;
+    recommendationCount: number;
+    recommendationRate: number;
+    returnExperience: number;
+    returnExperienceTotal: number;
+    totalReviews: number;
+    distribution: {
+      five: number;
+      four: number;
+      three: number;
+      two: number;
+      one: number;
+    };
+  };
+
   location?: {
     lat: number;
     lng: number;

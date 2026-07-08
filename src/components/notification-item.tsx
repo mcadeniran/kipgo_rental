@@ -46,7 +46,7 @@ export default function NotificationItem({
 
     }
 
-    console.log("CASE: ", notification.audience);
+    // console.log("CASE: ", notification.audience);
 
     switch (notification.audience) {
       case "admin":

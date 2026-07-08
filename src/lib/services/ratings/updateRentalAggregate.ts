@@ -1,5 +1,6 @@
 import { RentalRating, RentalRatingAggregate } from '@/types/ratings';
 import { AggregateOperation, calculateAggregate } from './aggregateEngine';
+import { updateDistribution } from './updateDistribution';
 
 export function updateRentalAggregate(
   aggregate: RentalRatingAggregate,
@@ -7,6 +8,12 @@ export function updateRentalAggregate(
   recommended: boolean,
   operation: AggregateOperation,
 ): RentalRatingAggregate {
+  const distribution = updateDistribution(
+    aggregate.distribution,
+    'create',
+    rating.overall,
+  );
+
   let totalReviews = aggregate.totalReviews;
   let recommendationCount = aggregate.recommendationCount;
 
@@ -77,5 +84,6 @@ export function updateRentalAggregate(
     pickupExperience: pickupExperience.average,
     returnExperience: returnExperience.average,
     professionalism: professionalism.average,
+    distribution,
   };
 }

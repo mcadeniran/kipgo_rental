@@ -23,7 +23,7 @@ export async function deleteFileFromUrl(fileUrl: string) {
     const fileRef = ref(storage, filePath);
     await deleteObject(fileRef);
 
-    console.log('File deleted:', filePath);
+    // console.log('File deleted:', filePath);
   } catch (error) {
     console.error('Error deleting file:', error);
   }

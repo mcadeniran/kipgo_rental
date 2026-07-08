@@ -2,11 +2,22 @@
 
 import {auth} from '@/app/[locale]/firebase/config';
 import {UserProfile} from '@/app/[locale]/models/UserProfile';
-import {getUserProfileById} from '@/lib/services/userService';
+import {createUserProfile, getUserProfileById, markUserEmailVerified} from '@/lib/services/userService';
 import {getRentalShopById} from '@/lib/services/rentalService';
-import {createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User, UserCredential} from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  User,
+  UserCredential,
+} from 'firebase/auth';
 import React, {useContext, useEffect, useState} from 'react';
 import {RentalShop} from '@/app/[locale]/models/RentalShop';
+import {createUserProfileFactory} from '@/lib/helper/createUserProfileFactory';
+import {AuthStatus} from '@/types/auth';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -17,9 +28,15 @@ interface AuthContextType {
   signUp: (email: string, password: string, username: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
   loading: boolean;
+  resendVerificationEmail: () => Promise<void>;
+  refreshUser: () => Promise<false | User>;
+  authStatus: AuthStatus;
+  refreshProfile: () => Promise<void>;
 }
 
 type UserRole = "admin" | "user" | "rental";
+
+
 
 const AuthContext = React.createContext<AuthContextType | null>(null);
 
@@ -36,12 +53,80 @@ export function AuthProvider({children}: {children: React.ReactNode;}) {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<UserRole | null>(null);
 
-  function login(email: string, password: string) {
-    return signInWithEmailAndPassword(auth, email, password);
+  const authStatus: AuthStatus = loading
+    ? "loading"
+    : !currentUser
+      ? "guest"
+      : !currentUser.emailVerified
+        ? "unverified"
+        : role === "admin"
+          ? "admin"
+          : role === "rental"
+            ? "rental"
+            : role === "user"
+              ? "user"
+              : "no-profile";
+
+
+  async function login(email: string, password: string): Promise<UserCredential> {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    //
+    // Always refresh user information
+    //
+    await credential.user.reload();
+
+    const refreshedUser = auth.currentUser;
+
+    if (!refreshedUser) {
+      throw new Error("Unable to load user.");
+    }
+
+    return credential;
   }
 
-  function signUp(email: string, password: string, username: string) {
-    return createUserWithEmailAndPassword(auth, email, password);
+  async function signUp(
+    email: string,
+    password: string,
+    username: string
+  ) {
+
+    const credential =
+      await createUserWithEmailAndPassword(auth, email, password);
+
+    const firebaseUser = credential.user;
+
+    await updateProfile(firebaseUser, {displayName: username, });
+
+    await sendEmailVerification(firebaseUser);
+
+    const profile = createUserProfileFactory({uid: firebaseUser.uid, email, username, });
+
+    await createUserProfile(profile);
+
+    return credential;
+  }
+
+  async function resendVerificationEmail() {
+    if (!auth.currentUser) {
+      throw new Error("No authenticated user.");
+    }
+    await sendEmailVerification(auth.currentUser);
+  }
+
+  async function refreshUser() {
+    if (!auth.currentUser) return false;
+    await auth.currentUser.reload();
+    return auth.currentUser;
+  }
+
+  async function refreshProfile() {
+    if (!currentUser) return;
+
+    const profile = await getUserProfileById(currentUser.uid);
+
+    if (profile) {
+      setUserDataObj(profile);
+    }
   }
 
   function logout() {
@@ -55,19 +140,56 @@ export function AuthProvider({children}: {children: React.ReactNode;}) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
         setLoading(true);
-        setCurrentUser(user);
 
         if (!user) {
+          setCurrentUser(null);
           setUserDataObj(null);
           setRentalDataObj(null);
           setRole(null);
           return;
         }
 
+        await user.reload();
+
+        const refreshedUser = auth.currentUser;
+
+        if (!refreshedUser) {
+          setCurrentUser(null);
+          return;
+        }
+
+        //
+        // Block unverified users
+        //
+        if (!refreshedUser.emailVerified) {
+          setCurrentUser(refreshedUser);
+          setUserDataObj(null);
+          setRentalDataObj(null);
+          setRole(null);
+          return;
+        }
+
+        //
+        // User is verified
+        //
+        setCurrentUser(refreshedUser);
+
         const uid = user.uid;
 
         // 1️⃣ Check profiles collection first
         const userProfile = await getUserProfileById(uid);
+
+        if (
+          userProfile &&
+          refreshedUser.emailVerified &&
+          !userProfile.account.emailVerified
+        ) {
+
+          await markUserEmailVerified(uid);
+
+          userProfile.account.emailVerified = true;
+
+        }
 
         if (userProfile) {
           setUserDataObj(userProfile);
@@ -79,7 +201,6 @@ export function AuthProvider({children}: {children: React.ReactNode;}) {
             // if isAdmin missing OR false → default to user
             setRole("user");
           }
-
           return;
         }
 
@@ -119,7 +240,11 @@ export function AuthProvider({children}: {children: React.ReactNode;}) {
     login,
     logout,
     loading,
-    signUp
+    signUp,
+    resendVerificationEmail,
+    refreshUser,
+    authStatus,
+    refreshProfile
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

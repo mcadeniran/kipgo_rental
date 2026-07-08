@@ -6,7 +6,7 @@ import {Card, CardContent, CardTitle, } from "@/components/ui/card";
 
 import Image from "next/image";
 import {Booking, PaymentMethod, PaymentStatus} from "../../models/Booking";
-
+import {Icon} from "@iconify/react";
 
 import {useDateTimeFormatter} from '@/lib/helper/formatDate';
 import {BookingStatusBadge} from "@/components/badges/bookingstatusBadge";
@@ -34,8 +34,16 @@ export default function BookingCard({
         />
 
         <CardContent className="px-2 space-y-2">
-          <CardTitle>
-            {booking.car.brand}{' '}{booking.car.model}{' '}{booking.car.year}
+          <CardTitle className="flex justify-between">
+            <span>{booking.car.brand}{' '}{booking.car.model}{' '}{booking.car.year}</span>
+            {
+              booking.status === 'completed' && (booking.isRated ? <Icon
+                icon="ic:sharp-star"
+                width={18}
+                className="text-amber-400"
+              /> : <span className="text-sm font-light">Not Rated</span>
+              )
+            }
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             {booking.shop.name}

@@ -15,6 +15,8 @@ import {useQueries} from "@tanstack/react-query";
 import Image from "next/image";
 import {useDateTimeFormatter} from '@/lib/helper/formatDate';
 import {BookNowButton} from "@/components/BookNowButton";
+import {CarSpecRow} from "@/components/general/CarSpecRow";
+import {CarRatingPreview} from "@/components/general/CarRatingPreview";
 
 export default function CarsPage() {
   const results = useQueries({
@@ -289,33 +291,23 @@ function CarCard({
           )}
         </div>
 
-        <CardContent className="pt-4">
-          <div className="space-y-2">
-            <h3 className="font-semibold text-lg">
-              {item.car.brand}{" "}
-              {item.car.model}
-            </h3>
+        <CardContent className="pt-0">
+          <div className="space-y-1">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold text-lg">
+                {item.car.brand}{" "}
+                {item.car.model}
+              </h3>
+              <CarRatingPreview review={item.car.review} />
+            </div>
 
             <p className="text-sm text-muted-foreground">
               {item.shop.name}
             </p>
 
-            <div className="flex gap-4 text-sm">
-              <div className='flex flex-row gap-2'>
-                <div className="flex flex-row gap-1">
-                  <Icon icon="fluent:settings-cog-multiple-20-regular" className='' width={18} height={18} />
-                  {item.car.transmission}
-                </div>
-                <div className="flex flex-row gap-1">
-                  <Icon icon="fluent:gas-pump-20-regular" className='' width={18} height={18} />
-                  {item.car.fuel}
-                </div>
-                <div className="flex flex-row gap-1">
-                  <Icon icon="fluent:people-community-32-light" className='' width={18} height={18} />
-                  {item.car.seats}
-                </div>
-              </div>
-            </div>
+            <CarSpecRow transmission={item.car.transmission} fuel={item.car.fuel} seats={item.car.seats} />
+
+
 
             <div className="flex justify-between items-center pt-2">
               <div>

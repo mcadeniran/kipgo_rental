@@ -1,5 +1,6 @@
 import { VehicleRating, VehicleRatingAggregate } from '@/types/ratings';
 import { AggregateOperation, calculateAggregate } from './aggregateEngine';
+import { updateDistribution } from './updateDistribution';
 
 export function updateVehicleAggregate(
   aggregate: VehicleRatingAggregate,
@@ -7,6 +8,12 @@ export function updateVehicleAggregate(
   recommended: boolean,
   operation: AggregateOperation,
 ): VehicleRatingAggregate {
+  const distribution = updateDistribution(
+    aggregate.distribution,
+    'create',
+    rating.overall,
+  );
+
   let totalReviews = aggregate.totalReviews;
   let recommendationCount = aggregate.recommendationCount;
 
@@ -77,5 +84,6 @@ export function updateVehicleAggregate(
     comfort: comfort.average,
     condition: condition.average,
     valueForMoney: valueForMoney.average,
+    distribution,
   };
 }

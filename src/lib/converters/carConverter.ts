@@ -92,6 +92,32 @@ export const carConverter: FirestoreDataConverter<Car> = {
       rating: data.rating ?? 0,
       totalRatings: data.totalRatings ?? 0,
 
+      review: data.review
+        ? {
+            average: data.review.average,
+            cleanliness: data.review.cleanliness,
+            cleanlinessTotal: data.review.cleanlinessTotal,
+            comfort: data.review.comfort,
+            comfortTotal: data.review.comfortTotal,
+            condition: data.review.condition,
+            conditionTotal: data.review.conditionTotal,
+            overall: data.review.overall,
+            overallTotal: data.review.overallTotal,
+            recommendationCount: data.review.recommendationCount,
+            recommendationRate: data.review.recommendationRate,
+            totalReviews: data.review.totalReviews,
+            valueForMoney: data.review.valueForMoney,
+            valueForMoneyTotal: data.review.valueForMoneyTotal,
+            distribution: {
+              one: data.review.distribution.one,
+              two: data.review.distribution.two,
+              three: data.review.distribution.three,
+              four: data.review.distribution.four,
+              five: data.review.distribution.five,
+            },
+          }
+        : undefined,
+
       shop: data.shop
         ? {
             name: data.shop.name,

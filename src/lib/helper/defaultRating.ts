@@ -1,5 +1,17 @@
 import { RatingFormValues } from '@/schemas';
-import { RentalRatingAggregate, VehicleRatingAggregate } from '@/types/ratings';
+import {
+  RatingDistribution,
+  RentalRatingAggregate,
+  VehicleRatingAggregate,
+} from '@/types/ratings';
+
+export const defaultDistribution: RatingDistribution = {
+  one: 0,
+  two: 0,
+  three: 0,
+  four: 0,
+  five: 0,
+};
 
 export const defaultVehicleAggregate: VehicleRatingAggregate = {
   totalReviews: 0,
@@ -16,6 +28,10 @@ export const defaultVehicleAggregate: VehicleRatingAggregate = {
   comfort: 0,
   condition: 0,
   valueForMoney: 0,
+
+  distribution: {
+    ...defaultDistribution,
+  },
 };
 
 export const defaultRentalAggregate: RentalRatingAggregate = {
@@ -33,6 +49,10 @@ export const defaultRentalAggregate: RentalRatingAggregate = {
   pickupExperience: 0,
   returnExperience: 0,
   professionalism: 0,
+
+  distribution: {
+    ...defaultDistribution,
+  },
 };
 
 export const defaultRatingValues: RatingFormValues = {
@@ -63,3 +83,26 @@ export const defaultRatingValues: RatingFormValues = {
     isAnonymous: false,
   },
 };
+
+export const DISTRIBUTION_ITEMS = [
+  {
+    stars: 5,
+    key: 'five',
+  },
+  {
+    stars: 4,
+    key: 'four',
+  },
+  {
+    stars: 3,
+    key: 'three',
+  },
+  {
+    stars: 2,
+    key: 'two',
+  },
+  {
+    stars: 1,
+    key: 'one',
+  },
+] as const;

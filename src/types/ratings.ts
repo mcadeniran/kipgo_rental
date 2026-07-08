@@ -59,6 +59,11 @@ export interface Rating {
   details: ReviewDetails;
   createdAt: Timestamp;
   updatedAt?: Timestamp;
+  createdBy: {
+    id: string;
+    name: string;
+    photoUrl?: string;
+  };
 }
 
 export interface VehicleRatingAggregate {
@@ -76,6 +81,8 @@ export interface VehicleRatingAggregate {
   comfort: number;
   condition: number;
   valueForMoney: number;
+
+  distribution: RatingDistribution;
 }
 
 export interface RentalRatingAggregate {
@@ -93,6 +100,8 @@ export interface RentalRatingAggregate {
   pickupExperience: number;
   returnExperience: number;
   professionalism: number;
+
+  distribution: RatingDistribution;
 }
 
 export interface CreateRatingInput {
@@ -105,4 +114,20 @@ export interface CreateRatingInput {
   vehicle: VehicleRating;
   rental: RentalRating;
   details: ReviewDetailsInput;
+}
+
+export interface RatingDistribution {
+  five: number;
+  four: number;
+  three: number;
+  two: number;
+  one: number;
+}
+
+export interface DistributionRowProps {
+  stars: number;
+
+  count: number;
+
+  total: number;
 }

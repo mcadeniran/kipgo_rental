@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['10.170.43.113'],
+  allowedDevOrigins: ['10.40.136.113'],
 };
 
 const withNextIntl = createNextIntlPlugin();

@@ -43,7 +43,7 @@ export async function resolveRenter({
       return await updateRenter(profile.id, draft.driver!.id!, renterPayload);
 
     default:
-      console.log(draft.driver?.action);
+      // console.log(draft.driver?.action);
       throw new Error('Unknown driver action.');
   }
 }

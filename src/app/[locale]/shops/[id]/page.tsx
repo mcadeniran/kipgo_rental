@@ -12,10 +12,18 @@ import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Item, ItemContent, ItemDescription, ItemMedia, ItemTitle} from "@/components/ui/item";
 import RentalRules from '../../_components/RentalRules';
+import {RentalShop} from '../../models/RentalShop';
+import RatingSummary from '../../ratings/_components/RatingSummary';
+import RatingMetricsGrid from '../../ratings/_components/RatingMetricsGrid';
+import useInfiniteReviews from '@/lib/helper/useInfiniteReviews';
+import ReviewPreviewList from '../../ratings/_components/ReviewPreviewList';
+import {useRouter} from '@/i18n/navigation';
 
 export default function ShopDetailsPage() {
   const params = useParams();
   const id = params.id as string;
+
+  const router = useRouter();
 
   const results = useQueries({
     queries: [
@@ -34,6 +42,15 @@ export default function ShopDetailsPage() {
   const shop = results[0].data || null;
   const cars = results[1].data || [];
 
+  const {
+    reviews,
+    isLoading: isReviewLoading,
+  } = useInfiniteReviews({
+    shopId: id,
+    pageSize: 5,
+  });
+
+
 
   const isLoading = results.some((q) => q.isLoading);
 
@@ -45,11 +62,6 @@ export default function ShopDetailsPage() {
 
   if (!shop) return <div className="">Shop not found</div>;
 
-  // const isError = results.some((q) => q.isError);
-
-  // if (isError) return results.find(q => {
-  //   <p className="">{q.error?.message}</p>;
-  // });
 
   if (results.some((q) => q.isError)) {
     return (
@@ -97,8 +109,8 @@ export default function ShopDetailsPage() {
                 icon="material-symbols:star"
                 className="text-yellow-400"
               />
-              {shop.rating}
-              {' '}({shop.totalRatings})
+              {shop.review?.overall ?? 0}
+              {' '}({shop.review?.totalReviews ?? 0})
             </div>
           </div>
         </div>
@@ -111,20 +123,7 @@ export default function ShopDetailsPage() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Item variant="outline">
-          <ItemMedia variant="icon">
-            <Icon
-              icon="material-symbols:star"
-              className="text-yellow-400"
-            />
-          </ItemMedia>
-          <ItemContent>
-            <ItemTitle>{shop.rating} ({shop.totalRatings})</ItemTitle>
-            <ItemDescription>
-              {"Rental's Rating"}
-            </ItemDescription>
-          </ItemContent>
-        </Item>
+
         <Item variant="outline">
           <ItemMedia variant="icon">
             <Icon
@@ -180,10 +179,65 @@ export default function ShopDetailsPage() {
           {shop.description}
         </CardContent>
       </Card>
+
+      <ShopRating shop={shop} />
+
+      {
+        !isReviewLoading &&
+        <ReviewPreviewList
+          reviews={reviews.slice(0, 5)}
+          onReadMore={() =>
+            router.push(`/shops/${id}/reviews`)
+          }
+        />
+      }
+
+
       <RentalRules shop={shop} />
 
       <AvailableRentalCars cars={cars} shop={shop} />
 
     </div>
   );
+}
+
+function ShopRating({shop}: {shop: RentalShop;}) {
+  return <div className=" flex flex-col sm:flex-row w-full gap-4">
+    <div className="w-full max-w-2xl">
+      <RatingSummary
+        average={shop.review?.average ?? 0}
+        totalReviews={shop.review?.totalReviews ?? 0}
+        recommendationRate={shop.review?.recommendationRate ?? 0}
+        distribution={shop.review?.distribution ?? {
+          five: 0, four: 0, three: 0, two: 0, one: 0
+        }}
+      />
+    </div>
+    <div className="w-full max-w-2xl">
+
+      <RatingMetricsGrid
+        // title="Vehicle Ratings"
+        metrics={[
+          {
+            label: "Communication",
+            value: shop.review?.communication ?? 0,
+          },
+          {
+            label: "Professionalism",
+            value: shop.review?.professionalism ?? 0,
+          },
+          {
+            label: "Pickup Experience",
+            value: shop.review?.pickupExperience ?? 0,
+          },
+          {
+            label: "Return Experience",
+            value: shop.review?.returnExperience ?? 0,
+          },
+        ]}
+      />
+
+
+    </div>
+  </div>;
 }

@@ -25,12 +25,12 @@ export const PaymentCountdown = ({booking}: {booking: Booking;}) => {
     const tick = () => {
       const now = new Date();
 
-      console.log("NOW:", now);
-      console.log("EXPIRES:", expiresAt);
+      // console.log("NOW:", now);
+      // console.log("EXPIRES:", expiresAt);
 
       const diff = differenceInMilliseconds(expiresAt, now);
 
-      console.log("DIFF:", diff);
+      // console.log("DIFF:", diff);
 
       setRemaining(Math.max(diff, 0));
       // const diff = differenceInMilliseconds(expiresAt, new Date(),);
@@ -52,9 +52,9 @@ export const PaymentCountdown = ({booking}: {booking: Booking;}) => {
 
     hasExpired.current = true;
 
-    console.log("EXPIRES AT: ", expiresAt);
-    console.log("REMAINING: ", remaining);
-    console.log("BOOKING STATUS: ", booking.status);
+    // console.log("EXPIRES AT: ", expiresAt);
+    // console.log("REMAINING: ", remaining);
+    // console.log("BOOKING STATUS: ", booking.status);
 
     expireBooking.mutate(booking.id);
   }, [remaining, expiresAt, booking.status, booking.id, expireBooking,]);

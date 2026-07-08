@@ -187,34 +187,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-  // return (
-  //   <footer className='mt-16 bg-k-primary text-white'>
-  //     <div className=' mx-auto max-w-7xl p-8 flex flex-col gap-8 md:flex-row md:justify-between'>
-  //       <div className="flex flex-col gap-4 items-center md:items-start">
-  //         <Link href='/' className='flex flex-row items-center gap-2'>
-  //           <Image src={logo} alt='logo' width={120} height={120} className='' />
-  //         </Link>
-  //         <p className="text-sm text-gray-400">© 2026, KIPGO</p>
-  //         <p className="text-sm text-gray-400">All rights reserved.</p>
-  //         <div className="flex gap-4">
-  //           <Link href='https://www.facebook.com/profile.php?id=61583224523752' target='_blank'><Icon icon='logos:facebook' className='h-7 w-7' /></Link>
-  //           <Link href='https://www.instagram.com/kipgo.official/' target='_blank'><Icon icon='skill-icons:instagram' className='h-7 w-7' /></Link>
-  //         </div>
-  //       </div>
-  //       <div className="flex flex-col gap-4 text-sm text-gray-400  items-center md:items-start">
-  //         <div className="flex gap-4">
-  //           <Icon icon='logos:google-play-icon' className='h-10 w-10' />
-  //           <Icon icon='logos:apple-app-store' className='h-10 w-10' />
-  //         </div>
-  //       </div>
-  //       <div className="flex flex-col gap-4 text-sm text-gray-400  items-center md:items-start">
-  //         <p className='text-sm text-amber-50'>Links</p>
-  //         <Link href=''>Homepage</Link>
-  //         <Link href=''>Contact</Link>
-  //         <Link href=''>Terms of Service</Link>
-  //         <Link href=''>Privacy Policy</Link>
-  //       </div>
-  //     </div>
-  //   </footer>
-  // );
 }

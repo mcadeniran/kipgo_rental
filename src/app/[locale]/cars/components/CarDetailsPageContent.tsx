@@ -16,12 +16,16 @@ import {Button} from "@/components/ui/button";
 import {Icon} from "@iconify/react";
 import {Car} from "../../models/Car";
 import {RentalShop} from "../../models/RentalShop";
-import {Link} from "@/i18n/navigation";
+import {Link, useRouter} from "@/i18n/navigation";
 
 import {useDateTimeFormatter} from '@/lib/helper/formatDate';
 import RentalRules from "../../_components/RentalRules";
 import {CarWithShop} from "@/lib/services/CarWithShop";
 import {BookNowButton} from "@/components/BookNowButton";
+import RatingSummary from "../../ratings/_components/RatingSummary";
+import RatingMetricsGrid from "../../ratings/_components/RatingMetricsGrid";
+import useInfiniteReviews from "@/lib/helper/useInfiniteReviews";
+import ReviewPreviewList from "../../ratings/_components/ReviewPreviewList";
 
 
 interface Props {
@@ -33,6 +37,7 @@ export default function CarDetailsPageContent({
   car,
   shop,
 }: Props) {
+
   const cover =
     car.images.find(i => i.isCover)?.url ??
     car.images[0]?.url;
@@ -42,8 +47,18 @@ export default function CarDetailsPageContent({
 
   const carshop = new CarWithShop(car, shop);
 
+  const router = useRouter();
+
+  const {
+    reviews,
+    isLoading,
+  } = useInfiniteReviews({
+    carId: car.id,
+    pageSize: 5,
+  });
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* TOP SECTION */}
       <div className="grid gap-8 lg:grid-cols-3">
         {/* GALLERY */}
@@ -97,10 +112,25 @@ export default function CarDetailsPageContent({
           shop={shop}
           carshop={carshop}
         />
+
       </div>
 
       {/* HEADER */}
       <CarHeader car={car} />
+
+      {/* RATINGS */}
+      <CarRating car={car} />
+
+      {
+        !isLoading &&
+        <ReviewPreviewList
+          reviews={reviews.slice(0, 5)}
+          onReadMore={() =>
+            router.push(`/cars/${car.id}/reviews`)
+          }
+        />
+      }
+
 
       {/* FEATURES */}
       <CarFeatures car={car} />
@@ -216,6 +246,45 @@ function CarHeader({
       </div>
     </div>
   );
+}
+
+function CarRating({car}: {car: Car;}) {
+  return <div className=" flex flex-col sm:flex-row w-full gap-4">
+    <div className="w-full max-w-2xl">
+      <RatingSummary
+        average={car.review?.average ?? 0}
+        totalReviews={car.review?.totalReviews ?? 0}
+        recommendationRate={car.review?.recommendationRate ?? 0}
+        distribution={car.review?.distribution ?? {
+          five: 0, four: 0, three: 0, two: 0, one: 0
+        }}
+      />
+    </div>
+    <div className="w-full max-w-2xl">
+
+      <RatingMetricsGrid
+        // title="Vehicle Ratings"
+        metrics={[
+          {
+            label: "Cleanliness",
+            value: car.review?.cleanliness ?? 0,
+          },
+          {
+            label: "Comfort",
+            value: car.review?.comfort ?? 0,
+          },
+          {
+            label: "Condition",
+            value: car.review?.condition ?? 0,
+          },
+          {
+            label: "Value for Money",
+            value: car.review?.valueForMoney ?? 0,
+          },
+        ]}
+      />
+    </div>
+  </div>;
 }
 
 function CarFeatures({
@@ -401,7 +470,7 @@ function RentalCompanyCard({
                 className="text-yellow-400"
               />
               <span>
-                {shop.rating} ({shop.totalRatings} review{shop.totalRatings === 1 ? '' : 's'})
+                {shop.review?.average ?? 0} ({shop.review?.totalReviews ?? 0} review{shop.review?.totalReviews === 1 ? '' : 's'})
               </span>
             </p>
           </div>

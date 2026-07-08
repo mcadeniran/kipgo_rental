@@ -9,6 +9,7 @@ import {
 import {Icon} from "@iconify/react";
 import {Booking} from "../../models/Booking";
 import {useDateTimeFormatter} from "@/lib/helper/formatDate";
+import {CarSpecRow} from "@/components/general/CarSpecRow";
 
 export function RentalVehicleCard({
   booking,
@@ -54,33 +55,7 @@ export function RentalVehicleCard({
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm">
-
-              <div className="flex items-center gap-2">
-                <Icon
-                  icon="mdi:car-shift-pattern"
-                  width={18}
-                />
-                {booking.car.transmission}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Icon
-                  icon="mdi:gas-station"
-                  width={18}
-                />
-                {booking.car.fuel}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Icon
-                  icon="mdi:seat-passenger"
-                  width={18}
-                />
-                {booking.car.seats} Seats
-              </div>
-
-            </div>
+            <CarSpecRow transmission={booking.car.transmission} fuel={booking.car.fuel} seats={booking.car.seats} />
 
             <div>
               <p className="text-muted-foreground">
@@ -91,7 +66,12 @@ export function RentalVehicleCard({
                 {formatCurrency(booking.car.pricePerDay, booking.currency)}
               </p>
             </div>
-            <p className="">{booking.isRated ? "RAted" : "Not Rated"}</p>
+            <p className="">{booking.status === 'completed' && booking.isRated ?
+              <Icon
+                icon="ic:sharp-star"
+                width={18}
+                className="text-amber-400"
+              /> : booking.status === 'completed' && !booking.isRated ? "Not Rated" : ''}</p>
           </div>
         </div>
       </CardContent>

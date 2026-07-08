@@ -43,6 +43,30 @@ export interface Car {
   totalUnits: number;
   availableUnits: number;
 
+  review?: {
+    average: number;
+    cleanliness: number;
+    cleanlinessTotal: number;
+    comfort: number;
+    comfortTotal: number;
+    condition: number;
+    conditionTotal: number;
+    overall: number;
+    overallTotal: number;
+    recommendationCount: number;
+    recommendationRate: number;
+    totalReviews: number;
+    valueForMoney: number;
+    valueForMoneyTotal: number;
+    distribution: {
+      five: number;
+      four: number;
+      three: number;
+      two: number;
+      one: number;
+    };
+  };
+
   shop?: {
     name: string;
     rating: number;

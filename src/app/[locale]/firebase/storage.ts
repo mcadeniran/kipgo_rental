@@ -13,7 +13,9 @@ const storage = getStorage(app);
 export async function uploadFile(path: string, file: File): Promise<string> {
   const storageRef = ref(storage, path);
 
-  await uploadBytes(storageRef, file);
+  await uploadBytes(storageRef, file, {
+    contentType: file.type,
+  });
 
   return getDownloadURL(storageRef);
 }

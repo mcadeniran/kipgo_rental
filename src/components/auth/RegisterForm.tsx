@@ -12,26 +12,27 @@ import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import {Button} from '../ui/button';
 import useAuth from '@/context/AuthContext';
-import {useState, useTransition} from 'react';
-import {useRouter} from '@/i18n/navigation';
-import PageLoader from '../general/PageLoader';
+import {useState} from 'react';
 import {FormError} from '../general/FormError';
 import {FormSuccess} from '../general/FormSuccess';
 import {Loader} from 'lucide-react';
-import {registerAction} from '@/actions/register-action';
+import {getFirebaseAuthError} from './firebase-auth-errors';
+import {useSearchParams} from 'next/navigation';
 
 export const RegisterForm = () => {
   const t = useTranslations();
   const a = useTranslations('auth');
   const schema = RegisterFormSchema(t);
 
-  const {currentUser, userDataObj, role, loading, signUp} = useAuth();
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl");
+
+  const {loading, signUp} = useAuth();
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
 
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -42,35 +43,30 @@ export const RegisterForm = () => {
     }
   });
 
-  if (loading) {
-    return <div className="flex bg-k-foreground w-full h-screen items-center justify-center text-k-primary">
-      <PageLoader />
-    </div>; // show spinner while checking
-  }
+  const onSubmit = async (
+    values: z.infer<typeof schema>
+  ) => {
 
-  // If logged in, we return null because redirect will happen.
-  if (currentUser && userDataObj) {
-    return null;
-  }
-
-
-  const onSubmit = async (values: z.infer<typeof schema>) => {
     setError("");
     setSuccess("");
 
-    // startTransition(() => {
-    //   registerAction(values, t).then((data) => {
-    //     setError(data.error);
-    //     setSuccess(data.succees);
-    //   });
-    // });
+    try {
+      await signUp(values.email, values.password, values.username);
+      setSuccess(
+        "We've sent a verification email. Please verify your email before logging in."
+      );
+      form.reset();
+    }
+    catch (error) {
+      setError(getFirebaseAuthError(error));
+    }
   };
 
   return (
     <CardWrapper
       headerLabel='Create an account'
       backButtonLabel="Already have an account?"
-      backButtonHref='/auth/login'
+      backButtonHref={callbackUrl ? `/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/auth/login'}
       showSocials={false}
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -89,6 +85,7 @@ export const RegisterForm = () => {
                   aria-invalid={fieldState.invalid}
                   placeholder="JDoe"
                   autoComplete="off"
+                  disabled={loading}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -110,6 +107,7 @@ export const RegisterForm = () => {
                   aria-invalid={fieldState.invalid}
                   placeholder="john.doe@email.com"
                   autoComplete="off"
+                  disabled={loading}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -132,6 +130,7 @@ export const RegisterForm = () => {
                   aria-invalid={fieldState.invalid}
                   placeholder="********"
                   autoComplete="off"
+                  disabled={loading}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -144,10 +143,12 @@ export const RegisterForm = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button
+            disabled={loading}
+            size='lg'
             type='submit'
             className='w-full bg-k-primary text-white hover:bg-k-primary/80 hover:text-white cursor-pointer'
           >
-            {isPending ? <Loader className='animate-spin' /> : 'Create Account'}
+            {loading ? <Loader className='animate-spin' /> : 'Create Account'}
           </Button>
         </div>
       </form>

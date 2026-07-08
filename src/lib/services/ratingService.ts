@@ -20,6 +20,7 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
   const bookingRef = doc(db, 'bookings', input.bookingId);
   const carRef = doc(db, 'cars', input.carId);
   const shopRef = doc(db, 'rentalShops', input.shopId);
+  const userRef = doc(db, 'profiles', input.userId);
 
   const ratingRef = doc(collection(db, 'carRatings'));
 
@@ -31,6 +32,14 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
     photos = await uploadReviewPhotos(ratingId, input.details.photos);
 
     await runTransaction(db, async (transaction) => {
+      const userSnap = await transaction.get(userRef);
+
+      if (!userSnap.exists()) {
+        throw new Error('User not found');
+      }
+
+      const user = userSnap.data();
+
       const bookingSnap = await transaction.get(bookingRef);
 
       if (!bookingSnap.exists()) {
@@ -84,6 +93,11 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
         id: ratingId,
         version: 1,
         bookingId: input.bookingId,
+        createdBy: {
+          id: input.userId,
+          name: user.username,
+          photoUrl: user.personal.photoUrl ?? null,
+        },
         unitId: input.unitId,
         carId: input.carId,
         shopId: input.shopId,
@@ -133,6 +147,11 @@ export async function createRating(input: CreateRatingInput): Promise<Rating> {
     details: {
       ...input.details,
       photos,
+    },
+    createdBy: {
+      id: input.userId,
+      name: '',
+      photoUrl: '',
     },
     createdAt: Timestamp.now(),
   };

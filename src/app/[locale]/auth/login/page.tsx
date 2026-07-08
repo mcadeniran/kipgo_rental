@@ -1,13 +1,11 @@
+import GuestRoute from '@/components/auth/GuestRoute';
 import {LoginForm} from '@/components/auth/LoginForm';
 import React from 'react';
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{callbackUrl?: string;}>;
-}) {
-  const params = await searchParams;
+export default async function LoginPage() {
   return (
-    <LoginForm callbackUrl={params.callbackUrl} />
+    <GuestRoute>
+      <LoginForm />
+    </GuestRoute>
   );
 }

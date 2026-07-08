@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import {Star} from "lucide-react";
 
 import {cn} from "@/lib/utils";
+import {Icon} from "@iconify/react";
 
 type RatingSize = "sm" | "md" | "lg";
 
@@ -125,7 +125,8 @@ export function RatingStars({
                 "cursor-default",
               )}
             >
-              <Star
+              <Icon
+                icon="ic:outline-star"
                 className={cn(
                   STAR_SIZES[size],
                   "transition-colors duration-150",

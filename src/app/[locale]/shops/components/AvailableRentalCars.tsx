@@ -16,6 +16,7 @@ import {useRouter} from 'next/navigation';
 import {CarWithShop} from '@/lib/services/CarWithShop';
 import {RentalShop} from '../../models/RentalShop';
 import {BookNowButton} from '@/components/BookNowButton';
+import {CarSpecRow} from '@/components/general/CarSpecRow';
 
 export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: RentalShop;}) {
   const router = useRouter();
@@ -57,27 +58,14 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                 <CardHeader>
                   <CardAction>
                     <div className="flex flex-row gap-1 items-center">
-                      <Icon icon="material-symbols:star" className='text-amber-400' width={14} height={14} />
-                      {car.rating}{' '}({car.totalRatings} review{car.totalRatings === 1 ? '' : "s"})
+                      <Icon icon="ic:outline-star" className='text-amber-400' width={14} height={14} />
+                      {car.review?.average ?? 0}{' '}({car.review?.totalReviews ?? 0})
                     </div>
                   </CardAction>
                   <CardTitle>{car.brand} {car.model} {car.year}</CardTitle>
                   <CardDescription>
-                    <div className="flex flex-row justify-between">
-                      <div className='flex flex-row gap-2'>
-                        <div className="flex flex-row gap-1">
-                          <Icon icon="fluent:settings-cog-multiple-20-regular" className='' width={18} height={18} />
-                          {car.transmission}
-                        </div>
-                        <div className="flex flex-row gap-1">
-                          <Icon icon="fluent:gas-pump-20-regular" className='' width={18} height={18} />
-                          {car.fuel}
-                        </div>
-                        <div className="flex flex-row gap-1">
-                          <Icon icon="fluent:people-community-32-light" className='' width={18} height={18} />
-                          {car.seats}
-                        </div>
-                      </div>
+                    <div className="flex flex-row justify-between" >
+                      <CarSpecRow fuel={car.fuel} transmission={car.transmission} seats={car.seats} size={12} />
                       {car.isFeatured && car.featured && date > car.featured?.startAt && date < car.featured?.endAt &&
                         <Badge variant='destructive'>Featured</Badge>}
                     </div>

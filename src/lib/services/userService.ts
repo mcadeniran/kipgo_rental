@@ -1,5 +1,5 @@
 import { db } from '@/app/[locale]/firebase/config';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { userProfileConverter } from '../converters/userProfileConverter';
 import { UserProfile } from '@/app/[locale]/models/UserProfile';
 import { getAuth } from 'firebase/auth';
@@ -26,4 +26,20 @@ export async function getUserProfileById(
   const snap = await getDoc(ref);
 
   return snap.exists() ? snap.data() : null;
+}
+
+export async function createUserProfile(profile: UserProfile): Promise<void> {
+  const ref = doc(db, 'profiles', profile.id).withConverter(
+    userProfileConverter,
+  );
+
+  await setDoc(ref, profile);
+}
+
+export async function markUserEmailVerified(uid: string): Promise<void> {
+  const ref = doc(db, 'profiles', uid);
+
+  await updateDoc(ref, {
+    'account.emailVerified': true,
+  });
 }

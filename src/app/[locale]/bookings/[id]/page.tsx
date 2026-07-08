@@ -39,7 +39,7 @@ export default function BookingDetailsPage() {
     return <p>Booking not found</p>;
   }
 
-  console.log(booking.rating);
+  // console.log(booking.rating);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">

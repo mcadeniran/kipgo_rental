@@ -19,6 +19,7 @@ export interface Account {
   isOnline: boolean;
   isProfileCompleted: boolean;
   isApproved: boolean;
+  emailVerified: boolean;
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -45,6 +46,7 @@ export interface Personal {
   rating?: number;
   phone: string;
   reviews: Review[];
+  isPhoneVerified?: boolean;
 }
 
 export interface UserProfile {

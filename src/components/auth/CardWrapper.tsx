@@ -5,16 +5,18 @@ import {BackButton} from "./BackButton";
 import {Header} from "./Header";
 import {Social} from "./Social";
 
+
 interface CardWrapperProps {
   children: React.ReactNode,
   headerLabel: string;
-  backButtonLabel: string;
-  backButtonHref: string,
+  footer?: React.ReactNode;
+  backButtonLabel?: string;
+  backButtonHref?: string;
   showSocials?: boolean;
 }
 
-export const CardWrapper = ({children, headerLabel, backButtonLabel, backButtonHref, showSocials}: CardWrapperProps) => {
-  return <Card className="w-100 shadow-md">
+export const CardWrapper = ({children, headerLabel, backButtonLabel, backButtonHref, footer, showSocials}: CardWrapperProps) => {
+  return <Card className="w-120  rounded-lg">
     <CardHeader>
       <Header label={headerLabel} />
     </CardHeader>
@@ -25,7 +27,19 @@ export const CardWrapper = ({children, headerLabel, backButtonLabel, backButtonH
       </CardFooter>
     }
     <CardFooter>
-      <BackButton label={backButtonLabel} href={backButtonHref} />
+      {footer ? (
+        footer
+      ) : (
+        backButtonLabel &&
+        backButtonHref && (
+          <BackButton
+            label={backButtonLabel}
+            href={backButtonHref}
+          />
+        )
+      )}
     </CardFooter>
   </Card>;
+
+
 };
