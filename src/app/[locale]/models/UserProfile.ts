@@ -56,6 +56,8 @@ export interface UserProfile {
   username: string;
   isAdmin: boolean;
   token: string;
+  newRideStatus: string;
+  language: string;
   vehicle: Vehicle;
   account: Account;
   personal: Personal;

@@ -1,4 +1,7 @@
 import { UserProfile } from '@/app/[locale]/models/UserProfile';
+import { Timestamp } from 'firebase/firestore';
+
+const timestamp = Timestamp.now();
 
 interface CreateUserProfileInput {
   uid: string;
@@ -65,8 +68,8 @@ export function createUserProfileFactory({
       isProfileCompleted: false,
       isApproved: true,
       createdAt: {
-        seconds: new Date(),
-        nanoseconds: new Date(),
+        seconds: timestamp.seconds,
+        nanoseconds: timestamp.nanoseconds,
       },
 
       // NEW
