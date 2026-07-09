@@ -5,7 +5,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -18,11 +17,10 @@ import {
 
 import {
   BadgeCheck,
-  Bell,
-  Calendar,
-  CreditCard,
+  UserRoundMinus,
   LogOut,
-  User,
+  SquareAsterisk,
+  UserCog,
 } from "lucide-react";
 
 import {Button} from "@/components/ui/button";
@@ -53,11 +51,12 @@ export default function ProfileMenu() {
       } />
       <DropdownMenuContent
         align="end"
-        className="w-72"
+        // className="w-72"
+        className='w-min'
       >
         {/* PROFILE */}
         {authenticated ? (
-          <div className="m-4 rounded-2xl bg-linear-to-br from-k-primary to-k-primary/80 p-5 text-white">
+          <div className="mb-6 rounded-lg bg-linear-to-br from-k-primary to-k-primary/80 p-4 text-white">
             <div className="flex items-center gap-3">
               <Avatar className="h-14 w-14 border-2 border-white">
                 <AvatarImage
@@ -93,7 +92,7 @@ export default function ProfileMenu() {
           </div>
         )}
         <DropdownMenuGroup>
-          <DropdownMenuLabel>
+          {/* <DropdownMenuLabel>
             <div className="space-y-1">
               <p className="font-semibold">
                 {userDataObj?.username}
@@ -107,34 +106,34 @@ export default function ProfileMenu() {
                 </span>
               </div>
             </div>
-          </DropdownMenuLabel>
+          </DropdownMenuLabel> */}
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator /> */}
         <DropdownMenuGroup>
           <Link href="/profile">
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
+              <UserCog className="mr-2 h-4 w-4" />
               My Profile
             </DropdownMenuItem>
           </Link>
-          <Link href="/bookings">
-            <DropdownMenuItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              My Bookings
-            </DropdownMenuItem>
-          </Link>
-          <DropdownMenuItem>
-            <Bell className="mr-2 h-4 w-4" />
-            Notifications
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            Billing
-          </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
-
+        <DropdownMenuGroup className='my-4 gap-6'>
+          <Link href=''>
+            <DropdownMenuItem>
+              <SquareAsterisk className="mr-2 h-4 w-4" />
+              Change Password
+            </DropdownMenuItem>
+          </Link>
+          <Link href='' className="text-destructive">
+            <DropdownMenuItem>
+              <UserRoundMinus className="mr-2 h-4 w-4" />
+              Delete Account
+            </DropdownMenuItem>
+          </Link>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-red-500"
           onClick={logout}

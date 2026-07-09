@@ -1,4 +1,11 @@
-import { CarFront, CalendarDays, Info, Phone, Home } from 'lucide-react';
+import {
+  CarFront,
+  CalendarDays,
+  Info,
+  Phone,
+  Home,
+  UserCog,
+} from 'lucide-react';
 
 import { AuthStatus } from '@/types/auth';
 
@@ -48,6 +55,13 @@ export const navItems: NavItem[] = [
     label: 'My Bookings',
     href: '/bookings',
     icon: CalendarDays,
+    authenticated: true,
+  },
+
+  {
+    label: 'Profile',
+    href: '/profile',
+    icon: UserCog,
     authenticated: true,
   },
 ];
