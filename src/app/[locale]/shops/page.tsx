@@ -12,6 +12,7 @@ import {Link} from '@/i18n/navigation';
 import Image from 'next/image';
 import {Badge} from '@/components/ui/badge';
 import {isShopFeatured} from '@/lib/helper/isShopFeatured';
+import {useTranslations} from 'next-intl';
 
 export default function AllShopsPage() {
   const {data: shops = [], isLoading, error, isError} = useQuery({
@@ -57,15 +58,16 @@ export default function AllShopsPage() {
 }
 
 function RentalShopsHero() {
+  const t = useTranslations('shops');
   return (
     <div className="rounded-2xl bg-k-primary text-white p-8 md:p-12" >
       <div className="max-w-2xl">
         <h1 className="text-3xl md:text-5xl font-bold">
-          Rental Companies
+          {t('rentalCompanies')}
         </h1>
 
         <p className="mt-4 text-white/80">
-          Discover trusted rental companies and browse available vehicles across multiple locations.
+          {t('discoverTrustedRentalCompanies')}
         </p>
       </div>
     </div>
@@ -73,16 +75,17 @@ function RentalShopsHero() {
 }
 
 function RentalShopFilters() {
+  const t = useTranslations('shops');
   return (
     <Card>
       <CardContent className="pt-6">
         <div className="flex flex-col md:flex-row gap-4">
-          <Input placeholder="Search company..." />
+          <Input placeholder={t('searchCompany')} />
 
-          <Input placeholder="City" />
+          <Input placeholder={t('city')} />
 
           <Button>
-            Search
+            {t('search')}
           </Button>
         </div>
       </CardContent>
@@ -95,6 +98,7 @@ function FeaturedShops({
 }: {
   shops: RentalShop[];
 }) {
+  const t = useTranslations('shops');
   if (!shops.length) {
     return null;
   }
@@ -102,7 +106,7 @@ function FeaturedShops({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold">
-        Featured Companies
+        {t('featuredCompanies')}
       </h2>
 
       <div className="flex gap-4 overflow-x-auto pb-2">
@@ -170,19 +174,17 @@ function RentalShopGrid({
 }: {
   shops: RentalShop[];
 }) {
+  const t = useTranslations('shops');
   if (!shops.length) {
     return (
-      <p className="">No companies found</p>
-      // <EmptyState
-      //   title="No companies found"
-      // />
+      <p className="">{t('noCompaniesFound')}</p>
     );
   }
 
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold">
-        All Rental Companies
+        {t('allRentalCompanies')}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -203,6 +205,7 @@ function RentalShopCard({
   shop: RentalShop;
 
 }) {
+  const t = useTranslations('shops');
   return (
     <Link
       href={`/shops/${shop.id}`}
@@ -219,7 +222,7 @@ function RentalShopCard({
 
           {isShopFeatured({shop: shop}) && (
             <Badge className="absolute top-3 right-3 bg-amber-500 font-semibold">
-              Featured
+              {t('featured')}
             </Badge>
           )}
         </div>
@@ -256,7 +259,7 @@ function RentalShopCard({
           </p>
 
           <Button className="mt-4 w-full bg-k-primary">
-            View Company
+            {t('viewCompany')}
           </Button>
         </CardContent>
       </Card>

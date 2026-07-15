@@ -23,6 +23,11 @@ import {Loader} from "lucide-react";
 import {useRouter} from "@/i18n/navigation";
 import {toast} from "sonner";
 import {FormError} from "@/components/general/FormError";
+import {useTranslations} from "next-intl";
+import TranslatedTransmissionType from "@/lib/translations/translatedTransmissionType";
+import {TransmissionType} from "@/lib/carProperties";
+import TranslatedGender, {GenderType} from "@/lib/translations/translatedGender";
+import TranslatedDeliveryMethod from "@/lib/translations/translatedDeliveryMethod";
 
 export const SummaryStep = ({
   carShop,
@@ -39,6 +44,8 @@ export const SummaryStep = ({
   profile: UserProfile,
   wallet: Wallet;
 }) => {
+
+  const t = useTranslations('cars');
 
   const mutation = useCreateBooking();
 
@@ -58,7 +65,7 @@ export const SummaryStep = ({
         wallet,
       });
 
-      toast.success("Booking created successfully.");
+      toast.success(t('bookingCreatedSuccessfully'));
 
       if (draft.paymentMethod === "payOnPickup") {
         router.replace(`/bookings/${result.bookingId}`);
@@ -73,7 +80,7 @@ export const SummaryStep = ({
       const message =
         error instanceof Error
           ? error.message
-          : "Unable to create booking.";
+          : t('unableToCreateBooking');
       setSubmitError(message);
 
     }
@@ -93,7 +100,7 @@ export const SummaryStep = ({
         <Card>
           <CardHeader>
             <CardTitle>
-              Additional Note
+              {t('additionalNote')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -120,11 +127,12 @@ export const SummaryStep = ({
 };
 
 function VehicleSummary({car, shop, }: {car: Car; shop: RentalShop;}) {
+  const t = useTranslations('cars');
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Vehicle
+          {t('vehicle')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -140,8 +148,8 @@ function VehicleSummary({car, shop, }: {car: Car; shop: RentalShop;}) {
             <h3 className="font-semibold text-lg">{car.brand} {car.model} </h3>
             <Badge>{car.year}</Badge>
             <p>{shop.name}</p>
-            <p>{car.transmission}</p>
-            <p>{car.seats} Seats</p>
+            <p><TranslatedTransmissionType transmission={car.transmission as TransmissionType} /></p>
+            <p>{t('numSeats', {count: car.seats})}</p>
           </div>
         </div>
       </CardContent>
@@ -150,6 +158,7 @@ function VehicleSummary({car, shop, }: {car: Car; shop: RentalShop;}) {
 }
 
 function ScheduleSummary({draft, }: {draft: BookingDraft;}) {
+  const t = useTranslations('cars');
   const combineDateTime = (date?: Date, time?: string) => {
     if (!date || !time) return null;
     const [h, m] = time.split(":").map(Number);
@@ -164,33 +173,33 @@ function ScheduleSummary({draft, }: {draft: BookingDraft;}) {
     <Card>
       <CardHeader>
         <CardTitle>
-          Rental Schedule
+          {t('rentalSchedule')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex justify-between">
-          <span>Pickup</span>
+          <span>{t('pickup')}</span>
           <span>{formatDate(pickupDateTime!.toISOString())} @ {formatTime(pickupDateTime!.toISOString())}</span>
         </div>
         <div className="flex justify-between">
-          <span>Dropoff</span>
+          <span>{t('dropoff')}</span>
           <span>{formatDate(dropoffDateTime!.toISOString())} @ {formatTime(dropoffDateTime!.toISOString())}</span>
         </div>
         <div className="flex justify-between">
-          <span>Rental Days</span>
+          <span>{t('rentalDays')}</span>
           <span>{differenceInCalendarDays(draft.dropoffDate!, draft.pickupDate!)}</span>
         </div>
         <Separator />
         <div className="flex justify-between">
-          <span>Delivery Type</span>
-          <Badge>{draft.deliveryType}</Badge>
+          <span>{t('deliveryMethod')}</span>
+          <Badge><TranslatedDeliveryMethod method={draft.deliveryType} /></Badge>
         </div>
 
         {draft.deliveryType === "delivery" && (
           <>
             <Separator />
             <div>
-              <p className="font-medium mb-1">Delivery Address</p>
+              <p className="font-medium mb-1">{t('deliveryAddress')}</p>
               <p className="text-muted-foreground">{draft.deliveryAddress} </p>
             </div>
           </>
@@ -239,37 +248,39 @@ function DocumentPreview({
 }
 
 function DriverSummary({draft, }: {draft: BookingDraft;}) {
+  const t = useTranslations('cars');
   const driver = draft.driver!;
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Driver</CardTitle>
+        <CardTitle>{t('driver')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        <p><strong>Name:</strong> {driver.name}</p>
-        <p><strong>Email:</strong> {driver.email}</p>
-        <p><strong>Phone:</strong> {driver.phone}</p>
-        <p><strong>Date of Birth:</strong> {driver.dob}</p>
-        <p><strong>Gender:</strong> {driver.gender}</p>
+        <p><strong>{t('fullName')}:</strong> {driver.name}</p>
+        <p><strong>{t('email')}:</strong> {driver.email}</p>
+        <p><strong>{t('phone')}:</strong> {driver.phone}</p>
+        <p><strong>{t('dateOfBirth')}:</strong> {driver.dob}</p>
+        <p><strong>{t('gender')}:</strong><TranslatedGender gender={driver.gender as GenderType} /></p>
       </CardContent>
     </Card>
   );
 }
 
 function DocumentsSummary({draft, }: {draft: BookingDraft;}) {
+  const t = useTranslations('cars');
   const docs = [
     {
-      title: "Driver License Front",
+      title: t('driverLicenseFront'),
       file: draft.driverDocuments?.licenseFront,
       url: draft.driverDocuments?.licenseFrontUrl,
     },
     {
-      title: "Driver License Back",
+      title: t('driverLicenseBack'),
       file: draft.driverDocuments?.licenseBack,
       url: draft.driverDocuments?.licenseBackUrl,
     },
     {
-      title: "Government ID",
+      title: t('governmentID'),
       file: draft.driverDocuments?.idCard,
       url: draft.driverDocuments?.idCardUrl,
     },
@@ -279,7 +290,7 @@ function DocumentsSummary({draft, }: {draft: BookingDraft;}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Documents</CardTitle>
+        <CardTitle>{t('documents')}</CardTitle>
       </CardHeader>
       <CardContent className="grid md:grid-cols-3 gap-4">
         {docs.map(doc => (
@@ -309,6 +320,7 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
   onSubmit: () => void;
   isSubmitting: boolean;
 }) {
+  const t = useTranslations('cars');
 
   const {formatCurrency} = useDateTimeFormatter();
 
@@ -329,12 +341,12 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
   return (
     <Card className="sticky top-24">
       <CardHeader>
-        <CardTitle>Cost Summary</CardTitle>
+        <CardTitle>{t('costSummary')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex justify-between">
-          <span>Rental</span>
-          <span>{totals.rentalDays} day{totals.rentalDays !== 1 && 's'} x {formatCurrency(totals.dailyPrice, totals.currency)}</span>
+          <span>{t('rental')}</span>
+          <span>{t('rentalDaysCount', {count: totals.rentalDays})} x {formatCurrency(totals.dailyPrice, totals.currency)}</span>
         </div>
         <div className="flex justify-between">
           <span></span>
@@ -343,24 +355,24 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
         {
           draft.deliveryType === 'delivery' &&
           <div className="flex justify-between">
-            <span>Delivery</span>
+            <span>{t('delivery')}</span>
             <span>{formatCurrency(totals.deliveryPrice, totals.currency)}</span>
           </div>
         }
 
 
         <div className="flex justify-between">
-          <span>Tax Rate</span>
+          <span>{t('taxRate')}</span>
           <span>%{carShop.shop.taxRate}</span>
         </div>
 
         <div className="flex justify-between">
-          <span>Tax</span>
+          <span>{t('tax')}</span>
           <span>{formatCurrency(totals.tax, totals.currency)}</span>
         </div>
 
         <div className="flex justify-between">
-          <span>Deposit</span>
+          <span>{t('deposit')}</span>
           <span>{formatCurrency(totals.deposit, totals.currency)}</span>
         </div>
 
@@ -368,7 +380,7 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
 
         <div className="flex justify-between text-lg font-bold">
 
-          <span>Total</span>
+          <span>{t('total')}</span>
 
           <span>{formatCurrency(totals.total, totals.currency)}</span>
 
@@ -391,9 +403,9 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
           >
             <Field orientation="horizontal">
               <FieldContent>
-                <FieldTitle>Crypto</FieldTitle>
+                <FieldTitle>{t('crypto')}</FieldTitle>
                 <FieldDescription>
-                  Pay using cryptocurrency
+                  {t('payUsingCrypto')}
                 </FieldDescription>
               </FieldContent>
               <RadioGroupItem value="crypto" id="crypto" />
@@ -405,8 +417,8 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
           >
             <Field orientation="horizontal">
               <FieldContent>
-                <FieldTitle>Pay on Pickup</FieldTitle>
-                <FieldDescription>Pay physically when receiving car</FieldDescription>
+                <FieldTitle>{t('payOnPickup')}</FieldTitle>
+                <FieldDescription>{t('payPhysically')}</FieldDescription>
               </FieldContent>
               <RadioGroupItem value="payOnPickup" id="payOnPickup" />
             </Field>
@@ -424,31 +436,31 @@ function BookingCostSummary({carShop, draft, onBack, setDraft, onSubmit, isSubmi
               disabled={isSubmitting}
               onClick={() => onBack((prev: number) => prev - 1)}
             >
-              Back
+              {t('back')}
             </Button>
             <AlertDialog>
-              <AlertDialogTrigger render={<Button className="flex-1 bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer">Submit Booking</Button>}>
+              <AlertDialogTrigger render={<Button className="flex-1 bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer">{t('submitBooking')}</Button>}>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Confirm Booking?</AlertDialogTitle>
+                  <AlertDialogTitle>{t('confirmBooking')}</AlertDialogTitle>
                   <AlertDialogDescription>
-                    You are about to book:
+                    {t('youAreAboutToBook')}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <div className="flex flex-col gap-2 p-0">
                   {carShop.car.brand}{' '}{carShop.car.model}{' '}{carShop.car.year}
-                  <span className="text-sm text-slate-600">Pickup: {formatDate(pickupDateTime!.toISOString())} @{formatTime(pickupDateTime!.toISOString())}</span>
-                  <span className="text-sm text-slate-600">Dropoff: {formatDate(dropoffDateTime!.toISOString())} @{formatTime(dropoffDateTime!.toISOString())}</span>
-                  <span className="text-sm text-slate-600">Total: {formatCurrency(totals.total, totals.currency)}</span>
+                  <span className="text-sm text-slate-600">{t('pickup')}: {formatDate(pickupDateTime!.toISOString())} @{formatTime(pickupDateTime!.toISOString())}</span>
+                  <span className="text-sm text-slate-600">{t('dropoff')}: {formatDate(dropoffDateTime!.toISOString())} @{formatTime(dropoffDateTime!.toISOString())}</span>
+                  <span className="text-sm text-slate-600">{t('total')}: {formatCurrency(totals.total, totals.currency)}</span>
                 </div>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                   <AlertDialogAction
                     className="bg-k-primary text-white cursor-pointer hover:bg-k-primary/90 hover:text-white"
                     onClick={onSubmit}
                     disabled={isSubmitting}
-                  >{isSubmitting ? <Loader className="animate-spin" /> : "Confirm"}</AlertDialogAction>
+                  >{isSubmitting ? <Loader className="animate-spin" /> : t('confirm')}</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

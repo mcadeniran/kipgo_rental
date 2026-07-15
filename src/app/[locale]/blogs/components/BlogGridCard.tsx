@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {Blog} from "@/app/[locale]/models/Blog";
 import {Badge} from "@/components/ui/badge";
+import TranslatedBlogCategories from "@/lib/translations/translatedBlogCategories";
 
 export default function BlogGridCard({
   blog,
@@ -47,7 +48,7 @@ export default function BlogGridCard({
             variant="secondary"
             className="capitalize"
           >
-            {blog.category}
+            <TranslatedBlogCategories category={blog.category} />
           </Badge>
 
           {blog.createdAt && (

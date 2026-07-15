@@ -7,8 +7,11 @@ import useAuth from "@/context/AuthContext";
 import {useUploadAvatar} from "@/lib/helper/useUploadAvatar";
 import {toast} from "sonner";
 import AvatarUpload from "./AvatarUpload";
+import {useTranslations} from "next-intl";
 
 export default function ProfileAvatarCard() {
+  const t = useTranslations('profile');
+
   const {currentUser, userDataObj, refreshProfile} = useAuth();
 
   const uploadMutation = useUploadAvatar();
@@ -35,13 +38,13 @@ export default function ProfileAvatarCard() {
       setPreview(imageUrl);
 
       toast.success(
-        "Profile picture updated successfully."
+        t('profilePictureUpdateSuccessfully')
       );
       await refreshProfile();
     } catch {
       setPreview(previousImage);
       toast.error(
-        "Unable to upload profile picture."
+        t('unableToUploadProfilePicture')
       );
     } finally {
       URL.revokeObjectURL(tempUrl);
@@ -70,7 +73,7 @@ export default function ProfileAvatarCard() {
         {uploadMutation.isPending && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" />
-            Uploading image...
+            {t('uploadingImage')}
           </div>
         )}
       </CardContent>

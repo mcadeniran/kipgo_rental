@@ -4,7 +4,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 import {Loader} from "lucide-react";
 import {toast} from "sonner";
-
+import * as z from 'zod';
 import {Button} from "@/components/ui/button";
 
 import {
@@ -14,7 +14,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
-import {RatingFormValues, RatingSchema} from "@/schemas";
+import {RatingSchema} from "@/schemas";
 import {ratingDefaultValues} from "@/constants/rating";
 import VehicleRatingSection from "./VehicleRatingSection";
 import RentalRatingSection from "./RentalRatingSection";
@@ -22,6 +22,7 @@ import ReviewDetailsSection from "./ReviewDetailsSection";
 import ProsConsInput from "./ProsConsInput";
 import ReviewPhotoUpload from "./ReviewPhotoUpload";
 import useSubmitRating from "@/lib/helper/useSubmitRating";
+import {useTranslations} from "next-intl";
 
 interface SubmitRatingFormProps {
   bookingId: string;
@@ -32,8 +33,12 @@ export default function SubmitRatingForm({
   bookingId,
   onSuccess,
 }: SubmitRatingFormProps) {
-  const form = useForm<RatingFormValues>({
-    resolver: zodResolver(RatingSchema),
+  const t = useTranslations('bookings');
+  const m = useTranslations();
+  const schema = RatingSchema(m);
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: ratingDefaultValues,
     mode: "onSubmit",
   });
@@ -47,7 +52,7 @@ export default function SubmitRatingForm({
 
   // const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function onSubmit(values: RatingFormValues) {
+  async function onSubmit(values: z.infer<typeof schema>) {
     try {
       // setIsSubmitting(true);
 
@@ -56,7 +61,7 @@ export default function SubmitRatingForm({
         rating: values,
       });
 
-      toast.success("Thank you for your review!");
+      toast.success(t('thankYouForYourReview'));
 
       onSuccess?.();
 
@@ -65,7 +70,7 @@ export default function SubmitRatingForm({
     } catch (error) {
       console.error(error);
 
-      toast.error("Unable to submit your review.");
+      toast.error(t('unableToSubmitYourReview'));
     } finally {
       // setIsSubmitting(false);
     }
@@ -108,12 +113,12 @@ export default function SubmitRatingForm({
               }
             >
               <FieldLabel>
-                What did you like?
+                {t('whatDidYouLike')}
               </FieldLabel>
 
               <ProsConsInput
-                title="Pros"
-                placeholder="Press Enter after each item..."
+                title={t('pros')}
+                placeholder={t('pressEnterAfter')}
                 value={field.value}
                 onChange={
                   field.onChange
@@ -147,12 +152,12 @@ export default function SubmitRatingForm({
               }
             >
               <FieldLabel>
-                What could be improved?
+                {t('whatCouldBeImproved')}
               </FieldLabel>
 
               <ProsConsInput
-                title="Cons"
-                placeholder="Press Enter after each item..."
+                title={t('cons')}
+                placeholder={t('pressEnterAfter')}
                 value={field.value}
                 onChange={
                   field.onChange
@@ -186,7 +191,7 @@ export default function SubmitRatingForm({
               }
             >
               <FieldLabel>
-                Review Photos
+                {t('reviewPhotos')}
               </FieldLabel>
 
               <ReviewPhotoUpload
@@ -216,7 +221,7 @@ export default function SubmitRatingForm({
           <p className="mb-4 text-sm text-destructive">
             {error instanceof Error
               ? error.message
-              : "Unable to submit your review."}
+              : t('unableToSubmitYourReview')}
           </p>
         )}
 
@@ -231,10 +236,10 @@ export default function SubmitRatingForm({
             <>
               <Loader className="mr-2 h-4 w-4 animate-spin" />
 
-              Submitting Review...
+              {t('submittingReview')}
             </>
           ) : (
-            "Submit Review"
+            t('submitReview')
           )}
         </Button>
       </div>

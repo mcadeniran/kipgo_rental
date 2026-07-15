@@ -5,6 +5,7 @@ import Image from "next/image";
 import {Trash2, Upload} from "lucide-react";
 
 import {Button} from "@/components/ui/button";
+import {useTranslations} from "next-intl";
 
 interface Props {
   value: File[];
@@ -17,6 +18,7 @@ export default function ReviewPhotoUpload({
   onChange,
   maxFiles = 6,
 }: Props) {
+  const t = useTranslations('bookings');
   const inputRef =
     React.useRef<HTMLInputElement>(null);
 
@@ -54,7 +56,7 @@ export default function ReviewPhotoUpload({
         }
       >
         <Upload className="mr-2 h-4 w-4" />
-        Upload Photos
+        {t('uploadPhotos')}
       </Button>
 
       <input

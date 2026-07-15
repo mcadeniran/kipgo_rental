@@ -26,8 +26,19 @@ import {
 import {Button} from "@/components/ui/button";
 import useAuth from "@/context/AuthContext";
 import {Link} from "@/i18n/navigation";
+import {useTranslations} from "next-intl";
+import {useState} from "react";
+import {ChangePasswordDialog} from "../profile/account/change-password-dialog";
+import {DeleteAccountWarning} from "../profile/account/delete-account-warning";
+import DeleteAccountDialog from "../profile/account/delete-account-dialog";
 
 export default function ProfileMenu() {
+  const t = useTranslations('nav');
+
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const {userDataObj, currentUser, logout, authStatus} = useAuth();
 
@@ -79,59 +90,46 @@ export default function ProfileMenu() {
             <div className="mt-4 flex items-center gap-2">
               <BadgeCheck className="h-4 w-4" />
               <span className="text-sm">
-                Verified Account
+                {t('verifiedAccount')}
               </span>
             </div>
           </div>
         ) : (
           <div className="border-b p-5">
             <h3 className="font-semibold">
-              Welcome
+              {t('welcome')}
             </h3>
-            <p className="text-sm text-muted-foreground">Sign in to manage bookings.</p>
+            <p className="text-sm text-muted-foreground">{t('signInToManageBookings')}</p>
           </div>
         )}
         <DropdownMenuGroup>
-          {/* <DropdownMenuLabel>
-            <div className="space-y-1">
-              <p className="font-semibold">
-                {userDataObj?.username}
-              </p>
-              <p className="text-xs text-muted-foreground">{currentUser?.email}</p>
 
-              <div className="flex items-center gap-1 pt-1 text-k-primary">
-                <BadgeCheck className="h-4 w-4" />
-                <span className="text-xs">
-                  Verified Account
-                </span>
-              </div>
-            </div>
-          </DropdownMenuLabel> */}
         </DropdownMenuGroup>
         {/* <DropdownMenuSeparator /> */}
         <DropdownMenuGroup>
           <Link href="/profile">
             <DropdownMenuItem>
               <UserCog className="mr-2 h-4 w-4" />
-              My Profile
+              {t('myProfile')}
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
         <DropdownMenuGroup className='my-4 gap-6'>
-          <Link href=''>
-            <DropdownMenuItem>
-              <SquareAsterisk className="mr-2 h-4 w-4" />
-              Change Password
-            </DropdownMenuItem>
-          </Link>
-          <Link href='' className="text-destructive">
-            <DropdownMenuItem>
-              <UserRoundMinus className="mr-2 h-4 w-4" />
-              Delete Account
-            </DropdownMenuItem>
-          </Link>
+          <DropdownMenuItem
+            onClick={() => setPasswordDialogOpen(true)}
+          >
+            <SquareAsterisk
+              className="mr-2 h-4 w-4"
+            />
+            {t("changePassword")}
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={() => setWarningOpen(true)}>
+            <UserRoundMinus className="mr-2 h-4 w-4" />
+            {t('deleteAccount')}
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -139,9 +137,29 @@ export default function ProfileMenu() {
           onClick={logout}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          Sign Out
+          {t('signOut')}
         </DropdownMenuItem>
       </DropdownMenuContent>
+      <ChangePasswordDialog
+        open={passwordDialogOpen}
+        onOpenChange={setPasswordDialogOpen}
+        email={currentUser?.email ?? ""}
+      />
+
+      <DeleteAccountWarning
+        open={warningOpen}
+        onOpenChange={setWarningOpen}
+        onContinue={() =>
+          setDeleteDialogOpen(true)
+        }
+      />
+
+      <DeleteAccountDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        userEmail={userDataObj?.email ?? "Unknown"}
+      />
     </DropdownMenu>
+
   );
 }

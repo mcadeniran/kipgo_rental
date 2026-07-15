@@ -3,6 +3,7 @@
 import {ChevronRight} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Link, usePathname} from "@/i18n/navigation";
+import {useTranslations} from "next-intl";
 
 interface Props {
   href: string;
@@ -13,6 +14,7 @@ interface Props {
 
 export default function MobileNavItem({href, icon: Icon, label, onNavigate, }: Props) {
 
+  const c = useTranslations();
   const pathname = usePathname();
 
   const active =
@@ -24,9 +26,11 @@ export default function MobileNavItem({href, icon: Icon, label, onNavigate, }: P
 
     <Link
       href={href}
-      onClick={onNavigate}
+      onClick={() => {
+        onNavigate?.();
+      }}
       className={cn(
-        "group flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300",
+        "group flex w-full items-center justify-between rounded-xl px-4 py-3 transition-all duration-300",
         active
           ? "bg-k-primary/10 text-k-primary"
           : "hover:bg-muted"
@@ -35,7 +39,7 @@ export default function MobileNavItem({href, icon: Icon, label, onNavigate, }: P
       <div className="flex items-center gap-3">
         <Icon className="h-5 w-5" />
         <span className="font-medium">
-          {label}
+          {c(label)}
         </span>
       </div>
 

@@ -4,7 +4,7 @@ import {useState} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {Sheet, SheetContent, SheetTrigger, SheetClose, SheetFooter, } from "@/components/ui/sheet";
-import {Menu, LogOut, LogIn, UserPlus, BadgeCheck, } from "lucide-react";
+import {Menu, LogOut, LogIn, UserPlus, BadgeCheck, SquareAsterisk, UserRoundMinus, } from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar";
 import useAuth from "@/context/AuthContext";
@@ -13,9 +13,20 @@ import {getNavigation} from "./nav-items";
 
 import logo from "../../../public/logo.png";
 import {useRouter} from "@/i18n/navigation";
+import {useTranslations} from "next-intl";
+import MobileNavAction from "./mobile-nav-action";
+import {DeleteAccountWarning} from "../profile/account/delete-account-warning";
+import DeleteAccountDialog from "../profile/account/delete-account-dialog";
+import {ChangePasswordDialog} from "../profile/account/change-password-dialog";
+import {Marker, MarkerContent} from "../ui/marker";
 
 export default function MobileNav() {
+  const t = useTranslations('nav');
   const [open, setOpen] = useState(false);
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const {authStatus, currentUser, userDataObj, logout, } = useAuth();
 
   const router = useRouter();
@@ -92,33 +103,69 @@ export default function MobileNav() {
               <div className="mt-4 flex items-center gap-2">
                 <BadgeCheck className="h-4 w-4" />
                 <span className="text-sm">
-                  Verified Account
+                  {t('verifiedAccount')}
                 </span>
               </div>
             </div>
           ) : (
             <div className="border-b p-5">
               <h3 className="font-semibold">
-                Welcome
+                {t('welcome')}
               </h3>
-              <p className="text-sm text-muted-foreground">Sign in to manage bookings.</p>
+              <p className="text-sm text-muted-foreground">{t('signInToManageBookings')}</p>
             </div>
           )}
 
           {/* NAVIGATION */}
-
-          <SheetClose>
-            <div className="flex-1 space-y-2 overflow-y-auto ">
+          <Marker variant="separator">
+            <MarkerContent>Navigation</MarkerContent>
+          </Marker>
+          <div className="flex-1 overflow-y-auto">
+            {/* <SheetClose> */}
+            <div className="space-y-2 ">
               {navigation.map((item) => (
                 <MobileNavItem
                   key={item.href}
                   href={item.href}
                   icon={item.icon}
                   label={item.label}
+                  onNavigate={() => setOpen(false)}
                 />
               ))}
             </div>
-          </SheetClose>
+            {/* </SheetClose> */}
+
+            {authenticated && (
+              <>
+                <Marker variant="separator">
+                  <MarkerContent>Account</MarkerContent>
+                </Marker>
+                {/* account actions */}
+                <MobileNavAction
+                  icon={SquareAsterisk}
+                  label='nav.changePassword'
+                  onClick={() => {
+                    setOpen(false);
+                    setTimeout(() => {
+                      setPasswordDialogOpen(true);
+                    }, 150);
+                  }}
+                />
+
+                <MobileNavAction
+                  icon={UserRoundMinus}
+                  label="nav.deleteAccount"
+                  variant="destructive"
+                  onClick={() => {
+                    setOpen(false);
+                    setTimeout(() => {
+                      setWarningOpen(true);
+                    }, 150);
+                  }}
+                />
+              </>
+            )}
+          </div>
 
           {/* FOOTER */}
           <SheetFooter>
@@ -130,7 +177,7 @@ export default function MobileNav() {
                   onClick={logout}
                 >
                   <LogOut className="h-5 w-5" />
-                  Sign Out
+                  {t('signOut')}
                 </Button>
               }>
               </SheetClose>
@@ -140,7 +187,7 @@ export default function MobileNav() {
                 <SheetClose render={
                   <Button size='lg' className="w-full bg-k-primary cursor-pointer text-white hover:bg-k-primary/90 hover:text-white/90" onClick={() => router.push("/auth/login")}>
                     <LogIn className="mr-2 h-4 w-4" />
-                    Sign In
+                    {t('signIn')}
                   </Button>
                 }>
 
@@ -148,7 +195,7 @@ export default function MobileNav() {
                 <SheetClose render={
                   <Button variant="outline" className="w-full" onClick={() => router.push("/auth/register")}>
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Create Account
+                    {t('createAccount')}
                   </Button>
                 }>
                 </SheetClose>
@@ -157,6 +204,25 @@ export default function MobileNav() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+      <ChangePasswordDialog
+        open={passwordDialogOpen}
+        onOpenChange={setPasswordDialogOpen}
+        email={currentUser?.email ?? ""}
+      />
+
+      <DeleteAccountWarning
+        open={warningOpen}
+        onOpenChange={setWarningOpen}
+        onContinue={() =>
+          setDeleteDialogOpen(true)
+        }
+      />
+
+      <DeleteAccountDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        userEmail={userDataObj?.email ?? "Unknown"}
+      />
     </div>
   );
 }

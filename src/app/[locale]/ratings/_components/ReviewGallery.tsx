@@ -9,6 +9,7 @@ import {
 
 import {ReviewPhoto} from "@/types/ratings";
 import {useState} from "react";
+import {useTranslations} from "next-intl";
 
 interface ReviewGalleryProps {
   photos?: ReviewPhoto[];
@@ -17,6 +18,7 @@ interface ReviewGalleryProps {
 export default function ReviewGallery({
   photos = [],
 }: ReviewGalleryProps) {
+  const t = useTranslations('reviews');
 
   const [selected, setSelected] = useState<ReviewPhoto | null>(null);
 
@@ -28,7 +30,7 @@ export default function ReviewGallery({
   return (
     <div className="space-y-4">
       <h4 className="font-semibold">
-        Review Photos
+        {t('reviewPhotos')}
       </h4>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -36,7 +38,7 @@ export default function ReviewGallery({
           <div className="relative aspect-video w-full" key={photo.id}>
             <Image
               src={photo.url}
-              alt="Review photo"
+              alt={t('reviewPhoto')}
               fill
               className="rounded-lg object-contain"
               onClick={() => setSelected(photo)}
@@ -52,7 +54,7 @@ export default function ReviewGallery({
             <div className="relative aspect-video w-full">
               <Image
                 src={selected!.url}
-                alt="Review photo"
+                alt={t('reviewPhoto')}
                 fill
                 className="rounded-lg object-contain"
               />

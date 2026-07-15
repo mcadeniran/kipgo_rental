@@ -1,4 +1,5 @@
 import { RatingFormValues } from '@/schemas';
+import { Translator } from '@/schemas/create-schema';
 
 export const VEHICLE_RATING_FIELDS = [
   'overall',
@@ -32,62 +33,63 @@ export const MAX_CONS = 5;
 
 export const MAX_TAG_LENGTH = 60;
 
-export const VEHICLE_RATING_ITEMS = [
-  {
-    name: 'overall',
-    label: 'Overall Experience',
-    description: 'How would you rate the vehicle overall?',
-  },
-  {
-    name: 'cleanliness',
-    label: 'Cleanliness',
-    description: 'Was the vehicle clean and well maintained?',
-  },
-  {
-    name: 'comfort',
-    label: 'Comfort',
-    description: 'How comfortable was the vehicle during the trip?',
-  },
-  {
-    name: 'condition',
-    label: 'Vehicle Condition',
-    description:
-      'Did the vehicle match the listing and arrive in good condition?',
-  },
-  {
-    name: 'valueForMoney',
-    label: 'Value for Money',
-    description: 'Did the vehicle provide good value for the amount paid?',
-  },
-] as const;
+export const VEHICLE_RATING_ITEMS = (t: Translator) =>
+  [
+    {
+      name: 'overall',
+      label: t('bookings.ratings.overallExperience'),
+      description: t('bookings.ratings.overallExperienceNote'),
+    },
+    {
+      name: 'cleanliness',
+      label: t('bookings.ratings.cleanliness'),
+      description: t('bookings.ratings.cleanlinessNote'),
+    },
+    {
+      name: 'comfort',
+      label: t('bookings.ratings.comfort'),
+      description: t('bookings.ratings.comfortNote'),
+    },
+    {
+      name: 'condition',
+      label: t('bookings.ratings.vehicleCondition'),
+      description: t('bookings.ratings.vehicleConditionNote'),
+    },
+    {
+      name: 'valueForMoney',
+      label: t('bookings.ratings.valueForMoney'),
+      description: t('bookings.ratings.valueForMoneyNote'),
+    },
+  ] as const;
 
-export const RENTAL_RATING_ITEMS = [
-  {
-    name: 'overall',
-    label: 'Overall Experience',
-    description: 'Overall experience with the rental company.',
-  },
-  {
-    name: 'communication',
-    label: 'Communication',
-    description: 'How responsive and helpful was the rental company?',
-  },
-  {
-    name: 'pickupExperience',
-    label: 'Pickup Experience',
-    description: 'How smooth was the pickup process?',
-  },
-  {
-    name: 'returnExperience',
-    label: 'Return Experience',
-    description: 'How easy was the vehicle return process?',
-  },
-  {
-    name: 'professionalism',
-    label: 'Professionalism',
-    description: 'How professional was the rental company?',
-  },
-] as const;
+export const RENTAL_RATING_ITEMS = (t: Translator) =>
+  [
+    {
+      name: 'overall',
+      label: t('bookings.ratings.overallRental'),
+      description: t('bookings.ratings.overallRentalNote'),
+    },
+    {
+      name: 'communication',
+      label: t('bookings.ratings.communication'),
+      description: t('bookings.ratings.communicationNote'),
+    },
+    {
+      name: 'pickupExperience',
+      label: t('bookings.ratings.pickupExperience'),
+      description: t('bookings.ratings.pickupExperienceNote'),
+    },
+    {
+      name: 'returnExperience',
+      label: t('bookings.ratings.returnExperience'),
+      description: t('bookings.ratings.returnExperienceNote'),
+    },
+    {
+      name: 'professionalism',
+      label: t('bookings.ratings.professionalism'),
+      description: t('bookings.ratings.professionalismNote'),
+    },
+  ] as const;
 
 export const ratingDefaultValues: RatingFormValues = {
   vehicle: {

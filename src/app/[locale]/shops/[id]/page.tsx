@@ -18,8 +18,11 @@ import RatingMetricsGrid from '../../ratings/_components/RatingMetricsGrid';
 import useInfiniteReviews from '@/lib/helper/useInfiniteReviews';
 import ReviewPreviewList from '../../ratings/_components/ReviewPreviewList';
 import {useRouter} from '@/i18n/navigation';
+import {useTranslations} from 'next-intl';
 
 export default function ShopDetailsPage() {
+  const t = useTranslations('shops');
+
   const params = useParams();
   const id = params.id as string;
 
@@ -66,12 +69,12 @@ export default function ShopDetailsPage() {
   if (results.some((q) => q.isError)) {
     return (
       <div className="py-10 text-center">
-        Something went wrong while loading the page.
+        {t('somethingWentWrong')}
       </div>
     );
   }
 
-  if (!shop) return <p className="">Company not found</p>;
+  if (!shop) return <p className="">{t('companyNotFound')}</p>;
 
 
   return (
@@ -118,7 +121,7 @@ export default function ShopDetailsPage() {
 
       <div className="flex gap-3 flex-wrap">
         <Button variant="secondary">
-          View Cars
+          {t('viewCars')}
         </Button>
       </div>
 
@@ -134,7 +137,7 @@ export default function ShopDetailsPage() {
           <ItemContent>
             <ItemTitle>{cars.length}</ItemTitle>
             <ItemDescription>
-              Total Cars
+              {t('totalCars')}
             </ItemDescription>
           </ItemContent>
         </Item>
@@ -148,7 +151,7 @@ export default function ShopDetailsPage() {
           <ItemContent>
             <ItemTitle>{shop.district}, {shop.city}</ItemTitle>
             <ItemDescription>
-              Location
+              {t('location')}
             </ItemDescription>
           </ItemContent>
         </Item>
@@ -160,9 +163,9 @@ export default function ShopDetailsPage() {
             />
           </ItemMedia>
           <ItemContent>
-            <ItemTitle>Office Pickup {shop.offersDelivery && " | Delivery"}</ItemTitle>
+            <ItemTitle>{t('officePickup')} {shop.offersDelivery && <span>{" | "}{t('delivery')}</span>}</ItemTitle>
             <ItemDescription>
-              Delivery Method
+              {t('deliveryMethod')}
             </ItemDescription>
           </ItemContent>
         </Item>
@@ -171,7 +174,7 @@ export default function ShopDetailsPage() {
       <Card>
         <CardHeader>
           <CardTitle>
-            About Company
+            {t('aboutCompany')}
           </CardTitle>
         </CardHeader>
 
@@ -202,6 +205,7 @@ export default function ShopDetailsPage() {
 }
 
 function ShopRating({shop}: {shop: RentalShop;}) {
+  const t = useTranslations('shops');
   return <div className=" flex flex-col sm:flex-row w-full gap-4">
     <div className="w-full max-w-2xl">
       <RatingSummary
@@ -219,25 +223,23 @@ function ShopRating({shop}: {shop: RentalShop;}) {
         // title="Vehicle Ratings"
         metrics={[
           {
-            label: "Communication",
+            label: t('communication'),
             value: shop.review?.communication ?? 0,
           },
           {
-            label: "Professionalism",
+            label: t('professionalism'),
             value: shop.review?.professionalism ?? 0,
           },
           {
-            label: "Pickup Experience",
+            label: t('pickupExperience'),
             value: shop.review?.pickupExperience ?? 0,
           },
           {
-            label: "Return Experience",
+            label: t('returnExperience'),
             value: shop.review?.returnExperience ?? 0,
           },
         ]}
       />
-
-
     </div>
   </div>;
 }

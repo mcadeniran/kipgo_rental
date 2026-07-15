@@ -1,43 +1,54 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Booking} from "../../models/Booking";
 import {Item, ItemContent, ItemDescription, ItemTitle} from "@/components/ui/item";
+import {useTranslations} from "next-intl";
+import {GenderType} from "@/lib/translations/translatedGender";
 
 export function DriverDetailsCard({
   booking,
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
+  const c = useTranslations('cars');
+
+  const label: Record<GenderType, string> = {
+    Male: c('male'),
+    Female: c('female'),
+    Others: c('others'),
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Driver Information
+          {t('driverInformation')}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3">
         <Info
-          label="Name"
+          label={t('name')}
           value={booking.driver.name}
         />
 
         <Info
-          label="Email"
+          label={t('email')}
           value={booking.driver.email}
         />
 
         <Info
-          label="Phone"
+          label={t('phone')}
           value={booking.driver.phone}
         />
 
         <Info
-          label="Gender"
-          value={booking.driver.gender}
+          label={t('gender')}
+          value={label[booking.driver.gender as GenderType]}
         />
 
         <Info
-          label="Date of Birth"
+          label={t('dateOfBirth')}
           value={booking.driver.dob}
         />
 

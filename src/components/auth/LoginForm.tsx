@@ -33,10 +33,6 @@ export const LoginForm = ({
 
   const {login} = useAuth();
 
-  // const searchParams = useSearchParams();
-
-  // const callbackUrl = searchParams.get("callbackUrl");
-
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -61,19 +57,19 @@ export const LoginForm = ({
       // router.push("/admin");
     } catch (error) {
       if (error instanceof EmailNotVerifiedError) {
-        setError("Please verify your email before logging in.");
+        setError(a('pleaseVerifyEmail'));
         return;
       }
 
-      setError(getFirebaseAuthError(error));
+      setError(getFirebaseAuthError(error, t));
     }
     setIsPending(false);
   };
 
   return (
     <CardWrapper
-      headerLabel='Welcome back'
-      backButtonLabel="Don't have an account?"
+      headerLabel={a('welcomeBack')}
+      backButtonLabel={a('dontHaveAnAccount')}
       backButtonHref={callbackUrl ? `/auth/register?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/auth/register'}
       showSocials={false}
     >
@@ -85,7 +81,7 @@ export const LoginForm = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-email">
-                  Email
+                  {a('email')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -107,7 +103,7 @@ export const LoginForm = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-password">
-                  Password
+                  {a('password')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -119,7 +115,7 @@ export const LoginForm = ({
                   disabled={isPending}
                 />
                 <div className="flex w-full justify-end">
-                  <Button variant='link' size='sm' className='px-0 font-normal'><Link href='/auth/reset'>Forgot password?</Link> </Button>
+                  <Button variant='link' size='sm' className='px-0 font-normal'><Link href='/auth/reset'>{a('forgotPassword')}</Link> </Button>
                 </div>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -137,7 +133,7 @@ export const LoginForm = ({
             className='w-full bg-k-primary text-white hover:bg-k-primary/80 hover:text-white cursor-pointer'
             disabled={isPending}
           >
-            {isPending ? <Loader className='animate-spin' /> : 'Login'}
+            {isPending ? <Loader className='animate-spin' /> : a('login')}
           </Button>
         </div>
       </form>

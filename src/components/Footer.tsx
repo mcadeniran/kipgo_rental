@@ -9,9 +9,10 @@ import apple_ru from '../../public/apple_ru.svg';
 import apple_tr from '../../public/apple_tr.svg';
 import React from 'react';
 import {Icon} from '@iconify/react';
-import {useLocale} from 'next-intl';
+import {useLocale, useTranslations} from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer');
   const locale = useLocale();
 
   return (
@@ -43,8 +44,7 @@ export default function Footer() {
             </Link>
 
             <p className="mt-4 text-sm text-white/70 max-w-md">
-              Kipgo is your go-to platform for car rentals in Northern Cyprus.
-              Browse available vehicles, choose your pickup location, and enjoy a smooth and reliable rental experience from start to finish.
+              {t('kipgoIsYourGoToPlatform')}
             </p>
 
             <div className="flex gap-4 mt-6">
@@ -73,16 +73,16 @@ export default function Footer() {
           {/* Products */}
           <div>
             <h3 className="font-semibold mb-4">
-              Products
+              {t('products')}
             </h3>
 
             <div className="space-y-3 flex flex-col text-sm text-white/70">
               <Link href="/cars">
-                Car Rentals
+                {t('carRentals')}
               </Link>
 
               <Link href="/shops">
-                Rental Shops
+                {t('rentalShops')}
               </Link>
 
               {/* <Link href="/hotels">
@@ -98,34 +98,34 @@ export default function Footer() {
           {/* Company */}
           <div>
             <h3 className="font-semibold mb-4">
-              Company
+              {t('company')}
             </h3>
 
             <div className="space-y-3 text-sm flex flex-col text-white/70">
               <Link href="/blogs">
-                Blog
+                {t('blog')}
               </Link>
 
               <Link href="/contact">
-                Contact
+                {t('contact')}
               </Link>
 
               <Link href="/about">
-                About Us
+                {t('aboutUs')}
               </Link>
             </div>
             <div className="mt-8 ">
               <h3 className="font-semibold mb-4">
-                Legal
+                {t('legal')}
               </h3>
 
               <div className="space-y-3 text-sm text-white/70 flex flex-col">
                 <Link href="/privacy">
-                  Privacy Policy
+                  {t('privacyPolicy')}
                 </Link>
 
                 <Link href="/terms">
-                  Terms of Service
+                  {t('termsOfService')}
                 </Link>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function Footer() {
           {/* Apps & Legal */}
           <div>
             <h3 className="font-semibold mb-4">
-              Download
+              {t('download')}
             </h3>
 
             <div className="flex flex-col gap-3">
@@ -181,8 +181,7 @@ export default function Footer() {
             text-white/60
           "
         >
-          © {new Date().getFullYear()} Kipgo.
-          All rights reserved.
+          {t('copyright', {date: `${new Date().getFullYear()}`})}
         </div>
       </div>
     </footer>

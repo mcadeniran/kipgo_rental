@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import {RatingDistribution} from "@/types/ratings";
 import RatingDistributionComponent from "./RatingDistribution";
+import {useTranslations} from "next-intl";
 
 interface RatingSummaryProps {
   average: number;
@@ -23,11 +24,13 @@ export default function RatingSummary({
   recommendationRate,
   distribution,
 }: RatingSummaryProps) {
+  const t = useTranslations('reviews');
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Overall Rating
+          {t('overallRating')}
         </CardTitle>
       </CardHeader>
 
@@ -46,11 +49,7 @@ export default function RatingSummary({
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            Based on{" "}
-            <span className="font-medium">
-              {totalReviews}
-            </span>{" "}
-            verified reviews
+            {t('basedOn', {count: `${totalReviews}`})}
           </p>
         </div>
 
@@ -62,7 +61,7 @@ export default function RatingSummary({
           </p>
 
           <p className="text-xs text-muted-foreground">
-            would recommend this vehicle
+            {t('wouldRecommendThisVehicle')}
           </p>
         </div>
 

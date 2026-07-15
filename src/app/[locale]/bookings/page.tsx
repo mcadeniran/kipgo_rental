@@ -7,8 +7,10 @@ import {getBookingsByUserId} from '@/lib/services/bookingService';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {Booking} from '../models/Booking';
 import BookingCard from './components/BookingCard';
+import {useTranslations} from 'next-intl';
 
 export default function BookingsPage() {
+  const t = useTranslations('bookings');
   const {currentUser, role, loading, userDataObj: user} = useAuth();
 
   const userId = user?.id || "";
@@ -70,30 +72,30 @@ export default function BookingsPage() {
       "
       >
         <h1 className="text-4xl font-bold">
-          My Bookings
+          {t('myBookings')}
         </h1>
 
         <p className="mt-4 text-white/80 max-w-2xl">
-          Manage all your reservations.
+          {t("manageAllYourReservations")}
         </p>
       </div>
 
       <Tabs defaultValue="upcoming">
         <TabsList>
           <TabsTrigger value="upcoming">
-            Upcoming ({upcoming.length})
+            {t('upcoming')} ({upcoming.length})
           </TabsTrigger>
 
           <TabsTrigger value="active">
-            Active ({active.length})
+            {t('active')} ({active.length})
           </TabsTrigger>
 
           <TabsTrigger value="history">
-            History ({history.length})
+            {t('history')} ({history.length})
           </TabsTrigger>
 
           <TabsTrigger value="cancelled">
-            Cancelled ({cancelled.length})
+            {t('cancelled')} ({cancelled.length})
           </TabsTrigger>
         </TabsList>
 
@@ -122,11 +124,12 @@ function BookingGrid({
 }: {
   bookings: Booking[];
 }) {
+  const t = useTranslations('bookings');
   if (!bookings.length) {
     return (
       <div className="py-16 text-center">
         <p className="text-muted-foreground">
-          No bookings found.
+          {t('noBookingsFound')}
         </p>
       </div>
     );

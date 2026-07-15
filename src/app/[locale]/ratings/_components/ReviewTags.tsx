@@ -2,6 +2,7 @@
 
 import {Badge} from "@/components/ui/badge";
 import {ThumbsUp, TriangleAlert} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 export interface ReviewTagsProps {
   pros?: string[];
@@ -54,6 +55,7 @@ export default function ReviewTags({
   pros = [],
   cons = [],
 }: ReviewTagsProps) {
+  const t = useTranslations('reviews');
   if (pros.length === 0 && cons.length === 0) {
     return null;
   }
@@ -61,14 +63,14 @@ export default function ReviewTags({
   return (
     <div className="space-y-6">
       <TagSection
-        title="What they liked"
+        title={t('whatTheyLiked')}
         icon={ThumbsUp}
         items={pros}
         variant="secondary"
       />
 
       <TagSection
-        title="Could be improved"
+        title={t('couldBeImproved')}
         icon={TriangleAlert}
         items={cons}
         variant="outline"

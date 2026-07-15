@@ -13,8 +13,10 @@ import {getActiveRentalShops} from "@/lib/services/rentalService";
 import FeaturedShops from "./_components/FeaturedShops";
 import FeaturedCars from "./_components/FeaturedCars";
 import {buildCarsWithShop} from "@/lib/services/buildCarsWithShop";
+import {useTranslations} from "next-intl";
 
 export default function Home() {
+  const t = useTranslations("home");
 
   const results = useQueries({
     queries: [
@@ -50,24 +52,6 @@ export default function Home() {
 
   const now = new Date();
 
-  // const featuredShops = shops.filter(shop => {
-  //   if (!shop.isFeatured || shop.featured === null)
-  //     return false;
-
-  //   const start = shop.featured!.startAt;
-  //   const end = shop.featured!.endAt;
-
-  //   // return now.isAfter(start!) && now.isBefore(end!);
-
-  //   if (shop.isFeatured) {
-  //     if (now > start && now < end) {
-  //       return shop;
-  //     }
-  //     else {return null;}
-  //   } else {return null;}
-
-  // });
-
   const featuredShops = shops.filter((shop) => {
     if (!shop.isFeatured || !shop.featured) {
       return false;
@@ -83,16 +67,10 @@ export default function Home() {
   const carWithShop =
     buildCarsWithShop(cars, shops);
 
-  // const isError = results.some((q) => q.isError);
-
-  // if (isError) return results.find(q => {
-  //   <p className="">{q.error?.message}</p>;
-  // });
-
   if (results.some((q) => q.isError)) {
     return (
       <div className="py-10 text-center">
-        Something went wrong while loading the page.
+        {t('somethingWentWrong')}
       </div>
     );
   }
@@ -105,17 +83,17 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-3xl font-bold">
-                  Latest News
+                  {t('latestNews')}
                 </h2>
 
                 <p className="text-muted-foreground">
-                  Rental, travel and company updates.
+                  {t('rentalTravelCompanyUpdates')}
                 </p>
               </div>
 
               <Link href="/blogs">
                 <Button variant="outline">
-                  View All
+                  {t('viewAll')}
                 </Button>
               </Link>
             </div>

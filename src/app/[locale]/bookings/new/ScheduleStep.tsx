@@ -21,6 +21,8 @@ import {getAvailableUnitsForDate} from "@/lib/helper/getAvailableUnitsForDate";
 import {hasAvailableUnitForRange} from "@/lib/helper/hasAvailableUnitForRange";
 import {toast} from "sonner";
 import {DateRange} from "react-day-picker";
+import {useTranslations} from "next-intl";
+import TranslatedDeliveryMethod from "@/lib/translations/translatedDeliveryMethod";
 
 
 export const ScheduleStep = ({
@@ -59,6 +61,8 @@ export const ScheduleStep = ({
     note?: string | undefined;
   }>;
 }) => {
+
+  const t = useTranslations('cars');
 
   const calendarLocale = useCalendarLocale();
 
@@ -108,11 +112,6 @@ export const ScheduleStep = ({
 
   }, [pickupDate, scheduleForm]);
 
-  // const minDropoffDate =
-  //   pickupDate
-  //     ? addDays(pickupDate, 3)
-  //     : undefined;
-
   function isDateFullyBooked(
     date: Date
   ) {
@@ -137,7 +136,7 @@ export const ScheduleStep = ({
     if (!valid) {
 
       toast.error(
-        "Please complete all required fields."
+        t('pleaseCompleteAllRequiredField')
       );
 
       return;
@@ -157,7 +156,7 @@ export const ScheduleStep = ({
     if (!available) {
 
       toast.error(
-        "No vehicle available for the selected period."
+        t('noVehicleAvailableForTheSelectedPeriod')
       );
 
       return;
@@ -185,12 +184,12 @@ export const ScheduleStep = ({
     <form className='space-y-6'>
 
       <h2 className="text-xl font-semibold">
-        Rental Schedule
+        {t('rentalSchedule')}
       </h2>
 
       <Card className="shadow-none border-none">
         <CardHeader>
-          <CardTitle>Rental Period</CardTitle>
+          <CardTitle>{t('rentalPeriod')}</CardTitle>
         </CardHeader>
 
         <CardContent className="flex justify-center w-full">
@@ -250,7 +249,7 @@ export const ScheduleStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-pickupTime">
-                Pickup Time
+                {t('pickupTime')}
               </FieldLabel>
               <InputGroup id="form-pickupTime">
                 <InputGroupInput type="time" {...field} />
@@ -270,7 +269,7 @@ export const ScheduleStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-dropoffTime">
-                Dropoff Time
+                {t('dropoffTime')}
               </FieldLabel>
               <InputGroup id="form-dropoffTime">
                 <InputGroupInput type="time" {...field} />
@@ -294,7 +293,7 @@ export const ScheduleStep = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-delivery">
-                  Delivery Option
+                  {t('deliveryOption')}
                 </FieldLabel>
                 <RadioGroup
                   value={field.value}
@@ -312,14 +311,14 @@ export const ScheduleStep = ({
                   <div className="flex items-center gap-2">
                     <RadioGroupItem value="pickup" id="pickup" />
                     <Label htmlFor="pickup">
-                      Pickup
+                      <TranslatedDeliveryMethod method={'pickup'} />
                     </Label>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <RadioGroupItem value="delivery" id="delivery" />
                     <Label htmlFor="delivery">
-                      Delivery
+                      <TranslatedDeliveryMethod method={'delivery'} />
                     </Label>
                   </div>
 
@@ -339,11 +338,11 @@ export const ScheduleStep = ({
               render={({field, fieldState}) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="form-address">
-                    Delivery Address
+                    {t('deliveryAddress')}
                   </FieldLabel>
                   <Textarea
                     {...field}
-                    placeholder="Enter delivery address"
+                    placeholder={t('enterDeliveryAddress')}
                     id="form-address"
                   />
                 </Field>
@@ -359,13 +358,11 @@ export const ScheduleStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-note">
-                Special Request (Optional)
+                {t('specialRequest')}
               </FieldLabel>
               <Textarea
                 {...field}
-                placeholder=" Child seat,
-                      airport pickup,
-                  late pickup etc."
+                placeholder={t('childSeat')}
                 id="form-note"
               />
             </Field>
@@ -377,7 +374,7 @@ export const ScheduleStep = ({
           onClick={handleStepOneNext}
           className="bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer"
         >
-          Continue
+          {t('continue')}
         </Button>
 
       </div>

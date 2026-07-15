@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {RentalShop} from "../models/RentalShop";
 import {StarIcon} from "@heroicons/react/24/solid";
+import {useTranslations} from "next-intl";
 
 interface Props {
   shops: RentalShop[];
@@ -12,6 +13,7 @@ interface Props {
 export default function FeaturedShops({
   shops,
 }: Props) {
+  const t = useTranslations('home');
   if (!shops.length) return null;
 
   // console.log(shops);
@@ -20,14 +22,14 @@ export default function FeaturedShops({
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">
-          Featured Shops
+          {t('featuredShops')}
         </h2>
 
         <Link
           href="/shops"
           className="text-sm underline"
         >
-          View all
+          {t('viewAll')}
         </Link>
       </div>
 

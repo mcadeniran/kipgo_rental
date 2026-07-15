@@ -19,6 +19,7 @@ import {zodResolver} from '@hookform/resolvers/zod';
 import {BookingDriverFormSchema, BookingScheduleFormSchema, DriverDocumentsSchema} from '@/schemas/index';
 import {useTranslations} from 'next-intl';
 import {UserProfile} from '../../models/UserProfile';
+import {Translator} from '@/schemas/create-schema';
 
 export default function BookingWizard({
   carShop,
@@ -38,7 +39,7 @@ export default function BookingWizard({
 
   const [step, setStep] = useState(0);
 
-  const t = useTranslations();
+  const t: Translator = useTranslations();
   const scheduleSchema = BookingScheduleFormSchema(t);
   const driverSchema = BookingDriverFormSchema(t);
 
@@ -71,10 +72,10 @@ export default function BookingWizard({
     });
 
   const steps = [
-    "Schedule",
-    "Driver",
-    "Documents",
-    "Summary",
+    t('cars.steps.schedule'),
+    t('cars.steps.driver'),
+    t('cars.steps.documents'),
+    t('cars.steps.summary'),
   ];
 
 

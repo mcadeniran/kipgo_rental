@@ -1,6 +1,7 @@
 "use client";
 
 import {MessageSquareText} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 interface ReviewsEmptyProps {
   title?: string;
@@ -8,9 +9,11 @@ interface ReviewsEmptyProps {
 }
 
 export default function ReviewsEmpty({
-  title = "No reviews yet",
-  description = "Be the first to share your experience with this vehicle.",
+  title,
+  description,
 }: ReviewsEmptyProps) {
+  const t = useTranslations('reviews');
+
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-4 text-center">
 
@@ -19,11 +22,11 @@ export default function ReviewsEmpty({
       </div>
 
       <h3 className="mt-6 text-lg font-semibold">
-        {title}
+        {title === null ? t('noReviewsYet') : title}
       </h3>
 
       <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-        {description}
+        {description === null ? t('beTheFirst') : description}
       </p>
     </div>
   );

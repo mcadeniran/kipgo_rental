@@ -86,8 +86,8 @@ export const ResetForm = () => {
 
   return (
     <CardWrapper
-      headerLabel='Forgot your password?'
-      backButtonLabel="Back to login"
+      headerLabel={a('forgotYourPassword')}
+      backButtonLabel={a('backToLogin')}
       backButtonHref='/auth/login'
       showSocials={false}
     >
@@ -99,7 +99,7 @@ export const ResetForm = () => {
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-email">
-                  Email
+                  {a('email')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -122,7 +122,7 @@ export const ResetForm = () => {
             type='submit'
             className='w-full bg-k-primary text-white hover:bg-k-primary/80 hover:text-white cursor-pointer'
           >
-            {isPending ? <Loader className='animate-spin' /> : 'Send reset email'}
+            {isPending ? <Loader className='animate-spin' /> : a('sendResetEmail')}
           </Button>
         </div>
       </form>

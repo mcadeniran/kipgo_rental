@@ -8,9 +8,11 @@ import {Card, CardContent, CardHeader, CardTitle, } from '@/components/ui/card';
 import {Separator} from '@/components/ui/separator';
 import {Badge} from '@/components/ui/badge';
 import {useDateTimeFormatter} from "@/lib/helper/formatDate";
+import {useTranslations} from "next-intl";
 
 
 export const PaymentSummary = ({booking}: {booking: Booking;}) => {
+  const t = useTranslations('payment');
 
   const {formatCurrency} = useDateTimeFormatter();
 
@@ -22,13 +24,13 @@ export const PaymentSummary = ({booking}: {booking: Booking;}) => {
     <Card>
       <CardHeader>
         <CardTitle>
-          Payment Summary
+          {t('paymentSummary')}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-6">
         <div className="rounded-xl border bg-muted/30 p-6 text-center">
-          <p className="text-sm text-muted-foreground">Total Amount</p>
+          <p className="text-sm text-muted-foreground">{t('totalAmount')}</p>
 
           <h2 className="mt-2 text-3xl font-bold"> {formatCurrency(booking.totalPrice, booking.currency)}</h2>
 
@@ -38,25 +40,25 @@ export const PaymentSummary = ({booking}: {booking: Booking;}) => {
         <div className="grid gap-4 md:grid-cols-2">
           <InfoRow
             icon={<ReceiptText size={18} />}
-            label="Invoice"
+            label={t('invoice')}
             value={booking.invoiceNumber}
           />
 
           <InfoRow
             icon={<Wallet size={18} />}
-            label="Network"
+            label={t('network')}
             value={crypto.network}
           />
 
           <InfoRow
             icon={<Coins size={18} />}
-            label="Currency"
+            label={t('currency')}
             value={crypto.currency}
           />
 
           <InfoRow
             icon={<Banknote size={18} />}
-            label="Network Fee"
+            label={t('networkFee')}
             value={`${crypto.networkFee} USDT`}
           />
         </div>
@@ -64,7 +66,7 @@ export const PaymentSummary = ({booking}: {booking: Booking;}) => {
         <Separator />
 
         <div className="space-y-2">
-          <p className="font-medium">Receiving Address</p>
+          <p className="font-medium">{t('receivingAddress')}</p>
           <div className="rounded-lg bg-muted p-4 break-all font-mono text-sm">
             {crypto.walletAddress}
           </div>

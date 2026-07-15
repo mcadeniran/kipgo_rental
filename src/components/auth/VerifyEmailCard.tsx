@@ -9,10 +9,13 @@ import {FormSuccess} from "../general/FormSuccess";
 import {FormError} from "../general/FormError";
 import {useSearchParams} from "next/navigation";
 import {useRouter} from "@/i18n/navigation";
+import {useTranslations} from "next-intl";
+import {Translator} from "@/schemas/create-schema";
 
 export const VerifyEmailCard = () => {
   const {currentUser, resendVerificationEmail, refreshUser, logout} = useAuth();
-
+  const t: Translator = useTranslations();
+  const a = useTranslations('auth');
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -38,11 +41,11 @@ export const VerifyEmailCard = () => {
       setMessage("");
       setError("");
       await resendVerificationEmail();
-      setMessage("Verification email sent.");
+      setMessage(t('auth.verifiactionEmailSent'));
       setSeconds(60);
     }
     catch {
-      setError("Unable to send email.");
+      setError(t('auth.unableToSendEmail'));
     }
     finally {
       setLoading(false);
@@ -59,7 +62,7 @@ export const VerifyEmailCard = () => {
         router.replace(callback || "/");
       }
       setError(
-        "Your email has not been verified yet."
+        t('auth.yourEmailHasNotBeenVerified')
       );
     }
     finally {
@@ -68,11 +71,11 @@ export const VerifyEmailCard = () => {
   };
 
   return <CardWrapper
-    headerLabel="Verify your Email"
-    backButtonLabel="Sign Out"
+    headerLabel={t('auth.verifyYourEmail')}
+    backButtonLabel={t('auth.signOut')}
     footer={
       <Button variant="link" className="w-full cursor-pointer" onClick={logout}>
-        Sign Out
+        {t('auth.signOut')}
       </Button>
     }
     showSocials={false}
@@ -83,15 +86,11 @@ export const VerifyEmailCard = () => {
         <MailCheck className="mx-auto h-12 w-12 text-k-primary" />
 
         <h3 className="font-semibold">
-
-          Check your inbox
-
+          {t('auth.checkYourInbox')}
         </h3>
 
         <p className="text-muted-foreground">
-
-          {"We've"} sent a verification link to
-
+          {t('auth.weveSentAVerificationLinkTo')}
         </p>
 
         <p className="font-medium">
@@ -113,7 +112,7 @@ export const VerifyEmailCard = () => {
           {loading ?
             <Loader className="animate-spin" />
             :
-            "I've Verified My Email"
+            t('auth.iveVerifiedMyEmail')
           }
         </Button>
 
@@ -123,9 +122,8 @@ export const VerifyEmailCard = () => {
           onClick={resend}
           disabled={seconds > 0}
         >
-          {seconds > 0 ? `Resend (${seconds})` : "Resend Email"}
+          {seconds > 0 ? a('resendSeconds', {sec: `${seconds}`}) : t('auth.rensendEmail')}
         </Button>
-
       </div>
     </div>
 

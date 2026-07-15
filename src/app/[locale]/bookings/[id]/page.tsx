@@ -19,8 +19,11 @@ import {CheckCircle2, Circle, XCircle} from "lucide-react";
 import {UserBookingStatusMessage} from "../components/UserBookingStatusMessage";
 import {BookingStatusBadge} from "@/components/badges/bookingstatusBadge";
 import ReviewDialog from "@/components/ratings/display/ReviewDialog";
+import TranslatedDeliveryMethod, {DeliveryMethod} from "@/lib/translations/translatedDeliveryMethod";
+import {useTranslations} from "next-intl";
 
 export default function BookingDetailsPage() {
+  const t = useTranslations('bookings');
   const params = useParams();
 
   const id = params.id as string;
@@ -36,7 +39,7 @@ export default function BookingDetailsPage() {
   }
 
   if (!booking) {
-    return <p>Booking not found</p>;
+    return <p>{t('bookingNotFound')}</p>;
   }
 
   // console.log(booking.rating);
@@ -49,11 +52,11 @@ export default function BookingDetailsPage() {
         <BookingStatusBadge status={booking.status} />
 
         <h1 className="text-3xl font-bold">
-          Booking #{booking.invoiceNumber}
+          {t('bookingInvoice', {invoice: booking.invoiceNumber})}
         </h1>
 
         <p className="text-muted-foreground">
-          Created on {format(booking.createdAt, "PPP")}
+          {t('createdOn', {date: format(booking.createdAt, "PPP")})}
         </p>
       </div>
 
@@ -87,6 +90,7 @@ function RentalPeriodCard({
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
   const {formatDateShortMonth} = useDateTimeFormatter();
 
   const days =
@@ -98,7 +102,7 @@ function RentalPeriodCard({
   return <Card>
     <CardHeader>
       <CardTitle>
-        Rental Period
+        {t('rentalPeriod')}
       </CardTitle>
     </CardHeader>
 
@@ -107,7 +111,7 @@ function RentalPeriodCard({
 
         <div>
           <p className="text-sm text-muted-foreground">
-            Pickup
+            {t('pickup')}
           </p>
 
           <p>
@@ -117,7 +121,7 @@ function RentalPeriodCard({
 
         <div>
           <p className="text-sm text-muted-foreground">
-            Return
+            {t('return')}
           </p>
 
           <p>
@@ -127,14 +131,36 @@ function RentalPeriodCard({
 
         <div>
           <p className="text-sm text-muted-foreground">
-            Duration
+            {t("duration")}
           </p>
 
           <p>
-            {`${days} day${days > 1 ? "s" : ""
-              }`}
+            {t('rentalDaysCount', {count: days})}
           </p>
         </div>
+
+        <div>
+          <p className="text-sm text-muted-foreground">
+            {t('deliveryMethod')}
+          </p>
+
+          <p>
+            <TranslatedDeliveryMethod method={booking.deliveryType as DeliveryMethod} />
+          </p>
+        </div>
+
+        {
+          booking.deliveryType === 'delivery' &&
+          <div>
+            <p className="text-sm text-muted-foreground">
+              {t('deliveryAddress')}
+            </p>
+
+            <p>
+              {booking.deliveryAddress}
+            </p>
+          </div>
+        }
 
       </div>
     </CardContent>
@@ -146,6 +172,7 @@ function PaymentTimeline({
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
   if (!booking.payment) return null;
 
   const payment = booking.payment;
@@ -153,19 +180,19 @@ function PaymentTimeline({
   const steps = [
     {
       key: "unpaid",
-      label: "Awaiting Payment",
+      label: t('awaitingPayment'),
     },
     {
       key: "pending",
-      label: "Payment Initiated",
+      label: t('paymentInitiated'),
     },
     {
       key: "awaiting_verification",
-      label: "Awaiting Verification",
+      label: t('awaitingVerification'),
     },
     {
       key: "paid",
-      label: "Payment Verified",
+      label: t('paymentVerified'),
     },
   ];
 
@@ -179,7 +206,7 @@ function PaymentTimeline({
     <Card>
       <CardHeader>
         <CardTitle>
-          Payment Progress
+          {t('paymentProgress')}
         </CardTitle>
       </CardHeader>
 
@@ -239,7 +266,7 @@ function PaymentTimeline({
                 <XCircle className="h-5 w-5" />
 
                 <span>
-                  Payment Failed
+                  {t('paymentFailed')}
                 </span>
               </div>
             )}
@@ -254,11 +281,12 @@ function BookingActions({
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Actions
+          {t('actions')}
         </CardTitle>
       </CardHeader>
 
@@ -271,7 +299,7 @@ function BookingActions({
               variant="destructive"
               className="w-full"
             >
-              Cancel Request
+              {t('cancelRequest')}
             </Button>
           )}
 
@@ -279,14 +307,14 @@ function BookingActions({
           "approved" && (
             <>
               <Button className="w-full  bg-k-primary text-white hover:bg-k-primary/80 hover:text-white/90 cursor-pointer">
-                Contact Shop
+                {t('contactShop')}
               </Button>
 
               <Button
                 variant="outline"
                 className="w-full"
               >
-                Pickup Details
+                {t('pickupDetails')}
               </Button>
             </>
           )}

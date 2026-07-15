@@ -16,8 +16,10 @@ import {useEffect, useState} from "react";
 import {cn} from "@/lib/utils";
 import {useRouter} from "@/i18n/navigation";
 import ProfileMenu from "./profile-menu";
+import {useTranslations} from "next-intl";
 
 export default function Navbar() {
+  const t = useTranslations();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -74,7 +76,7 @@ export default function Navbar() {
                   className='hover:underline cursor-pointer hover:text-k-primary decoration-k-primary'
                   onClick={() => router.push('/auth/login')}
                 >
-                  Sign In
+                  {t('nav.signIn')}
                 </Button>
               }
             </>

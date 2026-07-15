@@ -10,6 +10,8 @@ import RatingGroup from "../shared/RatingGroup";
 import {VEHICLE_RATING_ITEMS} from "@/constants/rating";
 import RatingRow from "../shared/RatingRow";
 import {Field, FieldError} from "@/components/ui/field";
+import {useTranslations} from "next-intl";
+import {Translator} from "@/schemas/create-schema";
 
 
 
@@ -20,12 +22,14 @@ interface Props {
 export default function VehicleRatingSection({
   control,
 }: Props) {
+  const c: Translator = useTranslations();
+  const t = useTranslations('bookings');
   return (
     <RatingGroup
-      title="Vehicle Rating"
-      description="Tell us about your experience with the vehicle."
+      title={t('vehicleRating')}
+      description={t('tellUsAboutVehicle')}
     >
-      {VEHICLE_RATING_ITEMS.map((item) => (
+      {VEHICLE_RATING_ITEMS(c).map((item) => (
         <Controller
           key={item.name}
           control={control}

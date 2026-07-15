@@ -7,6 +7,7 @@ import {Input} from "@/components/ui/input";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import {Controller, UseFormReturn} from "react-hook-form";
 import {Field, FieldError} from "@/components/ui/field";
+import {useTranslations} from "next-intl";
 
 export const DocumentsStep = ({
   draft,
@@ -30,14 +31,7 @@ export const DocumentsStep = ({
     idCard?: File | undefined;
   }>;
 }) => {
-  // const needsLicenseFront =
-  //   !draft.driverDocuments?.licenseFrontUrl;
-
-  // const needsLicenseBack =
-  //   !draft.driverDocuments?.licenseBackUrl;
-
-  // const needsIdCard =
-  //   !draft.driverDocuments?.idCardUrl;
+  const t = useTranslations('cars');
 
   const handleContinue =
     documentForm.handleSubmit(
@@ -58,7 +52,7 @@ export const DocumentsStep = ({
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">
-        Driver Documents
+        {t('driverDocuments')}
       </h2>
       <form className='space-y-6'>
         <div className="grid grid-cols-1  md:grid-cols-2 gap-4">
@@ -68,7 +62,7 @@ export const DocumentsStep = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <DocumentUploader
-                  label="Driver License Front"
+                  label={t('driverLicenseFront')}
                   existingUrl={
                     draft.driverDocuments?.licenseFrontUrl
                   }
@@ -89,7 +83,7 @@ export const DocumentsStep = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <DocumentUploader
-                  label="Driver License Back"
+                  label={t('driverLicenseBack')}
                   existingUrl={
                     draft.driverDocuments?.licenseBackUrl
                   }
@@ -110,7 +104,7 @@ export const DocumentsStep = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <DocumentUploader
-                  label="Government ID"
+                  label={t("governmentID")}
                   existingUrl={
                     draft.driverDocuments?.idCardUrl
                   }
@@ -125,47 +119,6 @@ export const DocumentsStep = ({
             )}
           />
 
-          {/* <DocumentUploader
-            label="Driver License Front"
-            existingUrl={draft.driverDocuments?.licenseFrontUrl}
-            onFileSelected={(file) =>
-              setDraft((prev) => ({
-                ...prev,
-                driverDocuments: {
-                  ...prev.driverDocuments,
-                  licenseFront: file,
-                },
-              }))
-            }
-          />
-
-          <DocumentUploader
-            label="Driver License Back"
-            existingUrl={draft.driverDocuments?.licenseBackUrl}
-            onFileSelected={(file) =>
-              setDraft((prev) => ({
-                ...prev,
-                driverDocuments: {
-                  ...prev.driverDocuments,
-                  licenseBack: file,
-                },
-              }))
-            }
-          />
-
-          <DocumentUploader
-            label="Government ID"
-            existingUrl={draft.driverDocuments?.idCardUrl}
-            onFileSelected={(file) =>
-              setDraft((prev) => ({
-                ...prev,
-                driverDocuments: {
-                  ...prev.driverDocuments,
-                  idCard: file,
-                },
-              }))
-            }
-          /> */}
         </div>
 
         <div className="flex justify-between">
@@ -176,11 +129,11 @@ export const DocumentsStep = ({
               onBack(prev => prev - 1)
             }
           >
-            Back
+            {t('back')}
           </Button>
 
           <Button onClick={handleContinue} className="bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer">
-            Continue
+            {t('continue')}
           </Button>
         </div>
       </form>

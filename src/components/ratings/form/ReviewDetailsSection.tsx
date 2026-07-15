@@ -9,6 +9,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {RadioGroup, RadioGroupItem, } from "@/components/ui/radio-group";
 import {RatingFormValues} from "@/schemas";
 import {MAX_REVIEW_LENGTH} from "@/constants/rating";
+import {useTranslations} from "next-intl";
 
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 export default function ReviewDetailsSection({
   control,
 }: Props) {
+  const t = useTranslations('bookings');
   const review =
     useWatch({
       control,
@@ -30,11 +32,11 @@ export default function ReviewDetailsSection({
       <CardHeader>
 
         <CardTitle>
-          Review Details
+          {t('reviewDetails')}
         </CardTitle>
 
         <CardDescription>
-          Tell future renters about your experience.
+          {t('tellFutureRenters')}
         </CardDescription>
 
       </CardHeader>
@@ -52,13 +54,13 @@ export default function ReviewDetailsSection({
             }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-title">
-                  Title
+                  {t('title')}
                 </FieldLabel>
                 <Input
                   {...field}
                   id="form-title"
                   aria-invalid={fieldState.invalid}
-                  placeholder="Excellent experience"
+                  placeholder={t('excellentExperience')}
                   autoComplete="off"
                 />
                 {fieldState.invalid && (
@@ -78,13 +80,13 @@ export default function ReviewDetailsSection({
             }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-review">
-                  Review
+                  {t('review')}
                 </FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     {...field}
                     id="form-review"
-                    placeholder="Share your experience..."
+                    placeholder={t('shareYourExperience')}
                     rows={6}
                     className="min-h-24 resize-none"
                     aria-invalid={fieldState.invalid}
@@ -96,8 +98,7 @@ export default function ReviewDetailsSection({
                   </InputGroupAddon>
                 </InputGroup>
                 <FieldDescription>
-                  Include steps to reproduce, expected behavior, and what
-                  actually happened.
+
                 </FieldDescription>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -105,8 +106,6 @@ export default function ReviewDetailsSection({
               </Field>
             )}
           />
-
-
         </FieldGroup>
 
 
@@ -117,7 +116,7 @@ export default function ReviewDetailsSection({
           name="details.wouldRecommend"
           render={({field}) => (
             <FieldSet>
-              <FieldLegend variant="label">Would you recommend this rental?</FieldLegend>
+              <FieldLegend variant="label">{t('wouldYouRecommendRental')}</FieldLegend>
               <RadioGroup
                 value={field.value ? "yes" : "no"}
                 onValueChange={(value) => field.onChange(value === "yes",)}
@@ -126,13 +125,13 @@ export default function ReviewDetailsSection({
                 <Field orientation="horizontal">
                   <RadioGroupItem value="yes" id="recommend-yes" />
                   <FieldLabel htmlFor="recommend-yes" className="font-normal">
-                    Yes
+                    {t('yes')}
                   </FieldLabel>
                 </Field>
                 <Field orientation="horizontal">
                   <RadioGroupItem value="no" id="recommend-no" />
                   <FieldLabel htmlFor="recommend-no" className="font-normal">
-                    No
+                    {t('no')}
                   </FieldLabel>
                 </Field>
               </RadioGroup>
@@ -158,7 +157,7 @@ export default function ReviewDetailsSection({
                 htmlFor={'form-checkbox'}
                 className="font-normal"
               >
-                I would rent from this company again.
+                {t('iWouldRentAgain')}
               </FieldLabel>
             </Field>
           )}
@@ -182,7 +181,7 @@ export default function ReviewDetailsSection({
                 htmlFor={'form-anon'}
                 className="font-normal"
               >
-                Submit anonymously
+                {t('submitAnonymously')}
               </FieldLabel>
             </Field>
           )}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import {getBlogById} from "@/lib/services/blogService";
 import {Badge} from "@/components/ui/badge";
 import PageLoader from "@/components/general/PageLoader";
+import TranslatedBlogCategories from "@/lib/translations/translatedBlogCategories";
 
 export default function BlogDetailsPage() {
   const params = useParams();
@@ -49,7 +50,7 @@ export default function BlogDetailsPage() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <Badge className="capitalize">
-            {blog.category}
+            <TranslatedBlogCategories category={blog.category} />
           </Badge>
 
           <span className="text-xs text-muted-foreground">

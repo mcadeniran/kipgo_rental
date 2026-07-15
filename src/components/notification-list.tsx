@@ -7,6 +7,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {markAllNotificationsAsRead} from "@/lib/services/notificationService";
 import useAuth from "@/context/AuthContext";
 import NotificationItem from "./notification-item";
+import {useTranslations} from "next-intl";
 
 interface Props {
   notifications: Notification[];
@@ -20,6 +21,7 @@ export default function NotificationList({
   isLoading,
   unreadCount
 }: Props) {
+  const t = useTranslations('notification');
 
   const {rentalDataObj: rental, userDataObj: user} = useAuth();
 
@@ -53,7 +55,7 @@ export default function NotificationList({
       <div className="border-b p-2">
         <div className="flex items-center justify-between px-2">
           <h3 className="font-semibold">
-            Notifications
+            {t('notifications')}
           </h3>
 
           <Button
@@ -62,7 +64,7 @@ export default function NotificationList({
             onClick={markAllAsRead}
             disabled={unreadCount < 1}
           >
-            Mark all read
+            {t('markAllRead')}
           </Button>
         </div>
       </div>
@@ -70,7 +72,7 @@ export default function NotificationList({
       <div className="max-h-112.5 overflow-y-auto">
         {notifications.length === 0 ? (
           <div className="p-6 text-center text-sm text-muted-foreground">
-            No notifications
+            {t('noNotifications')}
           </div>
         ) : (
           notifications.map((notification) => (

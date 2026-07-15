@@ -8,6 +8,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 
 import {cn} from "@/lib/utils";
+import {useTranslations} from "next-intl";
 
 interface Props {
   title: string;
@@ -31,6 +32,7 @@ export default function ProsConsInput({
   maxItems = 5,
   className,
 }: Props) {
+  const t = useTranslations('bookings');
   const [input, setInput] =
     React.useState("");
 
@@ -88,7 +90,7 @@ export default function ProsConsInput({
           type="button"
           onClick={addItem}
         >
-          Add
+          {t('add')}
         </Button>
       </div>
 

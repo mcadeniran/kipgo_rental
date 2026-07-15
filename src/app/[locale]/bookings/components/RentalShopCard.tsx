@@ -10,18 +10,20 @@ import {
 import {Button} from "@/components/ui/button";
 import {Booking} from "../../models/Booking";
 import {useRouter} from "@/i18n/navigation";
+import {useTranslations} from "next-intl";
 
 export function RentalShopCard({
   booking,
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
   const router = useRouter();
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Rental Company
+          {t('rentalCompany')}
         </CardTitle>
       </CardHeader>
 
@@ -67,7 +69,7 @@ export function RentalShopCard({
           onClick={() => router.push(`/shops/${booking.shopId}`)}
           className="w-full bg-k-primary text-white hover:bg-k-primary/80 hover:text-white/90 cursor-pointer"
         >
-          View Company
+          {t('viewCompany')}
         </Button>
 
       </CardContent>

@@ -5,8 +5,10 @@ import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'next/navigation';
 import React from 'react';
 import CarDetailsPageContent from '../components/CarDetailsPageContent';
+import {useTranslations} from 'next-intl';
 
 export default function CarDetailsPage() {
+  const t = useTranslations('cars');
   const params = useParams();
   const id = params.id as string;
 
@@ -26,7 +28,7 @@ export default function CarDetailsPage() {
   if (error) return <p className="">{error.message}</p>;
 
   if (!data)
-    return <p>Not found</p>;
+    return <p>{t('notFound')}</p>;
 
   const {car, shop} = data;
 

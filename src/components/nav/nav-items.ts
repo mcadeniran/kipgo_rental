@@ -20,7 +20,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   {
-    label: 'Home',
+    label: 'nav.home',
     href: '/',
     icon: Home,
     guest: true,
@@ -29,7 +29,7 @@ export const navItems: NavItem[] = [
   },
 
   {
-    label: 'Rentals',
+    label: 'nav.rentals',
     href: '/cars',
     icon: CarFront,
     guest: true,
@@ -38,28 +38,28 @@ export const navItems: NavItem[] = [
   },
 
   {
-    label: 'About Us',
+    label: 'nav.aboutUs',
     href: '/about',
     icon: Info,
     guest: true,
   },
 
   {
-    label: 'Contact',
+    label: 'nav.contact',
     href: '/contact',
     icon: Phone,
     guest: true,
   },
 
   {
-    label: 'My Bookings',
+    label: 'nav.myBookings',
     href: '/bookings',
     icon: CalendarDays,
     authenticated: true,
   },
 
   {
-    label: 'Profile',
+    label: 'nav.myProfile',
     href: '/profile',
     icon: UserCog,
     authenticated: true,

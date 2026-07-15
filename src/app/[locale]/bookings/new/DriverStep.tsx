@@ -8,6 +8,7 @@ import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {formatDobForInput} from "@/lib/helper/formatDobForInput";
+import {useTranslations} from "next-intl";
 
 export const DriverStep = ({
   drivers,
@@ -39,6 +40,7 @@ export const DriverStep = ({
     selectedDriverId?: string | undefined;
   }>;
 }) => {
+  const t = useTranslations('cars');
 
   function hasDriverChanged(
     values: {
@@ -107,7 +109,7 @@ export const DriverStep = ({
   return <div className="flex flex-col space-y-4">
     <form className='space-y-6'>
       <h2 className="text-xl font-semibold">
-        {"Driver's"} Details
+        {t('driversDetails')}
       </h2>
 
       {
@@ -118,7 +120,7 @@ export const DriverStep = ({
               name="selectedDriverId"
               render={({field, fieldState}) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor='form-selectedDriver'>Saved Drivers</FieldLabel>
+                  <FieldLabel htmlFor='form-selectedDriver'>{t('savedDrivers')}</FieldLabel>
                   <RadioGroup
                     value={field.value ?? ""}
 
@@ -207,7 +209,7 @@ export const DriverStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-name">
-                Full Name
+                {t('fullName')}
               </FieldLabel>
               <Input
                 {...field}
@@ -228,7 +230,7 @@ export const DriverStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-email">
-                Email
+                {t('email')}
               </FieldLabel>
               <Input
                 {...field}
@@ -249,7 +251,7 @@ export const DriverStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-phone">
-                Phone
+                {t('phone')}
               </FieldLabel>
               <Input
                 {...field}
@@ -270,7 +272,7 @@ export const DriverStep = ({
           render={({field, fieldState}) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="form-dob">
-                Date of Birth
+                {t('dateOfBirth')}
               </FieldLabel>
               <Input
                 {...field}
@@ -292,7 +294,7 @@ export const DriverStep = ({
         control={driverForm.control}
         render={({field, fieldState}) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>Gender</FieldLabel>
+            <FieldLabel>{t('gender')}</FieldLabel>
 
             <RadioGroup
               value={field.value}
@@ -302,7 +304,7 @@ export const DriverStep = ({
               <FieldLabel htmlFor="male" className="block rounded-lg border border-border transition-all cursor-pointer has-[[data-slot=radio-group-item][data-checked]]:border-k-primary has-[[data-slot=radio-group-item][data-checked]]:bg-transparent has-[[data-slot=radio-group-item][data-checked]]:text-k-primary">
                 <Field orientation="horizontal">
                   <FieldContent>
-                    <FieldTitle>Male</FieldTitle>
+                    <FieldTitle>{t('male')}</FieldTitle>
                   </FieldContent>
                   <RadioGroupItem
                     value="Male"
@@ -314,7 +316,7 @@ export const DriverStep = ({
               <FieldLabel htmlFor="female" className="block rounded-lg border border-border transition-all cursor-pointer has-[[data-slot=radio-group-item][data-checked]]:border-k-primary has-[[data-slot=radio-group-item][data-checked]]:bg-transparent has-[[data-slot=radio-group-item][data-checked]]:text-k-primary">
                 <Field orientation="horizontal">
                   <FieldContent>
-                    <FieldTitle>Female</FieldTitle>
+                    <FieldTitle>{t("female")}</FieldTitle>
                   </FieldContent>
                   <RadioGroupItem
                     value="Female"
@@ -326,7 +328,7 @@ export const DriverStep = ({
               <FieldLabel htmlFor="others" className="block rounded-lg border border-border transition-all cursor-pointer has-[[data-slot=radio-group-item][data-checked]]:border-k-primary has-[[data-slot=radio-group-item][data-checked]]:bg-transparent has-[[data-slot=radio-group-item][data-checked]]:text-k-primary">
                 <Field orientation="horizontal">
                   <FieldContent>
-                    <FieldTitle>Others</FieldTitle>
+                    <FieldTitle>{t("others")}</FieldTitle>
                   </FieldContent>
                   <RadioGroupItem
                     value="Others"
@@ -382,7 +384,7 @@ export const DriverStep = ({
           }));
         }}
       >
-        <Plus /> Add New Driver
+        <Plus /> {t('addNewDriver')}
       </Button>
       <div className="flex justify-between">
 
@@ -394,7 +396,7 @@ export const DriverStep = ({
             onBack((prev) => prev - 1)
           }
         >
-          Back
+          {t('back')}
         </Button>
 
         <Button
@@ -402,7 +404,7 @@ export const DriverStep = ({
           onClick={handleContinue}
           className="bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer"
         >
-          Continue
+          {t('continue')}
         </Button>
       </div>
     </form>

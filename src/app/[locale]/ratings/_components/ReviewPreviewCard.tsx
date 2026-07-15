@@ -3,6 +3,7 @@ import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {Rating} from "@/types/ratings";
 import ReviewHeader from "./ReviewHeader";
+import {useTranslations} from "next-intl";
 
 interface ReviewPreviewCardProps {
   review: Rating;
@@ -15,6 +16,7 @@ export default function ReviewPreviewCard({
   onReadMore,
   className,
 }: ReviewPreviewCardProps) {
+  const t = useTranslations('reviews');
   return (
     <Card className={cn("min-w-[320px] max-w-85 snap-start", className)}>
       <CardContent className="space-y-3 p-4">
@@ -36,7 +38,7 @@ export default function ReviewPreviewCard({
           className="h-auto p-0"
           onClick={onReadMore}
         >
-          Read full review
+          {t('readFullReview')}
         </Button>
 
       </CardContent>

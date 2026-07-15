@@ -10,13 +10,13 @@ import {buildCarsWithShop} from "@/lib/services/buildCarsWithShop";
 import {getAllCars} from "@/lib/services/carService";
 import {CarWithShop} from "@/lib/services/CarWithShop";
 import {getActiveRentalShops} from "@/lib/services/rentalService";
-import {Icon} from "@iconify/react";
 import {useQueries} from "@tanstack/react-query";
 import Image from "next/image";
 import {useDateTimeFormatter} from '@/lib/helper/formatDate';
 import {BookNowButton} from "@/components/BookNowButton";
 import {CarSpecRow} from "@/components/general/CarSpecRow";
 import {CarRatingPreview} from "@/components/general/CarRatingPreview";
+import {useTranslations} from "next-intl";
 
 export default function CarsPage() {
   const results = useQueries({
@@ -72,6 +72,7 @@ export default function CarsPage() {
 }
 
 function CarsHero() {
+  const t = useTranslations('cars');
   return (
     <div
       className="
@@ -83,18 +84,19 @@ function CarsHero() {
       "
     >
       <h1 className="text-4xl font-bold">
-        Find Your Perfect Ride
+        {t('findYourPerfectRide')}
       </h1>
 
       <p className="mt-4 text-white/80 max-w-2xl">
-        Browse hundreds of rental vehicles
-        from trusted rental companies.
+        {t('browseHundredsOfRentalVehicles')}
       </p>
     </div>
   );
 }
 
 function CarFilters() {
+  const t = useTranslations('cars');
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -105,13 +107,13 @@ function CarFilters() {
             gap-4
           "
         >
-          <Input placeholder="Search vehicle" />
+          <Input placeholder={t('searchVehicle')} />
 
-          <Input placeholder="City" />
+          <Input placeholder={t('city')} />
 
           <Select>
             <SelectTrigger>
-              <SelectValue placeholder="Type" />
+              <SelectValue placeholder={t('type')} />
             </SelectTrigger>
 
             <SelectContent>
@@ -132,7 +134,7 @@ function CarFilters() {
           <Input placeholder="Max Price" />
 
           <Button>
-            Search
+            {t('search')}
           </Button>
         </div>
       </CardContent>
@@ -145,6 +147,7 @@ function FeaturedCars({
 }: {
   cars: CarWithShop[];
 }) {
+  const t = useTranslations('cars');
   const featured = cars.filter(
     (car) => car.car.isFeatured
   );
@@ -156,7 +159,7 @@ function FeaturedCars({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold">
-        Featured Vehicles
+        {t('featuredVehicles')}
       </h2>
 
       <div
@@ -224,10 +227,11 @@ function CarsGrid({
 }: {
   cars: CarWithShop[];
 }) {
+  const t = useTranslations('cars');
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold">
-        Available Vehicles
+        {t('availableVehicles')}
       </h2>
 
       <div
@@ -255,6 +259,7 @@ function CarCard({
 }: {
   item: CarWithShop;
 }) {
+  const t = useTranslations('cars');
   const cover =
     item.car.images.find(
       (i) => i.isCover
@@ -286,7 +291,7 @@ function CarCard({
                 right-3
               "
             >
-              Featured
+              {t('featured')}
             </Badge>
           )}
         </div>
@@ -312,7 +317,7 @@ function CarCard({
             <div className="flex justify-between items-center pt-2">
               <div>
                 <p className="text-xs text-muted-foreground">
-                  Price / Day
+                  {t('pricePerDay')}
                 </p>
                 <div className="flex flex-col">
                   {item.hasDiscount && (
@@ -341,7 +346,7 @@ function CarCard({
                   </span>
                 </div>
               </div>
-              <BookNowButton label="Book Now" url={`/bookings/new/${item.car.id}`} />
+              <BookNowButton label={t('bookNow')} url={`/bookings/new/${item.car.id}`} />
             </div>
           </div>
         </CardContent>

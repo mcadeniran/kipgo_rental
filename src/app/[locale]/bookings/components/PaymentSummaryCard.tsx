@@ -10,47 +10,50 @@ import {Booking} from "../../models/Booking";
 import {useDateTimeFormatter} from "@/lib/helper/formatDate";
 import {PaymentMethodBadge} from "@/components/badges/paymentMethodBadge";
 import {CryptoPaymentStatusBadge} from "@/components/badges/CryptoPaymentStatusBadge";
+import {useTranslations} from "next-intl";
 
 export function PaymentSummaryCard({
   booking,
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
+
   const {formatCurrency} = useDateTimeFormatter();
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Payment Summary
+          {t('paymentSummary')}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-4">
 
         <Row
-          label="Rental"
+          label={t('rental')}
           value={formatCurrency(booking.rentalPrice, booking.currency)}
         />
 
         <Row
-          label="Delivery"
+          label={t('delivery')}
           value={formatCurrency(booking.deliveryPrice, booking.currency)}
         />
 
         <Row
-          label="Deposit"
+          label={t("deposit")}
           value={formatCurrency(booking.deposit, booking.currency)}
         />
 
         <Row
-          label={`Tax (${booking.taxRate}%)`}
+          label={t('taxWithPercentage', {value: booking.taxRate})}
           value={formatCurrency(booking.tax, booking.currency)}
         />
 
         <Separator />
 
         <Row
-          label="Total"
+          label={t('total')}
           value={formatCurrency(booking.totalPrice, booking.currency)}
           bold
         />
@@ -59,20 +62,20 @@ export function PaymentSummaryCard({
           <>
             <Separator />
             <div className="flex justify-between">
-              <span>Payment Method</span>
+              <span>{t('paymentMethod')}</span>
 
               <PaymentMethodBadge method={booking.payment.method} />
             </div>
 
             <div className="flex justify-between">
-              <span>Payment Status</span>
+              <span>{t('paymentStatus')}</span>
 
               <CryptoPaymentStatusBadge status={booking.payment.status} />
             </div>
 
             {booking.payment.crypto?.txid && (
               <Row
-                label="Transaction ID"
+                label={t('transactionId')}
                 value={booking.payment.crypto.txid}
               />
             )}

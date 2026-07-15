@@ -26,6 +26,11 @@ import RatingSummary from "../../ratings/_components/RatingSummary";
 import RatingMetricsGrid from "../../ratings/_components/RatingMetricsGrid";
 import useInfiniteReviews from "@/lib/helper/useInfiniteReviews";
 import ReviewPreviewList from "../../ratings/_components/ReviewPreviewList";
+import {useTranslations} from "next-intl";
+import TranslatedTransmissionType from "@/lib/translations/translatedTransmissionType";
+import {CarType, FuelType, TransmissionType} from "@/lib/carProperties";
+import TranslatedFuelType from "@/lib/translations/translatedFuelType";
+import TranslatedCarType from "@/lib/translations/translatedCarType";
 
 
 interface Props {
@@ -159,13 +164,14 @@ function CarBookingCard({
   shop: RentalShop;
   carshop: CarWithShop;
 }) {
+  const t = useTranslations('cars');
   const {formatCurrency} = useDateTimeFormatter();
   return (
     <Card className="sticky top-24 h-fit">
       <CardContent className="space-y-6 pt-6">
         <div>
           <p className="text-sm text-muted-foreground">
-            Price Per Day
+            {t('pricePerDay')}
           </p>
           {
             carshop.hasDiscount &&
@@ -191,15 +197,13 @@ function CarBookingCard({
 
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span>Delivery</span>
+            <span>{t('deliveryMethod')}</span>
             <span>
-              {car.offersDelivery
-                ? "Available"
-                : "Pickup Only"}
+              {t('officePickup')} {car.offersDelivery && <span>{" | "}{t('homeDelivery')}</span>}
             </span>
           </div>
         </div>
-        <BookNowButton label="Book Now" url={`/bookings/new/${car.id}`} size="lg" />
+        <BookNowButton label={t('bookNow')} url={`/bookings/new/${car.id}`} size="lg" />
         <Link
           href={`/shops/${shop.id}`}
           className="block"
@@ -208,7 +212,7 @@ function CarBookingCard({
             variant="outline"
             className="w-full"
           >
-            View Shop
+            {t('viewShop')}
           </Button>
         </Link>
       </CardContent>
@@ -221,6 +225,7 @@ function CarHeader({
 }: {
   car: Car;
 }) {
+  const t = useTranslations('cars');
   return (
     <div className="space-y-4">
       <h1 className="text-4xl font-bold">
@@ -229,19 +234,19 @@ function CarHeader({
 
       <div className="flex flex-wrap gap-2">
         <Badge>
-          {car.transmission}
+          <TranslatedTransmissionType transmission={car.transmission as TransmissionType} />
         </Badge>
 
         <Badge variant="secondary">
-          {car.fuel}
+          <TranslatedFuelType fuel={car.fuel as FuelType} />
         </Badge>
 
         <Badge variant="outline">
-          {car.seats} Seats
+          {t('numSeats', {count: car.seats})}
         </Badge>
 
         <Badge variant="outline">
-          {car.carType}
+          <TranslatedCarType carType={car.carType as CarType} />
         </Badge>
       </div>
     </div>
@@ -249,6 +254,7 @@ function CarHeader({
 }
 
 function CarRating({car}: {car: Car;}) {
+  const t = useTranslations('cars');
   return <div className=" flex flex-col sm:flex-row w-full gap-4">
     <div className="w-full max-w-2xl">
       <RatingSummary
@@ -266,19 +272,19 @@ function CarRating({car}: {car: Car;}) {
         // title="Vehicle Ratings"
         metrics={[
           {
-            label: "Cleanliness",
+            label: t('cleanliness'),
             value: car.review?.cleanliness ?? 0,
           },
           {
-            label: "Comfort",
+            label: t("comfort"),
             value: car.review?.comfort ?? 0,
           },
           {
-            label: "Condition",
+            label: t("condition"),
             value: car.review?.condition ?? 0,
           },
           {
-            label: "Value for Money",
+            label: t('valueForMoney'),
             value: car.review?.valueForMoney ?? 0,
           },
         ]}
@@ -292,6 +298,7 @@ function CarFeatures({
 }: {
   car: Car;
 }) {
+  const t = useTranslations('cars');
   if (!car.features?.length) {
     return null;
   }
@@ -300,7 +307,7 @@ function CarFeatures({
     <Card>
       <CardHeader>
         <CardTitle>
-          Features
+          {t('features')}
         </CardTitle>
       </CardHeader>
 
@@ -341,26 +348,27 @@ function CarSpecifications({
 }: {
   car: Car;
 }) {
+  const t = useTranslations('cars');
   const specs = [
     {
-      label: "Transmission",
-      value: car.transmission,
+      label: t("transmission"),
+      value: <TranslatedTransmissionType transmission={car.transmission as TransmissionType} />
     },
     {
-      label: "Fuel",
-      value: car.fuel,
+      label: t("fuelLabel"),
+      value: <TranslatedFuelType fuel={car.fuel as FuelType} />,
     },
     {
-      label: "Seats",
+      label: t("seats"),
       value: car.seats,
     },
     {
-      label: "Year",
+      label: t("year"),
       value: car.year,
     },
     {
-      label: "Type",
-      value: car.carType,
+      label: t("type"),
+      value: <TranslatedCarType carType={car.carType as CarType} />,
     },
   ];
 
@@ -368,7 +376,7 @@ function CarSpecifications({
     <Card>
       <CardHeader>
         <CardTitle>
-          Specifications
+          {t("specifications")}
         </CardTitle>
       </CardHeader>
 
@@ -403,19 +411,19 @@ function CarDescription({
 }: {
   car: Car;
 }) {
+  const t = useTranslations('cars');
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          About This Vehicle
+          {t('aboutThisVehicle')}
+
         </CardTitle>
       </CardHeader>
 
       <CardContent>
         <p>
-          Premium {car.brand}{" "}
-          {car.model} available for
-          rental in {car.city}.
+          {t('premium', {brand: `${car.brand}`, model: `${car.model}`, city: `${car.city}`})}
         </p>
       </CardContent>
     </Card>
@@ -427,11 +435,13 @@ function RentalCompanyCard({
 }: {
   shop: RentalShop;
 }) {
+  const t = useTranslations('cars');
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Rental Company
+          {t('rentalCompany')}
         </CardTitle>
       </CardHeader>
 
@@ -470,7 +480,7 @@ function RentalCompanyCard({
                 className="text-yellow-400"
               />
               <span>
-                {shop.review?.average ?? 0} ({shop.review?.totalReviews ?? 0} review{shop.review?.totalReviews === 1 ? '' : 's'})
+                {shop.review?.average ?? 0}  ({t('numOfReviews', {count: shop.review?.totalReviews ?? 0})})
               </span>
             </p>
           </div>
@@ -479,7 +489,7 @@ function RentalCompanyCard({
             href={`/shops/${shop.id}`}
           >
             <Button>
-              View Shop
+              {t('viewShop')}
             </Button>
           </Link>
         </div>
@@ -487,76 +497,3 @@ function RentalCompanyCard({
     </Card>
   );
 }
-
-// function RentalRules({
-//   shop,
-// }: {
-//   shop: RentalShop;
-// }) {
-//   const rules = [
-//     {
-//       title: "Security Deposit",
-//       value:
-//         shop.rules.securityDeposit,
-//     },
-//     {
-//       title: "Fuel Policy",
-//       value:
-//         shop.rules.fuelPolicy,
-//     },
-//     {
-//       title: "Insurance",
-//       value:
-//         shop.rules.insurance,
-//     },
-//     {
-//       title: "Cancellation",
-//       value:
-//         shop.rules.cancellation,
-//     },
-//     {
-//       title: "Mileage Limit",
-//       value:
-//         shop.rules.mileageLimit,
-//     },
-//     {
-//       title: "Late Return",
-//       value:
-//         shop.rules.lateReturn,
-//     },
-//   ];
-
-//   return (
-//     <Card>
-//       <CardHeader>
-//         <CardTitle>
-//           Rental Rules
-//         </CardTitle>
-//       </CardHeader>
-
-//       <CardContent>
-//         <div className="
-//           grid
-//           md:grid-cols-2
-//           gap-4
-//         ">
-//           {rules.map((rule) => (
-//             <Card
-//               key={rule.title}
-//             >
-//               <CardHeader>
-//                 <CardTitle className="text-base">
-//                   {rule.title}
-//                 </CardTitle>
-//               </CardHeader>
-
-//               <CardContent>
-//                 {rule.value}
-//               </CardContent>
-//             </Card>
-//           ))}
-//         </div>
-//       </CardContent>
-//     </Card>
-//   );
-// }

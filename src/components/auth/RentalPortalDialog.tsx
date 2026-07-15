@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import useAuth from "@/context/AuthContext";
+import {useTranslations} from "next-intl";
 
 interface Props {
   open: boolean;
@@ -20,6 +21,7 @@ interface Props {
 export default function RentalPortalDialog({
   open,
 }: Props) {
+  const t = useTranslations('auth');
 
   const {logout} = useAuth();
 
@@ -42,16 +44,12 @@ export default function RentalPortalDialog({
 
           <AlertDialogTitle>
 
-            Rental Account
+            {t('rentalAccount')}
 
           </AlertDialogTitle>
 
           <AlertDialogDescription>
-
-            This account belongs to a rental partner.
-
-            Please use the Rental Portal instead.
-
+            {t('thisAccountBelongsToARental')}
           </AlertDialogDescription>
 
         </AlertDialogHeader>
@@ -61,13 +59,13 @@ export default function RentalPortalDialog({
           <AlertDialogCancel
             onClick={handleClose}
           >
-            Cancel
+            {t('cancel')}
           </AlertDialogCancel>
 
           <AlertDialogAction
             onClick={goToPortal}
           >
-            Go to Rental Portal
+            {t('goToRentalPortal')}
           </AlertDialogAction>
 
         </AlertDialogFooter>

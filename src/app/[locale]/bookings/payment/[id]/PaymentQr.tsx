@@ -8,8 +8,11 @@ import {Card, CardContent, CardHeader, CardTitle, } from '@/components/ui/card';
 
 import {Button} from '@/components/ui/button';
 import {useState} from "react";
+import {useTranslations} from "next-intl";
 
 export const PaymentQr = ({booking}: {booking: Booking;}) => {
+  const t = useTranslations('payment');
+
   const crypto = booking.payment?.crypto;
 
   const [copiedAddress, setCopiedAddress] = useState(false);
@@ -21,7 +24,7 @@ export const PaymentQr = ({booking}: {booking: Booking;}) => {
   const copyWallet = async () => {
     await navigator.clipboard.writeText(crypto.walletAddress);
     setCopiedAddress(true);
-    toast.success("Wallet copied.");
+    toast.success(t('walletCopied'));
     setTimeout(() => {
       setCopiedAddress(false);
     }, 2000);
@@ -30,7 +33,7 @@ export const PaymentQr = ({booking}: {booking: Booking;}) => {
   const copyAmount = async () => {
     await navigator.clipboard.writeText(crypto.amount.toString());
     setCopiedAmount(true);
-    toast.success("Amount copied.");
+    toast.success(t('amountCopied'));
     setTimeout(() => {
       setCopiedAmount(false);
     }, 2000);
@@ -40,19 +43,19 @@ export const PaymentQr = ({booking}: {booking: Booking;}) => {
     const text = `Wallet: ${crypto.walletAddress} Amount: ${crypto.amount} USDT Network: ${crypto.network}`;
 
     if (navigator.share) {
-      await navigator.share({title: "Crypto Payment", text, });
+      await navigator.share({title: t('cryptoPayment'), text, });
       return;
     }
 
     await navigator.clipboard.writeText(text);
-    toast.success("Payment information copied.");
+    toast.success(t('paymentInformationCopied'));
   };
 
   return (
 
     <Card>
       <CardHeader>
-        <CardTitle>Scan QR Code</CardTitle>
+        <CardTitle>{t('scanQRCode')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex justify-center rounded-xl border bg-white p-6">
@@ -63,44 +66,44 @@ export const PaymentQr = ({booking}: {booking: Booking;}) => {
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium">Wallet Address</p>
+          <p className="text-sm font-medium">{t('walletAddress')}</p>
           <div className="rounded-lg bg-muted p-3 break-all font-mono text-xs">{crypto.walletAddress}</div>
           <Button variant="outline" className="w-full" onClick={copyWallet}>
             {
               copiedAddress
                 ?
                 <>
-                  <Check className="mr-2 h-4 w-4" /> Copied
+                  <Check className="mr-2 h-4 w-4" /> {t('copied')}
                 </>
                 :
                 <>
-                  <Copy className="mr-2 h-4 w-4" /> Copy Wallet
+                  <Copy className="mr-2 h-4 w-4" /> {t('copyWallet')}
                 </>
             }
           </Button>
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium">Amount</p>
+          <p className="text-sm font-medium">{t('amount')}</p>
           <div className="rounded-lg bg-muted p-3 text-center text-2xl font-bold">
             {crypto.amount.toFixed(2)} USDT
           </div>
 
-          <Button variant="outline" className="w-full" onClick={copyAmount}          >
+          <Button variant="outline" className="w-full" onClick={copyAmount}>
             {
               copiedAmount
                 ?
                 <>
-                  <Check className="mr-2 h-4 w-4" /> Copied
+                  <Check className="mr-2 h-4 w-4" /> {t('copied')}
                 </> : <>
-                  <Copy className="mr-2 h-4 w-4" /> Copy Amount
+                  <Copy className="mr-2 h-4 w-4" /> {t('copyAmount')}
                 </>
             }
           </Button>
         </div>
 
         <Button className="w-full" onClick={share}>
-          <Share2 className="mr-2 h-4 w-4" /> Share Payment Details
+          <Share2 className="mr-2 h-4 w-4" /> {t('sharePaymentDetails')}
         </Button>
 
       </CardContent>

@@ -1,9 +1,11 @@
 'use client';
 
+import {useTranslations} from "next-intl";
 import NavLink from "./nav-link";
 import useAuth from "@/context/AuthContext";
 
 export default function DesktopNav() {
+  const t = useTranslations('nav');
   const {authStatus} = useAuth();
 
   const authenticated =
@@ -14,24 +16,24 @@ export default function DesktopNav() {
     <div className="hidden lg:flex items-center gap-8">
 
       <NavLink href="/cars">
-        Rentals
+        {t('rentals')}
       </NavLink>
 
       {!authenticated && (
         <>
           <NavLink href="/about">
-            About Us
+            {t('aboutUs')}
           </NavLink>
 
           <NavLink href="/contact">
-            Contact
+            {t('contact')}
           </NavLink>
         </>
       )}
 
       {authenticated && (
         <NavLink href="/bookings">
-          My Bookings
+          {t('myBookings')}
         </NavLink>
       )}
     </div>

@@ -5,10 +5,12 @@ import ReviewsSection from '@/app/[locale]/ratings/_components/ReviewsSection';
 import PageLoader from '@/components/general/PageLoader';
 import {getRentalShopById} from '@/lib/services/rentalService';
 import {useQuery} from '@tanstack/react-query';
+import {useTranslations} from 'next-intl';
 import {useParams} from 'next/navigation';
 import React from 'react';
 
 export default function ShopReviewsPage() {
+  const t = useTranslations('reviews');
   const params = useParams();
   const id = params.id as string;
 
@@ -28,7 +30,7 @@ export default function ShopReviewsPage() {
   if (error || !shop) {
     return (
       <div className="text-center py-10">
-        Unable to load shop reviews.
+        {t('unableToLoadShopReviews')}
       </div>
     );
   }

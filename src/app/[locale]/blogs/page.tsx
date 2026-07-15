@@ -7,10 +7,13 @@ import React, {useMemo, useState} from 'react';
 import BlogGridCard from './components/BlogGridCard';
 import {BlogCategory} from '../models/Blog';
 import FeaturedBlogCard from './components/featuredBlogCard';
+import {useTranslations} from 'next-intl';
+import TranslatedBlogCategories from '@/lib/translations/translatedBlogCategories';
 
 type Category = BlogCategory;
 
 export default function BlogsPage() {
+  const t = useTranslations('blog');
   const [category, setCategory] =
     useState<Category>("all");
 
@@ -62,13 +65,11 @@ export default function BlogsPage() {
       {/* Header */}
       <div className="rounded-2xl bg-k-primary text-white p-8 md:p-12">
         <h1 className="text-4xl font-bold">
-          Latest News & Updates
+          {t('latestNewsAndUpdates')}
         </h1>
 
         <p className="mt-4 text-white/80 max-w-2xl">
-          Discover travel guides,
-          rental tips, hotel updates
-          and industry news.
+          {t('discoverTravelGuides')}
         </p>
       </div>
 
@@ -102,7 +103,7 @@ export default function BlogsPage() {
               )
             }
           >
-            {item}
+            <TranslatedBlogCategories category={item as BlogCategory} />
           </Button>
         ))}
       </div>

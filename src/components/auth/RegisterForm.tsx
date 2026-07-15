@@ -17,6 +17,7 @@ import {FormError} from '../general/FormError';
 import {FormSuccess} from '../general/FormSuccess';
 import {Loader} from 'lucide-react';
 import {getFirebaseAuthError} from './firebase-auth-errors';
+import {Translator} from '@/schemas/create-schema';
 // import {useSearchParams} from 'next/navigation';
 
 interface LoginFormProps {
@@ -26,8 +27,7 @@ interface LoginFormProps {
 export const RegisterForm = ({
   callbackUrl,
 }: LoginFormProps) => {
-  const t = useTranslations();
-  const a = useTranslations('auth');
+  const t: Translator = useTranslations();
   const schema = RegisterFormSchema(t);
 
   // const searchParams = useSearchParams();
@@ -59,19 +59,19 @@ export const RegisterForm = ({
     try {
       await signUp(values.email, values.password, values.username);
       setSuccess(
-        "We've sent a verification email. Please verify your email before logging in."
+        t('auth.weveSentAVerificationEmail')
       );
       form.reset();
     }
     catch (error) {
-      setError(getFirebaseAuthError(error));
+      setError(getFirebaseAuthError(error, t));
     }
   };
 
   return (
     <CardWrapper
-      headerLabel='Create an account'
-      backButtonLabel="Already have an account?"
+      headerLabel={t('auth.createAnAccount')}
+      backButtonLabel={t('auth.alreadyHaveAnAccount')}
       backButtonHref={callbackUrl ? `/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/auth/login'}
       showSocials={false}
     >
@@ -83,7 +83,7 @@ export const RegisterForm = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-username">
-                  Username
+                  {t('auth.username')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -105,7 +105,7 @@ export const RegisterForm = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-email">
-                  Email
+                  {t('auth.email')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -127,7 +127,7 @@ export const RegisterForm = ({
             render={({field, fieldState}) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-password">
-                  Password
+                  {t('auth.password')}
                 </FieldLabel>
                 <Input
                   {...field}
@@ -154,7 +154,7 @@ export const RegisterForm = ({
             type='submit'
             className='w-full bg-k-primary text-white hover:bg-k-primary/80 hover:text-white cursor-pointer'
           >
-            {loading ? <Loader className='animate-spin' /> : 'Create Account'}
+            {loading ? <Loader className='animate-spin' /> : t('auth.createAccount')}
           </Button>
         </div>
       </form>

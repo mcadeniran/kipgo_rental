@@ -13,6 +13,8 @@ import {BookingStatusBadge} from "@/components/badges/bookingstatusBadge";
 import {Separator} from "@/components/ui/separator";
 import {CryptoPaymentStatusBadge} from "@/components/badges/CryptoPaymentStatusBadge";
 import {PaymentMethodIconBadge} from "@/components/badges/PaymentMethodIconBadge";
+import TranslatedDeliveryMethod, {DeliveryMethod} from "@/lib/translations/translatedDeliveryMethod";
+import {Badge} from "@/components/ui/badge";
 
 export default function BookingCard({
   booking,
@@ -54,6 +56,8 @@ export default function BookingCard({
             {" → "}
             {formatShortDayWeekMonth(booking.dropoffDate.toISOString())}{' • '}{formatTime(booking.dropoffDate.toISOString())}
           </div>
+          <Badge className="bg-k-primary text-white"><TranslatedDeliveryMethod method={booking.deliveryType as DeliveryMethod} /></Badge>
+
           <Separator />
           <div className="flex w-full gap-2 items-center">
             <PaymentMethodIconBadge method={booking.payment?.method as PaymentMethod} />

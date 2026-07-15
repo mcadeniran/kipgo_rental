@@ -13,6 +13,7 @@ import {
 
 import {Button} from "@/components/ui/button";
 import SubmitRatingForm from "../form/SubmitRatingForm";
+import {useTranslations} from "next-intl";
 
 interface ReviewDialogProps {
   bookingId: string;
@@ -21,6 +22,7 @@ interface ReviewDialogProps {
 export default function ReviewDialog({
   bookingId
 }: ReviewDialogProps) {
+  const t = useTranslations('bookings');
   const [open, setOpen] = useState(false);
 
   return (
@@ -30,18 +32,18 @@ export default function ReviewDialog({
     >
       <DialogTrigger render={
         <Button className="w-full bg-k-primary text-white hover:bg-k-primary/90 hover:text-white/90 cursor-pointer">
-          Leave Review
+          {t('leaveReview')}
         </Button>
       } />
 
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>
-            Leave a Review
+            {t('leaveAReview')}
           </DialogTitle>
 
           <DialogDescription>
-            Tell us about your experience with the vehicle and rental company. Your review helps future customers make informed decisions.
+            {t('tellUsAboutYourExperience')}
           </DialogDescription>
         </DialogHeader>
 

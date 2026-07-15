@@ -11,6 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 import {Booking} from "../../models/Booking";
+import {useTranslations} from "next-intl";
 
 
 interface Props {
@@ -20,30 +21,32 @@ interface Props {
 export default function BookingTimeline({
   booking,
 }: Props) {
+  const t = useTranslations('bookings');
+
   const steps = [
     {
       key: "pending",
-      label: "Booking Created",
+      label: t('bookingCreated'),
     },
     {
       key: "payment_submitted",
-      label: "Payment Submitted",
+      label: t('paymentSubmitted'),
     },
     {
       key: "reserved",
-      label: "Vehicle Reserved",
+      label: t('vehicleReserved'),
     },
     {
       key: "approved",
-      label: "Booking Approved",
+      label: t('bookingApproved'),
     },
     {
       key: "ongoing",
-      label: "Rental Started",
+      label: t('rentalStarted'),
     },
     {
       key: "completed",
-      label: "Rental Completed",
+      label: t('rentalCompleted'),
     },
   ];
 
@@ -66,7 +69,7 @@ export default function BookingTimeline({
     <Card>
       <CardHeader>
         <CardTitle>
-          Booking Timeline
+          {t('bookingTimeline')}
         </CardTitle>
       </CardHeader>
 
@@ -124,7 +127,8 @@ export default function BookingTimeline({
               <XCircle className="h-5 w-5" />
 
               <span className="font-medium capitalize">
-                Booking {booking.status}
+                {t('bookingWithStatus', {status: booking.status})}
+                {/* Booking {booking.status} */}
               </span>
             </div>
           )}

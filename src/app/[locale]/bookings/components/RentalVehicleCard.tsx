@@ -1,3 +1,4 @@
+'use client';
 import Image from "next/image";
 import {
   Card,
@@ -10,18 +11,22 @@ import {Icon} from "@iconify/react";
 import {Booking} from "../../models/Booking";
 import {useDateTimeFormatter} from "@/lib/helper/formatDate";
 import {CarSpecRow} from "@/components/general/CarSpecRow";
+import {useTranslations} from "next-intl";
+import {useRouter} from "@/i18n/navigation";
 
 export function RentalVehicleCard({
   booking,
 }: {
   booking: Booking;
 }) {
+  const t = useTranslations('bookings');
   const {formatCurrency} = useDateTimeFormatter();
+  const router = useRouter();
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          Vehicle Information
+          {t('vehicleInformation')}
         </CardTitle>
       </CardHeader>
 
@@ -45,7 +50,7 @@ export function RentalVehicleCard({
           <div className="flex-1 space-y-3">
 
             <div>
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold cursor-pointer hover:underline" onClick={() => router.push(`/shops/${booking.shopId}`)}>
                 {booking.car.brand}{" "}
                 {booking.car.model}
               </h2>
@@ -59,7 +64,7 @@ export function RentalVehicleCard({
 
             <div>
               <p className="text-muted-foreground">
-                Daily Rate
+                {t('dailyRate')}
               </p>
 
               <p className="font-semibold text-lg">
@@ -71,7 +76,7 @@ export function RentalVehicleCard({
                 icon="ic:sharp-star"
                 width={18}
                 className="text-amber-400"
-              /> : booking.status === 'completed' && !booking.isRated ? "Not Rated" : ''}</p>
+              /> : booking.status === 'completed' && !booking.isRated ? t('notRated') : ''}</p>
           </div>
         </div>
       </CardContent>

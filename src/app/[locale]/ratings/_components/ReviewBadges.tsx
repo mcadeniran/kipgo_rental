@@ -2,6 +2,7 @@
 
 import {Badge} from "@/components/ui/badge";
 import {BadgeCheck, RotateCcw, ThumbsUp} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 export interface ReviewBadgesProps {
   verified?: boolean;
@@ -14,19 +15,20 @@ export default function ReviewBadges({
   recommended = false,
   wouldRentAgain = false,
 }: ReviewBadgesProps) {
+  const t = useTranslations('reviews');
   const badges = [
     verified && {
-      label: "Verified Rental",
+      label: t('verifiedRental'),
       icon: BadgeCheck,
     },
 
     recommended && {
-      label: "Would Recommend",
+      label: t('wouldRecommend'),
       icon: ThumbsUp,
     },
 
     wouldRentAgain && {
-      label: "Would Rent Again",
+      label: t('wouldRentAgain'),
       icon: RotateCcw,
     },
   ].filter(Boolean) as {

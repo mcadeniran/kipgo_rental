@@ -10,8 +10,10 @@ import {getCarUnits} from "@/lib/services/carUnitService";
 import {loadWallet} from "@/lib/services/walletService";
 import PageLoader from "@/components/general/PageLoader";
 import {CarWithShop} from "@/lib/services/CarWithShop";
+import {useTranslations} from "next-intl";
 
 export default function NewBookingPage() {
+  const t = useTranslations('cars');
   const params = useParams();
   const id = params.id as string;
 
@@ -60,24 +62,10 @@ export default function NewBookingPage() {
     return <PageLoader />;
   }
 
-
-  // const carErrorr = results[0].isError && results[0].error.message;
-  // const bookingsErrorr = results[1].isError && results[1].error.message;
-  // const unitsErrorr = results[2].isError && results[2].error.message;
-  // const driversErrorr = results[3].isError && results[3].error.message;
-  // const walletErrorr = results[4].isError && results[4].error.message;
-
-  // console.log("CAR ERROR: ", carErrorr);
-  // console.log("BOOKING ERROR: ", bookingsErrorr);
-  // console.log("UNITS ERROR: ", unitsErrorr);
-  // console.log("DRIVERS ERROR: ", driversErrorr);
-  // console.log("WALLET ERROR: ", walletErrorr);
-
-
   if (results.some((q) => q.isError)) {
     return (
       <div className="py-10 text-center">
-        Something went wrong while loading the page.
+        {t('somethingWentWrong')}
       </div>
     );
   }
@@ -85,7 +73,7 @@ export default function NewBookingPage() {
   if (!car?.car || !car.shop || car.shop?.isActive === false || car.car.isVisible === false) {
     return (
       <div className="py-10 text-center">
-        Car not found.
+        {t('notFound')}
       </div>
     );
   }

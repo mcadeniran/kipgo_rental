@@ -11,6 +11,7 @@ import {toast} from "sonner";
 import {confirmPhoneOTP, sendPhoneOTP} from "@/lib/services/phoneVerificationService";
 import {RecaptchaVerifier} from "firebase/auth";
 import {auth} from "@/app/[locale]/firebase/config";
+import {useTranslations} from "next-intl";
 
 interface Props {
   open: boolean;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
+  const t = useTranslations('profile');
   const {currentUser, userDataObj, refreshProfile, } = useAuth();
   const [otp, setOtp] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -84,13 +86,13 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
       if (remaining === 0) {
         clearInterval(timer);
         toast.error(
-          "Verification code expired."
+          t('verificationCodeExpired')
         );
         setOtp("");
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [expiresAt]);
+  }, [expiresAt, t]);
 
   useEffect(() => {
     if (open) return;
@@ -112,7 +114,7 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
       setIsSending(true);
 
       if (!verifierRef.current) {
-        throw new Error("reCAPTCHA not initialized.");
+        throw new Error(t('recaptchaNotInitialized'));
       }
 
       await sendPhoneOTP(phone, verifierRef.current,);
@@ -125,11 +127,11 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
 
       setOtp("");
 
-      toast.success("Verification code sent.");
+      toast.success(t('verificationCodeSent'));
 
     } catch (e) {
       console.error(e);
-      toast.error("Unable to send verification code.");
+      toast.error(t('unableToSendVerificationCode'));
     } finally {
       setIsSending(false);
     }
@@ -142,7 +144,7 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
     if (remainingExpiry === 0 &&
       remainingExpiry !== 0) {
 
-      toast.error("Verification code expired.");
+      toast.error(t('verificationCodeExpired'));
       return;
     }
 
@@ -152,15 +154,19 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
       await markPhoneVerified(currentUser.uid);
       await refreshProfile();
       onOpenChange(false);
-      toast.success("Phone verified successfully.");
+      toast.success(t('phoneVerifiedSuccessfully'));
       onOpenChange(false);
     } catch (e) {
       console.error(e);
-      toast.error("Invalid verification code.");
+      toast.error(t('invalidVerificationCode'));
     } finally {
       setIsVerifying(false);
     }
   }
+
+  const expiryTime = `${Math.floor(remainingExpiry / 60)}:${String(
+    remainingExpiry % 60
+  ).padStart(2, '0')}`;
 
   return (
 
@@ -181,10 +187,10 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
         <DialogHeader>
           <Smartphone className="mx-auto h-12 w-12 text-k-primary" />
           <DialogTitle className="text-center">
-            Verify Phone Number
+            {t('verifyPhoneNumber')}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Enter the 6-digit code sent to
+            {t('enterCodeSent')}
             <br />
             <strong>{maskPhoneNumber(phone)}</strong>
           </DialogDescription>
@@ -213,19 +219,16 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
 
         {remainingExpiry > 0 ? (
           <p>
-            {`Code expires in ${Math.floor(
-              remainingExpiry / 60
-            )}:${String(
-              remainingExpiry % 60
-            ).padStart(2, "0")}`}
+            {t('codeExpiresIn', {
+              time: expiryTime,
+            })}
           </p>
         ) : (
           <Button
             variant="link"
             onClick={sendCode}
           >
-            Code expired.
-            Send another code
+            {t('codeExpired')}
           </Button>
         )}
 
@@ -238,9 +241,9 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
             remainingExpiry === 0
           }
         >
-          {isVerifying ? (
+          {isVerifying ?
             <Loader2 className="animate-spin" />
-          ) : ("Verify")}
+            : t('verify')}
         </Button>
 
         <Button
@@ -252,13 +255,19 @@ export default function VerifyPhoneDialog({open, onOpenChange, }: Props) {
             isVerifying
           }
         >
-          {isSending ? (<Loader2 className="animate-spin" />)
-            : resendCount >= MAX_RESENDS ?
-              "Maximum attempts reached"
-              : resendCooldown > 0 ?
-                `Resend in ${resendCooldown}s`
-                :
-                "Resend Code"}
+          {
+            isSending ? (
+              <Loader2 className="animate-spin" />
+            ) : resendCount >= MAX_RESENDS ? (
+              t('maximumAttempsReached')
+            ) : resendCooldown > 0 ? (
+              t('resendIn', {
+                seconds: resendCooldown,
+              })
+            ) : (
+              t('resendCode')
+            )
+          }
         </Button>
       </DialogContent>
     </Dialog>

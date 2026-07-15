@@ -7,8 +7,11 @@ import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import useAuth from "@/context/AuthContext";
 import VerifyPhoneDialog from "./VerifyPhoneDialog";
+import {useTranslations} from "next-intl";
 
 export default function PhoneVerificationCard() {
+  const t = useTranslations('profile');
+
   const {userDataObj} = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -19,7 +22,7 @@ export default function PhoneVerificationCard() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Phone Verification
+            {t('phoneVerification')}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between">
@@ -32,16 +35,16 @@ export default function PhoneVerificationCard() {
             </p>
 
             {verified ? (
-              <Badge>
+              <Badge className=" bg-k-primary text-white">
                 <BadgeCheck className="mr-1 h-3 w-3" />
-                Verified
+                {t('verified')}
               </Badge>
             ) : (
               <Badge
                 variant="secondary"
               >
                 <ShieldAlert className="mr-1 h-3 w-3" />
-                Not Verified
+                {t('notVerified')}
               </Badge>
             )}
           </div>
@@ -52,7 +55,7 @@ export default function PhoneVerificationCard() {
                 setOpen(true)
               }
             >
-              Verify
+              {t('verify')}
             </Button>
           )}
         </CardContent>

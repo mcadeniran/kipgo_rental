@@ -12,8 +12,10 @@ import {PaymentSummary} from './PaymentSummary';
 // import {PaymentWarning} from './PaymentWarning';
 import {PaymentQr} from './PaymentQr';
 import {PaymentTxidForm} from './PaymentTxidForm';
+import {useTranslations} from 'next-intl';
 
 export default function CryptoPaymentPage() {
+  const t = useTranslations('payment');
   const params = useParams();
 
   const id = params.id as string;
@@ -40,20 +42,20 @@ export default function CryptoPaymentPage() {
       booking?.payment?.status === 'paid'
     ) {
       toast.success(
-        'Payment verified successfully.'
+        t('paymentVerifiedSuccessfully')
       );
       router.replace(
         `/bookings/${booking.id}`
       );
     }
-  }, [booking?.payment?.status, booking?.id, router,]);
+  }, [booking?.payment?.status, booking?.id, router, t]);
 
   if (isLoading) return <PageLoader />;
 
   if (isError)
     return (
       <ErrorCard
-        title="Unable to load booking"
+        title={t('unableToLoadBooking')}
         message={error.message}
       />
     );
@@ -61,8 +63,8 @@ export default function CryptoPaymentPage() {
   if (!booking)
     return (
       <ErrorCard
-        title="Booking not found"
-        message="The booking does not exist."
+        title={t('bookingNotFound')}
+        message={t('theBookingDoesNotExist')}
       />
     );
 

@@ -17,27 +17,23 @@ import {ProfileSchema} from "@/schemas";
 import {useUpdateProfile} from "@/lib/helper/useUpdateProfile";
 import {toast} from "sonner";
 import {Field, FieldError, FieldGroup, FieldLabel} from "../ui/field";
-
-
-
-
-
-type FormValues =
-  z.infer<
-    typeof ProfileSchema
-  >;
+import {useTranslations} from "next-intl";
 
 export default function PersonalInformationCard() {
+  const t = useTranslations();
+  const m = useTranslations('profile');
+
+  const schema = ProfileSchema(t);
 
   const {currentUser, userDataObj, refreshProfile} = useAuth();
 
   const mutation = useUpdateProfile();
 
   const form =
-    useForm<FormValues>({
+    useForm<z.infer<typeof schema>>({
       resolver:
         zodResolver(
-          ProfileSchema,
+          schema,
         ),
 
       defaultValues: {
@@ -56,7 +52,7 @@ export default function PersonalInformationCard() {
     });
   }, [userDataObj, form]);
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: z.infer<typeof schema>) {
     if (!currentUser)
       return;
 
@@ -67,9 +63,9 @@ export default function PersonalInformationCard() {
       });
       await refreshProfile();
       form.reset(values);
-      toast.success("Profile updated.");
+      toast.success(m('profileUpdated'));
     } catch {
-      toast.error("Unable to update profile.");
+      toast.error(m('unableToUpdateProfile'));
     }
   }
 
@@ -77,10 +73,10 @@ export default function PersonalInformationCard() {
     <Card>
       <CardHeader>
         <CardTitle>
-          Personal Information
+          {m('personalInformation')}
         </CardTitle>
         <CardDescription>
-          Update your personal details.
+          {m('updateYourPersonalDetails')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -92,7 +88,7 @@ export default function PersonalInformationCard() {
               render={({field, fieldState}) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="firstName">
-                    First Name
+                    {m('firstName')}
                   </FieldLabel>
                   <Input
                     {...field}
@@ -115,7 +111,7 @@ export default function PersonalInformationCard() {
               render={({field, fieldState}) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="lastName">
-                    Last Name
+                    {m('lastName')}
                   </FieldLabel>
                   <Input
                     {...field}
@@ -138,7 +134,7 @@ export default function PersonalInformationCard() {
               render={({field, fieldState}) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="phone">
-                    Phone Number
+                    {m('phoneNumber')}
                   </FieldLabel>
                   <Input
                     {...field}
@@ -160,14 +156,14 @@ export default function PersonalInformationCard() {
           <Button
             type="submit"
             disabled={!form.formState.isDirty || mutation.isPending}
-            className="w-full"
+            className="w-full bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer"
           >
             {mutation.isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Save Changes
+            {m('saveChanges')}
           </Button>
         </form>
       </CardContent>

@@ -2,6 +2,7 @@
 
 
 import {CarWithShop} from "@/lib/services/CarWithShop";
+import {useTranslations} from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,20 +13,21 @@ interface Props {
 export default function FeaturedCars({
   cars,
 }: Props) {
+  const t = useTranslations('home');
   if (!cars.length) return null;
 
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">
-          Featured Cars
+          {t('featuredCars')}
         </h2>
 
         <Link
           href="/cars"
           className="text-sm underline"
         >
-          View all
+          {t('viewAll')}
         </Link>
       </div>
 
@@ -78,7 +80,7 @@ export default function FeaturedCars({
               </div>
 
               <p className="text-xs text-muted-foreground">
-                {car.seats} seats • {car.transmission}
+                {t('numSeats', {count: car.seats})} • {car.transmission}
               </p>
             </div>
           </Link>

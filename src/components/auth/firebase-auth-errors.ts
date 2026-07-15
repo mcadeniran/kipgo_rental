@@ -1,24 +1,25 @@
+import { Translator } from '@/schemas/create-schema';
 import { FirebaseError } from 'firebase/app';
 
-export function getFirebaseAuthError(error: unknown): string {
+export function getFirebaseAuthError(error: unknown, t: Translator): string {
   if (!(error instanceof FirebaseError)) {
-    return 'Something went wrong.';
+    return t('auth.somethingWentWrong');
   }
 
   switch (error.code) {
     case 'auth/email-already-in-use':
-      return 'An account already exists with this email.';
+      return t('auth.anAccountAlreadyExists');
 
     case 'auth/invalid-email':
-      return 'Please enter a valid email address.';
+      return t('auth.pleaseEnterValidEmail');
 
     case 'auth/weak-password':
-      return 'Password should be at least 6 characters.';
+      return t('auth.passwordShouldBe6Characters');
 
     case 'auth/network-request-failed':
-      return 'Network error. Please check your internet connection.';
+      return t('auth.networkError');
 
     default:
-      return 'Unable to complete your request.';
+      return t('auth.invalidEmailorPassword');
   }
 }

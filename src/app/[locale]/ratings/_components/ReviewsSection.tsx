@@ -7,6 +7,7 @@ import ReviewsLoading from "./ReviewSkeleton";
 import ReviewsEmpty from "./ReviewsEmpty";
 import ReviewsList from "./ReviewsList";
 import LoadMoreTrigger from "./LoadMoreTrigger";
+import {useTranslations} from "next-intl";
 
 
 export interface ReviewsSectionProps {
@@ -38,6 +39,7 @@ export default function ReviewsSection({
   showLoadMore,
   limit
 }: ReviewsSectionProps) {
+  const t = useTranslations('reviews');
   const {
     reviews,
     isLoading,
@@ -67,7 +69,7 @@ export default function ReviewsSection({
         <p className="text-sm text-destructive">
           {error instanceof Error
             ? error.message
-            : "Unable to load reviews."}
+            : t('unableToLoadReviews')}
         </p>
       </div>
     );

@@ -2,6 +2,7 @@ import {Booking} from "../../models/Booking";
 
 import {Info} from "lucide-react";
 import {cn} from "@/lib/utils";
+import {useTranslations} from "next-intl";
 
 type MessageConfig = {
   color:
@@ -76,6 +77,7 @@ const colorMap = {
 } as const;
 
 export function UserBookingStatusMessage({booking}: {booking: Booking;}) {
+
   const config = getBookingStatusMessage(booking);
 
   if (!config) return null;
@@ -87,6 +89,9 @@ export function UserBookingStatusMessage({booking}: {booking: Booking;}) {
 function getBookingStatusMessage(
   booking: Booking,
 ): MessageConfig | null {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const t = useTranslations('bookings.notes');
+
   const payment = booking.payment!;
 
   if (
@@ -96,8 +101,8 @@ function getBookingStatusMessage(
   ) {
     return {
       color: "orange",
-      title: 'Waiting for payment.',
-      message: 'Your booking request has been received. To continue, submit your crypto payment and transaction hash (TXID) before the payment window expires.'
+      title: t('waitingForPayment'),
+      message: t('waitingForPaymentNote')
     };
   }
 
@@ -107,8 +112,8 @@ function getBookingStatusMessage(
   ) {
     return {
       color: "orange",
-      title: 'Booking request submitted.',
-      message: 'Your booking request is awaiting review by the rental company. You will be notified once a decision has been made.',
+      title: t('bookingRequestSubmitted'),
+      message: t('bookingRequestSubmittedNote'),
     };
   }
 
@@ -119,8 +124,8 @@ function getBookingStatusMessage(
   ) {
     return {
       color: "blue",
-      title: 'Payment submitted successfully.',
-      message: 'Your transaction hash has been received and is currently being verified. This process may take some time depending on network confirmations.',
+      title: t('paymentSubmittedSuccessfully'),
+      message: t('paymentSubmittedSuccessfullyNote'),
     };
   }
 
@@ -131,58 +136,58 @@ function getBookingStatusMessage(
   ) {
     return {
       color: "green",
-      title: 'Vehicle reserved.',
-      message: 'Your payment has been verified and a vehicle has been reserved for your selected rental period. Your booking is awaiting final approval.',
+      title: t('vehicleReserved'),
+      message: t('vehicleReservedNote'),
     };
   }
 
   if (booking.status === "approved") {
     return {
       color: "teal",
-      title: 'Booking approved',
-      message: 'Your booking has been approved. Please arrive at the pickup location on the scheduled date with any required identification and documents.',
+      title: t('bookingApproved'),
+      message: t('bookingApprovedNote'),
     };
   }
 
   if (booking.status === "ongoing") {
     return {
       color: "indigo",
-      title: 'Rental in progress',
-      message: 'Your rental period is currently active. Please ensure the vehicle is returned on or before the agreed return date.',
+      title: t('rentalInProgress'),
+      message: t('rentalInProgressNote'),
     };
   }
 
   if (booking.status === "completed") {
     return {
       color: "green",
-      title: 'Rental completed.',
+      title: t('rentalCompleted'),
       message: !booking.isRated
-        ? 'This rental has been completed successfully. We would appreciate your feedback about your experience.'
-        : 'This rental has been completed successfully. Thank you for choosing our service.',
+        ? t('rentalCompletedNotRated')
+        : t('rentalCompletedRated'),
     };
   }
 
   if (booking.status === "rejected") {
     return {
       color: "red",
-      title: 'Booking request rejected.',
-      message: 'Unfortunately, this booking request could not be approved. You may submit a new booking request or contact the rental company for more information.',
+      title: t('bookingRequestRejected'),
+      message: t('bookingRequestRejectedNote'),
     };
   }
 
   if (booking.status === "cancelled") {
     return {
       color: "redAccent",
-      title: 'Booking cancelled.',
-      message: 'This booking has been cancelled and will not proceed further.',
+      title: t('bookingCancelled'),
+      message: t('bookingCancelledNote'),
     };
   }
 
   if (booking.status === "expired") {
     return {
       color: "gray",
-      title: 'Booking expired.',
-      message: 'The payment or confirmation period expired before the booking could be completed. A new booking will be required if you still wish to rent this vehicle.',
+      title: t('bookingExpired'),
+      message: t('bookingExpiredNote'),
     };
   }
 
@@ -197,8 +202,8 @@ function getBookingStatusMessage(
 
     return {
       color: "red",
-      title: 'Payment verification failed.',
-      message: `Reason: ${reason}\n\n'You may submit another valid transaction hash before the booking expires.'`,
+      title: t('paymentVerificationFailed'),
+      message: t('paymentVerificationFailedNote', {reason: reason}),
     };
   }
 

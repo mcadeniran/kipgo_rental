@@ -1,12 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import {Blog} from "@/app/[locale]/models/Blog";
+import {useTranslations} from "next-intl";
+import TranslatedBlogCategories from "@/lib/translations/translatedBlogCategories";
 
 export default function FeaturedBlogCard({
   blog,
 }: {
   blog: Blog;
 }) {
+  const t = useTranslations('blog');
   return (
     <Link
       href={`/blogs/${blog.id}`}
@@ -39,7 +42,7 @@ export default function FeaturedBlogCard({
 
         <div className="p-8 flex flex-col justify-center">
           <p className="uppercase text-sm text-k-primary font-medium">
-            {blog.category}
+            <TranslatedBlogCategories category={blog.category} />
           </p>
 
           <h2 className="text-3xl font-bold mt-3">
@@ -51,7 +54,7 @@ export default function FeaturedBlogCard({
           </p>
 
           <span className="mt-6 text-k-primary font-medium">
-            Read article →
+            {t('readArticle')}
           </span>
         </div>
       </div>

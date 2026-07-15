@@ -9,8 +9,10 @@ import {Badge} from '@/components/ui/badge';
 
 import {Booking} from "@/app/[locale]/models/Booking";
 import {useExpireBooking} from '@/lib/helper/useExpireBooking';
+import {useTranslations} from 'next-intl';
 
 export const PaymentCountdown = ({booking}: {booking: Booking;}) => {
+  const t = useTranslations('payment');
   const expireBooking = useExpireBooking();
   const expiresAt = booking.payment?.expiresAt;
 
@@ -97,15 +99,15 @@ export const PaymentCountdown = ({booking}: {booking: Booking;}) => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Clock3 className="h-5 w-5" />
-            <span className="font-semibold">Payment Countdown</span>
+            <span className="font-semibold">{t('paymentCountdown')}</span>
           </div>
 
-          <p className="text-sm text-muted-foreground">Complete your payment before the timer reaches zero.</p>
+          <p className="text-sm text-muted-foreground">{t('completeYourPaymentBefore')}</p>
         </div>
 
         <div className="text-right">
           <Badge variant={badgeVariant} className="mb-2" >
-            {remainingMs <= 0 ? 'Expired' : 'Pending'}
+            {remainingMs <= 0 ? t('expired') : t('pending')}
           </Badge>
 
           <div className="text-4xl font-bold tabular-nums">
@@ -118,7 +120,7 @@ export const PaymentCountdown = ({booking}: {booking: Booking;}) => {
         remainingMs > 0 && (
           <CardContent className="pt-0">
             <div className="flex items-center gap-2 rounded-lg bg-red-100 p-3 text-red-700">
-              <AlertTriangle className="h-4 w-4" />Less than 5 minutes remaining.
+              <AlertTriangle className="h-4 w-4" />{t('lessThanFive')}
             </div>
           </CardContent>
         )}

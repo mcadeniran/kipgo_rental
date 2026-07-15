@@ -17,12 +17,15 @@ import {CarWithShop} from '@/lib/services/CarWithShop';
 import {RentalShop} from '../../models/RentalShop';
 import {BookNowButton} from '@/components/BookNowButton';
 import {CarSpecRow} from '@/components/general/CarSpecRow';
+import {useTranslations} from 'next-intl';
 
 export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: RentalShop;}) {
+  const t = useTranslations('cars');
+
   const router = useRouter();
   const {formatCurrency} = useDateTimeFormatter();
 
-  if (!cars.length) return <p>No available cars</p>;
+  if (!cars.length) return <p>{t('noAvailableCars')}</p>;
 
   const date = new Date();
 
@@ -30,11 +33,11 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
     <div className='flex flex-col gap-6'>
       <div>
         <h2 className="text-2xl font-bold">
-          Available Cars
+          {t('availableCars')}
         </h2>
 
         <p className="text-muted-foreground">
-          {cars.length} vehicles available
+          {t('numVehiclesAvailable', {num: cars.length})}
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -67,14 +70,14 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                     <div className="flex flex-row justify-between" >
                       <CarSpecRow fuel={car.fuel} transmission={car.transmission} seats={car.seats} size={12} />
                       {car.isFeatured && car.featured && date > car.featured?.startAt && date < car.featured?.endAt &&
-                        <Badge variant='destructive'>Featured</Badge>}
+                        <Badge variant='destructive'>{t('featured')}</Badge>}
                     </div>
                   </CardDescription>
                 </CardHeader>
                 <CardFooter className='flex justify-between items-center'>
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      Per day
+                      {t('pricePerDay')}
                     </p>
                     {
                       !carShop.hasDiscount &&
@@ -97,7 +100,7 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                     }
 
                   </div>
-                  <BookNowButton label='Book Now' url={`/bookings/new/${car.id}`} />
+                  <BookNowButton label={t('bookNow')} url={`/bookings/new/${car.id}`} />
                 </CardFooter>
               </Card>);
           })

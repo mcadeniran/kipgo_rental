@@ -18,6 +18,7 @@ export const PaymentTxidForm = ({booking}: {booking: Booking;}) => {
   const mutation = useSubmitTxid();
 
   const t = useTranslations();
+  const m = useTranslations('payment');
 
   const paymentSchema = PaymentTxidSchema(t);
 
@@ -50,8 +51,8 @@ export const PaymentTxidForm = ({booking}: {booking: Booking;}) => {
   if (booking.payment?.crypto?.txid) {
     return (
       <div className="rounded-xl border p-6">
-        <h3 className="font-semibold">Transaction submitted</h3>
-        <p className="text-sm text-muted-foreground mt-2">Waiting for payment verification.</p>
+        <h3 className="font-semibold">{m('transactionSubmitted')}</h3>
+        <p className="text-sm text-muted-foreground mt-2">{m('waitingForPaymentVerification')}</p>
       </div>
     );
   }
@@ -63,9 +64,9 @@ export const PaymentTxidForm = ({booking}: {booking: Booking;}) => {
         name="txid"
         render={({field, fieldState}) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor='form-txid'>TXID</FieldLabel>
+            <FieldLabel htmlFor='form-txid'>{m('TXID')}</FieldLabel>
             <Input
-              placeholder="Paste TRON transaction hash"
+              placeholder={m('pasteTronTransactionHash')}
               id="form-txid"
               disabled={mutation.isPending}
               {...field}
@@ -78,12 +79,12 @@ export const PaymentTxidForm = ({booking}: {booking: Booking;}) => {
       />
       <div className="flex gap-3">
         <Button type="button" variant="outline" onClick={paste}>
-          <ClipboardPaste className="size-4 mr-2" />  Paste
+          <ClipboardPaste className="size-4 mr-2" />  {m('paste')}
         </Button>
 
         <Button type="submit" className="bg-k-primary text-white hover:bg-k-primary/90 hover:text-white cursor-pointer" disabled={mutation.isPending}>
           {
-            mutation.isPending ? <Loader className="animate-spin" /> : "I Have Paid"
+            mutation.isPending ? <Loader className="animate-spin" /> : m('iHavePaid')
           }
         </Button>
 

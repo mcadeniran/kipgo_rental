@@ -31,18 +31,42 @@ export const RegisterFormSchema = (t: Translator) =>
     email: z
       .email(t('validation.emailInvalid'))
       .nonempty(t('validation.emailRequired')),
-    password: z.string().min(8, 'Minimum 8 characters required'),
-    username: z.string().min(1, 'Username is required'),
+    password: z.string().min(8, t('validation.passwordMinLength')),
+    username: z.string().trim().min(1, t('validation.usernameRequired')),
   });
+
+export const DeleteAccountSchema = (t: Translator) =>
+  z
+    .object({
+      email: z.email(t('validation.invalidEmail')),
+      password: z.string().min(6),
+      confirmation: z.string(),
+      accepted: z.boolean().refine((v) => v, {
+        message: t('validation.mustAccept'),
+      }),
+    })
+    .superRefine((data, ctx) => {
+      if (data.confirmation.trim() !== 'DELETE') {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['confirmation'],
+          message: t('validation.typeDelete'),
+        });
+      }
+    });
 
 export const BookingScheduleFormSchema = (t: Translator) =>
   z
     .object({
-      pickupDate: z.date(),
-      dropoffDate: z.date(),
+      pickupDate: z.date({
+        error: t('validation.pickupDateRequired'),
+      }),
+      dropoffDate: z.date({
+        error: t('validation.dropoffDateRequired'),
+      }),
 
-      pickupTime: z.string().min(1),
-      dropoffTime: z.string().min(1),
+      pickupTime: z.string().min(1, t('validation.pickupTimeRequired')),
+      dropoffTime: z.string().min(1, t('validation.dropoffTimeRequired')),
 
       deliveryType: z.enum(['pickup', 'delivery']),
 
@@ -63,7 +87,7 @@ export const BookingScheduleFormSchema = (t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['pickupDate'],
-          message: 'Pickup must be at least 1 day from today',
+          message: t('validation.pickupMustBeTomorrow'),
         });
       }
 
@@ -76,7 +100,7 @@ export const BookingScheduleFormSchema = (t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['dropoffDate'],
-          message: 'Minimum rental period is 3 days',
+          message: t('validation.minimumRentalPeriod'),
         });
       }
 
@@ -84,7 +108,7 @@ export const BookingScheduleFormSchema = (t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['deliveryAddress'],
-          message: 'Delivery address is required',
+          message: t('validation.deliveryAddressRequired'),
         });
       }
     });
@@ -92,14 +116,17 @@ export const BookingScheduleFormSchema = (t: Translator) =>
 export const BookingDriverFormSchema = (t: Translator) =>
   z.object({
     selectedDriverId: z.string(),
-
-    name: z.string().trim().min(2, 'Driver name is required'),
+    name: z.string().trim().min(2, t('validation.driverNameRequired')),
 
     email: z
       .email(t('validation.emailInvalid'))
       .nonempty(t('validation.emailRequired')),
 
-    phone: z.string().trim().min(6, 'Phone number is required').max(20),
+    phone: z
+      .string()
+      .trim()
+      .min(6, t('validation.phoneRequired'))
+      .max(20, t('validation.phoneInvalid')),
 
     dob: z.string().refine(
       (value) => {
@@ -110,7 +137,7 @@ export const BookingDriverFormSchema = (t: Translator) =>
         return age >= 18;
       },
       {
-        message: 'Driver must be at least 18 years old',
+        message: t('validation.driverMustBe18'),
       },
     ),
 
@@ -129,7 +156,7 @@ export const DriverDocumentsSchema = (draft: BookingDraft, t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['licenseFront'],
-          message: 'Driver license front is required',
+          message: t('validation.licenseFrontRequired'),
         });
       }
 
@@ -137,7 +164,7 @@ export const DriverDocumentsSchema = (draft: BookingDraft, t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['licenseBack'],
-          message: 'Driver license back is required',
+          message: t('validation.licenseBackRequired'),
         });
       }
 
@@ -145,7 +172,7 @@ export const DriverDocumentsSchema = (draft: BookingDraft, t: Translator) =>
         ctx.addIssue({
           code: 'custom',
           path: ['idCard'],
-          message: 'Government ID is required',
+          message: t('validation.idCardRequired'),
         });
       }
     });
@@ -155,54 +182,73 @@ export const PaymentTxidSchema = (t: Translator) =>
     txid: z
       .string()
       .trim()
-      .min(64, 'Transaction hash is required.')
-      .max(64, 'Invalid transaction hash.')
-      .regex(/^[A-Fa-f0-9]{64}$/, 'Invalid TRON transaction hash.'),
+      .min(64, t('validation.txidRequired'))
+      .max(64, t('validation.txidInvalid'))
+      .regex(/^[A-Fa-f0-9]{64}$/, t('validation.txidInvalid')),
   });
 
-const StarRatingSchema = z
-  .number()
-  .min(1, 'Please provide a rating.')
-  .max(5, 'Ratings cannot exceed 5 stars.');
+const StarRatingSchema = (t: Translator) =>
+  z
+    .number()
+    .min(1, t('validation.ratingRequired'))
+    .max(5, t('validation.ratingMax'));
 
-export const VehicleRatingSchema = z.object({
-  overall: StarRatingSchema,
-  cleanliness: StarRatingSchema,
-  comfort: StarRatingSchema,
-  condition: StarRatingSchema,
-  valueForMoney: StarRatingSchema,
-});
+export const VehicleRatingSchema = (t: Translator) =>
+  z.object({
+    overall: StarRatingSchema(t),
+    cleanliness: StarRatingSchema(t),
+    comfort: StarRatingSchema(t),
+    condition: StarRatingSchema(t),
+    valueForMoney: StarRatingSchema(t),
+  });
 
-export const RentalRatingSchema = z.object({
-  overall: StarRatingSchema,
-  communication: StarRatingSchema,
-  pickupExperience: StarRatingSchema,
-  returnExperience: StarRatingSchema,
-  professionalism: StarRatingSchema,
-});
+export const RentalRatingSchema = (t: Translator) =>
+  z.object({
+    overall: StarRatingSchema(t),
+    communication: StarRatingSchema(t),
+    pickupExperience: StarRatingSchema(t),
+    returnExperience: StarRatingSchema(t),
+    professionalism: StarRatingSchema(t),
+  });
 
-export const ReviewDetailsSchema = z.object({
-  title: z.string().trim().min(5).max(120),
-  review: z.string().trim().min(MIN_REVIEW_LENGTH).max(MAX_REVIEW_LENGTH),
-  pros: z.array(z.string().trim().min(1).max(MAX_TAG_LENGTH)).max(MAX_PROS),
-  cons: z.array(z.string().trim().min(1).max(MAX_TAG_LENGTH)).max(MAX_CONS),
-  // photos: z.array(z.instanceof(File)).max(MAX_REVIEW_IMAGES),
-  photos: z.array(z.custom<File>()).max(MAX_REVIEW_IMAGES),
-  wouldRecommend: z.boolean(),
-  wouldRentAgain: z.boolean(),
-  isAnonymous: z.boolean(),
-});
+export const ReviewDetailsSchema = (t: Translator) =>
+  z.object({
+    title: z
+      .string()
+      .trim()
+      .min(5, t('validation.reviewTitleMin'))
+      .max(120, t('validation.reviewTitleMax')),
+    review: z
+      .string()
+      .trim()
+      .min(MIN_REVIEW_LENGTH, t('validation.reviewMin'))
+      .max(MAX_REVIEW_LENGTH, t('validation.reviewMax')),
+    pros: z
+      .array(z.string().trim().min(1).max(MAX_TAG_LENGTH))
+      .max(MAX_PROS, t('validation.maxPros')),
+    cons: z
+      .array(z.string().trim().min(1).max(MAX_TAG_LENGTH))
+      .max(MAX_CONS, t('validation.maxCons')),
+    photos: z
+      .array(z.custom<File>())
+      .max(MAX_REVIEW_IMAGES, t('validation.maxReviewImages')),
+    wouldRecommend: z.boolean(),
+    wouldRentAgain: z.boolean(),
+    isAnonymous: z.boolean(),
+  });
 
-export const RatingSchema = z.object({
-  vehicle: VehicleRatingSchema,
-  rental: RentalRatingSchema,
-  details: ReviewDetailsSchema,
-});
+export const RatingSchema = (t: Translator) =>
+  z.object({
+    vehicle: VehicleRatingSchema(t),
+    rental: RentalRatingSchema(t),
+    details: ReviewDetailsSchema(t),
+  });
 
-export type RatingFormValues = z.infer<typeof RatingSchema>;
+// export type RatingFormValues = z.infer<typeof RatingSchema>;
 
-export const ProfileSchema = z.object({
-  firstName: z.string().min(2),
-  lastName: z.string().min(2),
-  phone: z.string().min(7),
-});
+export const ProfileSchema = (t: Translator) =>
+  z.object({
+    firstName: z.string().min(2, t('validation.firstNameRequired')),
+    lastName: z.string().min(2, t('validation.lastNameRequired')),
+    phone: z.string().min(7, t('validation.phoneRequired')),
+  });

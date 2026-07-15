@@ -4,6 +4,7 @@ import {useDateTimeFormatter} from "@/lib/helper/formatDate";
 import {calculateBookingTotals} from "./bookingTotals";
 import {BookingDraft} from "./BookingDraft";
 import {CarWithShop} from "@/lib/services/CarWithShop";
+import {useTranslations} from "next-intl";
 
 interface BookingCostSummaryProps {
   draft: BookingDraft;
@@ -14,6 +15,7 @@ export function BookingCostSummary({
   draft,
   carShop,
 }: BookingCostSummaryProps) {
+  const t = useTranslations('cars');
 
   const {formatCurrency} = useDateTimeFormatter();
 
@@ -23,47 +25,47 @@ export function BookingCostSummary({
     <Card>
       <CardHeader>
         <CardTitle>
-          Booking Summary
+          {t('bookingSummary')}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3">
         <Row
-          label="Daily Price"
+          label={t('dailyPrice')}
           value={formatCurrency(totals.dailyPrice, totals.currency)}
         />
 
         <Row
-          label="Rental Days"
+          label={t('rentalDays')}
           value={totals.rentalDays.toString()}
         />
 
         <Row
-          label="Rental Cost"
+          label={t('rentalCost')}
           value={formatCurrency(totals.rentalPrice, totals.currency)}
         />
         {
           draft.deliveryType === 'delivery' &&
           <Row
-            label="Delivery"
+            label={t('delivery')}
             value={formatCurrency(totals.deliveryPrice, totals.currency)}
           />
         }
 
         <Row
-          label="Tax"
+          label={t('tax')}
           value={formatCurrency(totals.tax, totals.currency)}
         />
 
         <Row
-          label="Security Deposit"
+          label={t('securityDeposit')}
           value={formatCurrency(totals.deposit, totals.currency)}
         />
 
         <Separator />
 
         <Row
-          label="Total"
+          label={t('total')}
           value={formatCurrency(totals.total, totals.currency)}
           bold
         />
