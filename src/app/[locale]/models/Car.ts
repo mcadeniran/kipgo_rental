@@ -92,7 +92,7 @@ export interface Car {
   };
 
   isApproved?: boolean;
-  createdAt: Timestamp;
+  createdAt: Date;
 
   rating: number;
   totalRatings: number;

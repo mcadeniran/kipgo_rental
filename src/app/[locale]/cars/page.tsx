@@ -239,8 +239,8 @@ export default function CarsPage() {
       case "newest":
         result.sort(
           (a, b) =>
-            b.car.createdAt.toMillis() -
-            a.car.createdAt.toMillis()
+            b.car.createdAt.getTime() -
+            a.car.createdAt.getTime()
         );
         break;
 
