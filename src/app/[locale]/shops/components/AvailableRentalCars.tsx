@@ -62,7 +62,7 @@ export default function AvailableRentalCars({cars, shop}: {cars: Car[]; shop: Re
                   <CardAction>
                     <div className="flex flex-row gap-1 items-center">
                       <Icon icon="ic:outline-star" className='text-amber-400' width={14} height={14} />
-                      {car.review?.average ?? 0}{' '}({car.review?.totalReviews ?? 0})
+                      {car.review?.average.toFixed(1) ?? 0}{' '}({car.review?.totalReviews ?? 0})
                     </div>
                   </CardAction>
                   <CardTitle>{car.brand} {car.model} {car.year}</CardTitle>

@@ -331,7 +331,21 @@
     "rentalCost": "Стоимость аренды",
     "securityDeposit": "Залог",
     "pickupMethod": "Получение в офисе",
-    "homeMethod": "Доставка по адресу"
+    "homeMethod": "Доставка по адресу",
+    "featuredFirst": "Сначала рекомендуемые",
+    "lowestPrice": "Сначала дешёвые",
+    "highestPrice": "Сначала дорогие",
+    "highestRated": "Сначала с высоким рейтингом",
+    "newest": "Сначала новые",
+    "alphabetical": "По алфавиту",
+    "maxPrice": "Максимальная цена",
+    "selectCurrencyFirst": "Сначала выберите валюту",
+    "allCities": "Все города",
+    "allCategories": "Все категории",
+    "allCurrencies": "Все валюты",
+    "clearFilters": "Сбросить фильтры",
+    "featuredOnly": "Только рекомендуемые",
+    "vehiclesFound": "{count, plural, =0 {Автомобили не найдены} one {Найден # автомобиль} few {Найдено # автомобиля} many {Найдено # автомобилей} other {Найдено # автомобиля}}"
   },
   "shops": {
     "rentalCompanies": "Компании по аренде автомобилей",
@@ -356,7 +370,17 @@
     "communication": "Коммуникация",
     "professionalism": "Профессионализм",
     "pickupExperience": "Опыт получения автомобиля",
-    "returnExperience": "Опыт возврата автомобиля"
+    "returnExperience": "Опыт возврата автомобиля",
+    "all": "Все",
+    "allCities": "Все города",
+    "district": "Район",
+    "allDistricts": "Все районы",
+    "anyRating": "Любой рейтинг",
+    "featuredFirst": "Сначала рекомендуемые",
+    "highestRated": "Сначала с высоким рейтингом",
+    "alphabetical": "По алфавиту",
+    "newest": "Сначала новые",
+    "featuredOnly": "Только рекомендуемые"
   },
   "bookings": {
     "myBookings": "Мои бронирования",

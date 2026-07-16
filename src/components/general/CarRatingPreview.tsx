@@ -12,6 +12,6 @@ export function CarRatingPreview({review}: {review: Car['review'];}) {
       width={16}
       className="text-amber-400"
     />
-    {review.average}{' '}({review.totalReviews})
+    {review.average.toFixed(1)}{' '}({review.totalReviews})
   </div>;
 }

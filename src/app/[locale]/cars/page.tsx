@@ -17,6 +17,25 @@ import {BookNowButton} from "@/components/BookNowButton";
 import {CarSpecRow} from "@/components/general/CarSpecRow";
 import {CarRatingPreview} from "@/components/general/CarRatingPreview";
 import {useTranslations} from "next-intl";
+import {useMemo, useState} from "react";
+import React from "react";
+import {Checkbox} from "@/components/ui/checkbox";
+
+export interface CarFilters {
+  search: string;
+  city: string;
+  category: string;
+  currency: string;
+  maxPrice: number | null;
+  featuredOnly: boolean;
+  sort:
+  | "featured"
+  | "price-low"
+  | "price-high"
+  | "rating"
+  | "newest"
+  | "name";
+}
 
 export default function CarsPage() {
   const results = useQueries({
@@ -43,7 +62,204 @@ export default function CarsPage() {
   errors += results[0].error?.message ?? '';
   errors += results[1].error?.message ?? '';
 
+  const [filters, setFilters] =
+    useState<CarFilters>({
+      search: "",
+      city: "",
+      category: "",
+      currency: "",
+      maxPrice: null,
+      featuredOnly: false,
+      sort: "featured",
+    });
+
+
+
   const isLoading = results.some((q) => q.isLoading);
+
+  const carWithShop =
+    buildCarsWithShop(cars, shops);
+
+  const visibleCarsWithShop = carWithShop.filter(c => c.shop.isActive === true);
+
+  const cities = useMemo(() => {
+    return [
+      ...new Set(
+        visibleCarsWithShop.map(
+          item => item.shop.city
+        )
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+  }, [visibleCarsWithShop]);
+
+  const categories = useMemo(() => {
+    return [
+      ...new Set(
+        visibleCarsWithShop.map(
+          item => item.car.carType
+        )
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+  }, [visibleCarsWithShop]);
+
+  const currencies = useMemo(() => {
+    return [
+      ...new Set(
+        visibleCarsWithShop.map(
+          item => item.car.currency
+        )
+      ),
+    ].sort();
+  }, [visibleCarsWithShop]);
+
+  const filteredCars = React.useMemo(() => {
+    let result = [...visibleCarsWithShop];
+
+    //--------------------------------------------------
+    // Search
+    //--------------------------------------------------
+
+    if (filters.search) {
+      const search =
+        filters.search.toLowerCase();
+
+      result = result.filter(item =>
+        item.car.brand
+          .toLowerCase()
+          .includes(search) ||
+
+        item.car.model
+          .toLowerCase()
+          .includes(search) ||
+
+        item.shop.name
+          .toLowerCase()
+          .includes(search)
+      );
+    }
+
+    //--------------------------------------------------
+    // City
+    //--------------------------------------------------
+
+    if (filters.city) {
+      result = result.filter(
+        item =>
+          item.shop.city === filters.city
+      );
+    }
+
+    //--------------------------------------------------
+    // Category
+    //--------------------------------------------------
+
+    if (filters.category) {
+      result = result.filter(
+        item =>
+          item.car.carType ===
+          filters.category
+      );
+    }
+
+    //--------------------------------------------------
+    // Currency
+    //--------------------------------------------------
+
+    if (filters.currency) {
+      result = result.filter(
+        item =>
+          item.car.currency ===
+          filters.currency
+      );
+    }
+
+    //--------------------------------------------------
+    // Price
+    //--------------------------------------------------
+
+    if (
+      filters.currency &&
+      filters.maxPrice !== null
+    ) {
+      result = result.filter(
+        item =>
+          item.finalPrice <=
+          filters.maxPrice!
+      );
+    }
+
+    //--------------------------------------------------
+    // Featured
+    //--------------------------------------------------
+
+    if (filters.featuredOnly) {
+      result = result.filter(
+        item => item.car.isFeatured
+      );
+    }
+
+    //--------------------------------------------------
+    // Sorting
+    //--------------------------------------------------
+
+    switch (filters.sort) {
+      case "featured":
+        result.sort((a, b) => {
+          return (
+            Number(b.car.isFeatured) -
+            Number(a.car.isFeatured)
+          );
+        });
+        break;
+
+      case "price-low":
+        result.sort(
+          (a, b) =>
+            a.finalPrice -
+            b.finalPrice
+        );
+        break;
+
+      case "price-high":
+        result.sort(
+          (a, b) =>
+            b.finalPrice -
+            a.finalPrice
+        );
+        break;
+
+      case "rating":
+        result.sort(
+          (a, b) =>
+            (b.car.review?.average ?? 0) -
+            (a.car.review?.average ?? 0)
+        );
+        break;
+
+      case "newest":
+        result.sort(
+          (a, b) =>
+            b.car.createdAt.toMillis() -
+            a.car.createdAt.toMillis()
+        );
+        break;
+
+      case "name":
+        result.sort((a, b) =>
+          `${a.car.brand} ${a.car.model}`.localeCompare(
+            `${b.car.brand} ${b.car.model}`
+          )
+        );
+        break;
+    }
+
+    return result;
+
+  }, [
+    visibleCarsWithShop,
+    filters,
+  ]);
+
 
   if (isLoading) {
     return <PageLoader />;
@@ -53,20 +269,21 @@ export default function CarsPage() {
     return <p className="">{errors}</p>;
   }
 
-  const carWithShop =
-    buildCarsWithShop(cars, shops);
-
-  const visibleCarsWithShop = carWithShop.filter(c => c.shop.isActive === true);
-
   return (
     <div className="space-y-8">
       <CarsHero />
 
-      <CarFilters />
+      <CarFilters
+        filters={filters}
+        onChange={setFilters}
+        cities={cities}
+        categories={categories}
+        currencies={currencies}
+      />
 
-      <FeaturedCars cars={visibleCarsWithShop} />
+      <FeaturedCars cars={filteredCars} />
 
-      <CarsGrid cars={visibleCarsWithShop} />
+      <CarsGrid cars={filteredCars} />
     </div>
   );
 }
@@ -94,49 +311,293 @@ function CarsHero() {
   );
 }
 
-function CarFilters() {
+interface CarFiltersProps {
+  filters: CarFilters;
+  onChange: (
+    filters: CarFilters
+  ) => void;
+  cities: string[];
+  categories: string[];
+  currencies: string[];
+}
+
+function CarFilters({filters, onChange, cities, categories, currencies, }: CarFiltersProps) {
   const t = useTranslations('cars');
+
+  const normalizeSelectValue = (
+    value: string | null
+  ): string => {
+    if (value === null || value === "all") {
+      return "";
+    }
+    return value;
+  };
+
+  const sortLabels: Record<
+    CarFilters["sort"],
+    string
+  > = {
+    featured: t("featuredFirst"),
+    "price-low": t("lowestPrice"),
+    "price-high": t("highestPrice"),
+    rating: t("highestRated"),
+    newest: t("newest"),
+    name: t("alphabetical"),
+  };
+
+  const pricePlaceholder =
+    filters.currency
+      ? `${t("maxPrice")} (${filters.currency})`
+      : t("selectCurrencyFirst");
 
   return (
     <Card>
       <CardContent className="pt-6">
+
         <div
           className="
-            grid
-            md:grid-cols-5
-            gap-4
-          "
+      grid
+      grid-cols-1
+      md:grid-cols-2
+      xl:grid-cols-7
+      gap-4"
         >
-          <Input placeholder={t('searchVehicle')} />
 
-          <Input placeholder={t('city')} />
+          {/* Search */}
 
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder={t('type')} />
+          <Input
+            value={filters.search}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                search: e.target.value,
+              })
+            }
+            placeholder={t("searchVehicle")}
+          />
+
+          {/* City */}
+
+          <Select
+            value={filters.city || "all"}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                city: normalizeSelectValue(value),
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {filters.city ||
+                  t("allCities")}
+              </SelectValue>
             </SelectTrigger>
 
             <SelectContent>
-              <SelectItem value="sedan">
-                Sedan
+
+              <SelectItem value="all">
+                {t("allCities")}
               </SelectItem>
 
-              <SelectItem value="suv">
-                SUV
-              </SelectItem>
+              {cities.map(city => (
+                <SelectItem
+                  key={city}
+                  value={city}
+                >
+                  {city}
+                </SelectItem>
+              ))}
 
-              <SelectItem value="luxury">
-                Luxury
-              </SelectItem>
             </SelectContent>
           </Select>
 
-          <Input placeholder="Max Price" />
+          {/* Category */}
 
-          <Button>
-            {t('search')}
+          <Select
+            value={filters.category || "all"}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                category: normalizeSelectValue(value),
+              })
+            }
+          >
+
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {filters.category ||
+                  t("allCategories")}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+
+              <SelectItem value="all">
+                {t("allCategories")}
+              </SelectItem>
+
+              {categories.map(category => (
+                <SelectItem
+                  key={category}
+                  value={category}
+                >
+                  {category}
+                </SelectItem>
+              ))}
+
+            </SelectContent>
+
+          </Select>
+
+          {/* Currency */}
+
+          <Select
+            value={filters.currency || "all"}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                currency: normalizeSelectValue(value),
+                maxPrice: null,
+              })
+            }
+          >
+
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {filters.currency ||
+                  t("allCurrencies")}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+
+              <SelectItem value="all">
+                {t("allCurrencies")}
+              </SelectItem>
+
+              {currencies.map(currency => (
+                <SelectItem
+                  key={currency}
+                  value={currency}
+                >
+                  {currency}
+                </SelectItem>
+              ))}
+
+            </SelectContent>
+
+          </Select>
+
+          {/* Max Price */}
+
+          <Input
+            type="number"
+            disabled={!filters.currency}
+            value={filters.maxPrice ?? ""}
+            placeholder={pricePlaceholder}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                maxPrice:
+                  e.target.value === ""
+                    ? null
+                    : Number(e.target.value),
+              })
+            }
+          />
+
+          {/* Sort */}
+
+          <Select
+            value={filters.sort}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                sort: value as CarFilters["sort"],
+              })
+            }
+          >
+
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {sortLabels[filters.sort]}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+
+              <SelectItem value="featured">
+                {t("featuredFirst")}
+              </SelectItem>
+
+              <SelectItem value="price-low">
+                {t("lowestPrice")}
+              </SelectItem>
+
+              <SelectItem value="price-high">
+                {t("highestPrice")}
+              </SelectItem>
+
+              <SelectItem value="rating">
+                {t("highestRated")}
+              </SelectItem>
+
+              <SelectItem value="newest">
+                {t("newest")}
+              </SelectItem>
+
+              <SelectItem value="name">
+                {t("alphabetical")}
+              </SelectItem>
+
+            </SelectContent>
+
+          </Select>
+
+          {/* Clear */}
+
+          <Button
+            variant="outline"
+            onClick={() =>
+              onChange({
+                search: "",
+                city: "",
+                category: "",
+                currency: "",
+                maxPrice: null,
+                featuredOnly: false,
+                sort: "featured",
+              })
+            }
+          >
+            {t("clearFilters")}
           </Button>
+
         </div>
+
+        <div className="flex items-center gap-2 mt-5">
+
+          <Checkbox
+            id="featured"
+            checked={filters.featuredOnly}
+            onCheckedChange={(checked) =>
+              onChange({
+                ...filters,
+                featuredOnly: checked === true,
+              })
+            }
+          />
+
+          <label
+            htmlFor="featured"
+            className="cursor-pointer text-sm"
+          >
+            {t("featuredOnly")}
+          </label>
+
+        </div>
+
       </CardContent>
     </Card>
   );
@@ -230,9 +691,15 @@ function CarsGrid({
   const t = useTranslations('cars');
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">
-        {t('availableVehicles')}
-      </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">
+          {t("availableVehicles")}
+        </h2>
+
+        <p className="text-sm text-muted-foreground">
+          {t("vehiclesFound", {count: cars.length})}
+        </p>
+      </div>
 
       <div
         className="
@@ -311,8 +778,6 @@ function CarCard({
             </p>
 
             <CarSpecRow transmission={item.car.transmission} fuel={item.car.fuel} seats={item.car.seats} />
-
-
 
             <div className="flex justify-between items-center pt-2">
               <div>

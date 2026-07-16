@@ -112,7 +112,7 @@ export default function ShopDetailsPage() {
                 icon="material-symbols:star"
                 className="text-yellow-400"
               />
-              {shop.review?.overall ?? 0}
+              {shop.review?.overall.toFixed(1) ?? 0}
               {' '}({shop.review?.totalReviews ?? 0})
             </div>
           </div>

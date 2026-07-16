@@ -6,19 +6,141 @@ import {Card, CardContent} from '@/components/ui/card';
 import {Input} from '@/components/ui/input';
 import {getAllRentalShops} from '@/lib/services/rentalService';
 import {useQuery} from '@tanstack/react-query';
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {RentalShop} from '../models/RentalShop';
 import {Link} from '@/i18n/navigation';
 import Image from 'next/image';
 import {Badge} from '@/components/ui/badge';
 import {isShopFeatured} from '@/lib/helper/isShopFeatured';
 import {useTranslations} from 'next-intl';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Checkbox} from '@/components/ui/checkbox';
+import {Icon} from '@iconify/react';
+
+export interface RentalShopFilters {
+  search: string;
+  city: string;
+  district: string;
+  featuredOnly: boolean;
+  minRating: number;
+  sort:
+  | "featured"
+  | "rating"
+  | "name"
+  | "newest";
+}
 
 export default function AllShopsPage() {
   const {data: shops = [], isLoading, error, isError} = useQuery({
     queryKey: ['shops'],
     queryFn: getAllRentalShops
   });
+
+
+
+  const [filters, setFilters] = useState<RentalShopFilters>({
+    search: "",
+    city: "",
+    district: "",
+    featuredOnly: false,
+    minRating: 0,
+    sort: "featured",
+  });
+
+  const filteredShops = useMemo(() => {
+    let result = [...shops];
+
+    if (filters.search) {
+      const search = filters.search.toLowerCase();
+
+      result = result.filter(shop =>
+        shop.name.toLowerCase().includes(search) ||
+        shop.description.toLowerCase().includes(search)
+      );
+    }
+
+    if (filters.city) {
+      result = result.filter(
+        shop =>
+          shop.city.toLowerCase() ===
+          filters.city.toLowerCase()
+      );
+    }
+
+    if (filters.district) {
+      result = result.filter(
+        shop =>
+          shop.district.toLowerCase() ===
+          filters.district.toLowerCase()
+      );
+    }
+
+    if (filters.featuredOnly) {
+      result = result.filter(shop => isShopFeatured({shop}));
+    }
+
+    if (filters.minRating > 0) {
+      result = result.filter(
+        shop => (shop.review?.overall ?? 0) >= filters.minRating
+      );
+    }
+
+    switch (filters.sort) {
+      case "rating":
+        result.sort((a, b) => (b.review?.overall ?? 0) - (a.review?.overall ?? 0));
+        break;
+
+      case "name":
+        result.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        break;
+
+      case "featured":
+        result.sort((a, b) => {
+          return Number(isShopFeatured({shop: b})) -
+            Number(isShopFeatured({shop: a}));
+        });
+        break;
+
+      case "newest":
+        result.sort(
+          (a, b) =>
+            b.createdAt.getTime() -
+            a.createdAt.getTime()
+        );
+        break;
+    }
+
+    return result;
+
+  }, [shops, filters]);
+
+  const cities = React.useMemo(() => {
+    return [
+      ...new Set(
+        shops
+          .map((shop) => shop.city)
+          .filter((city): city is string => !!city)
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+  }, [shops]);
+
+  const districts = React.useMemo(() => {
+    return [
+      ...new Set(
+        shops
+          .filter(
+            (shop) =>
+              !filters.city || shop.city === filters.city
+          )
+          .map((shop) => shop.district)
+          .filter(
+            (district): district is string => !!district
+          )
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+  }, [shops, filters.city]);
 
   if (isLoading) return <PageLoader />;
 
@@ -46,13 +168,20 @@ export default function AllShopsPage() {
     <div className="space-y-8">
       <RentalShopsHero />
 
-      <RentalShopFilters />
+      {/* <RentalShopFilters /> */}
+      <RentalShopFilters
+        filters={filters}
+        onChange={setFilters}
+        cities={cities}
+        districts={districts}
+      />
 
       <FeaturedShops
         shops={featuredShops}
       />
 
-      <RentalShopGrid shops={shops} />
+      {/* <RentalShopGrid shops={shops} /> */}
+      <RentalShopGrid shops={filteredShops} />
     </div>
   );
 }
@@ -74,19 +203,210 @@ function RentalShopsHero() {
   );
 }
 
-function RentalShopFilters() {
+interface RentalShopFiltersProps {
+  filters: RentalShopFilters;
+  cities: string[],
+  districts: string[],
+  onChange: (
+    filters: RentalShopFilters
+  ) => void;
+}
+
+function RentalShopFilters({filters, onChange, cities, districts}: RentalShopFiltersProps) {
   const t = useTranslations('shops');
+
+  const ratingLabels: Record<string, string> = {
+    "0": t("anyRating"),
+    "3": "⭐ 3+",
+    "4": "⭐ 4+",
+    "4.5": "⭐ 4.5+",
+    "5": "⭐⭐⭐⭐⭐",
+  };
+
+  const sortLabels: Record<RentalShopFilters["sort"], string> = {
+    featured: t("featuredFirst"),
+    rating: t("highestRated"),
+    name: t("alphabetical"),
+    newest: t("newest"),
+  };
+
+  const normalizeSelectValue = (value: string | null): string => {
+    if (value === null || value === "all") {
+      return "";
+    }
+
+    return value;
+  };
+
   return (
     <Card>
       <CardContent className="pt-6">
-        <div className="flex flex-col md:flex-row gap-4">
-          <Input placeholder={t('searchCompany')} />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
+          <Input
+            value={filters.search}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                search: e.target.value,
+              })
+            }
+            placeholder={t("searchCompany")}
+          />
 
-          <Input placeholder={t('city')} />
+          <Select
+            value={filters.city || "all"}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                city: normalizeSelectValue(value),
+                district: "", // Reset district when city changes
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {filters.city || t("allCities")}
+              </SelectValue>
+            </SelectTrigger>
 
-          <Button>
-            {t('search')}
-          </Button>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("allCities")}
+              </SelectItem>
+
+              {cities.map((city) => (
+                <SelectItem
+                  key={city}
+                  value={city}
+                >
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.district || "all"}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                district: normalizeSelectValue(value),
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {filters.district || t("allDistricts")}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem value="all">
+                {t("allDistricts")}
+              </SelectItem>
+
+              {districts.map((district) => (
+                <SelectItem
+                  key={district}
+                  value={district}
+                >
+                  {district}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.minRating.toString()}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                minRating: Number(value),
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {ratingLabels[filters.minRating.toString()]}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem value="0">
+                {t("anyRating")}
+              </SelectItem>
+
+              <SelectItem value="3">
+                ⭐ 3+
+              </SelectItem>
+
+              <SelectItem value="4">
+                ⭐ 4+
+              </SelectItem>
+
+              <SelectItem value="4.5">
+                ⭐ 4.5+
+              </SelectItem>
+
+              <SelectItem value="5">
+                ⭐⭐⭐⭐⭐
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.sort}
+            onValueChange={(value) =>
+              onChange({
+                ...filters,
+                sort: value as RentalShopFilters["sort"],
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue>
+                {sortLabels[filters.sort]}
+              </SelectValue>
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectItem value="featured">
+                {t("featuredFirst")}
+              </SelectItem>
+
+              <SelectItem value="rating">
+                {t("highestRated")}
+              </SelectItem>
+
+              <SelectItem value="name">
+                {t("alphabetical")}
+              </SelectItem>
+
+              <SelectItem value="newest">
+                {t("newest")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="featured"
+              checked={filters.featuredOnly}
+              onCheckedChange={(checked) =>
+                onChange({
+                  ...filters,
+                  featuredOnly: checked === true,
+                })
+              }
+            />
+
+            <label
+              htmlFor="featured"
+              className="text-sm font-medium leading-none cursor-pointer"
+            >
+              {t("featuredOnly")}
+            </label>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -248,8 +568,13 @@ function RentalShopCard({
                 {shop.district}
               </p>
 
-              <div className="flex items-center gap-1 mt-1">
-                ⭐ {shop.rating}
+              <div className="flex items-center gap-2">
+                <Icon
+                  icon="material-symbols:star"
+                  className="text-yellow-400"
+                />
+                {shop.review?.overall.toFixed(1) ?? 0}
+                {' '}({shop.review?.totalReviews ?? 0})
               </div>
             </div>
           </div>

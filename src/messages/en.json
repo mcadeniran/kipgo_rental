@@ -320,7 +320,21 @@
     "rentalCost": "Rental Cost",
     "securityDeposit": "Security Deposit",
     "pickupMethod": "Office Pickup",
-    "homeMethod": "Home Delivery"
+    "homeMethod": "Home Delivery",
+    "featuredFirst": "Featured First",
+    "lowestPrice": "Lowest Price",
+    "highestPrice": "Highest Price",
+    "highestRated": "Highest Rated",
+    "newest": "Newest",
+    "alphabetical": "Alphabetical",
+    "maxPrice": "Max Price",
+    "selectCurrencyFirst": "Select Currency First",
+    "allCities": "All Cities",
+    "allCategories": "All Categories",
+    "allCurrencies": "All Currencies",
+    "clearFilters": "Clear Filters",
+    "featuredOnly": "Featured Only",
+    "vehiclesFound": "{count, plural, =0 {No vehicles found} one {# vehicle found} other {# vehicles found}}"
   },
   "shops": {
     "rentalCompanies": "Rental Companies",
@@ -345,7 +359,18 @@
     "communication": "Communication",
     "professionalism": "Professionalism",
     "pickupExperience": "Pickup Experience",
-    "returnExperience": "Return Experience"
+    "returnExperience": "Return Experience",
+
+    "all": "All",
+    "allCities": "All Cities",
+    "district": "District",
+    "allDistricts": "All Districts",
+    "anyRating": "Any Rating",
+    "featuredFirst": "Featured First",
+    "highestRated": "Highest Rated",
+    "alphabetical": "Alphabetical",
+    "newest": "Newest",
+    "featuredOnly": "Featured Only"
   },
   "bookings": {
     "myBookings": "My Bookings",

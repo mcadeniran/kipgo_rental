@@ -331,7 +331,21 @@
     "rentalCost": "Kiralama Ücreti",
     "securityDeposit": "Depozito",
     "pickupMethod": "Ofisten Teslim Alma",
-    "homeMethod": "Adrese Teslim"
+    "homeMethod": "Adrese Teslim",
+    "featuredFirst": "Öne Çıkanlar Önce",
+    "lowestPrice": "En Düşük Fiyat",
+    "highestPrice": "En Yüksek Fiyat",
+    "highestRated": "En Yüksek Puanlı",
+    "newest": "En Yeni",
+    "alphabetical": "Alfabetik",
+    "maxPrice": "Maksimum Fiyat",
+    "selectCurrencyFirst": "Önce Para Birimini Seçin",
+    "allCities": "Tüm Şehirler",
+    "allCategories": "Tüm Kategoriler",
+    "allCurrencies": "Tüm Para Birimleri",
+    "clearFilters": "Filtreleri Temizle",
+    "featuredOnly": "Yalnızca Öne Çıkanlar",
+    "vehiclesFound": "{count, plural, =0 {Araç bulunamadı} other {# araç bulundu}}"
   },
   "shops": {
     "rentalCompanies": "Araç Kiralama Firmaları",
@@ -356,7 +370,17 @@
     "communication": "İletişim",
     "professionalism": "Profesyonellik",
     "pickupExperience": "Teslim Alma Deneyimi",
-    "returnExperience": "İade Deneyimi"
+    "returnExperience": "İade Deneyimi",
+    "all": "Tümü",
+    "allCities": "Tüm Şehirler",
+    "district": "İlçe",
+    "allDistricts": "Tüm İlçeler",
+    "anyRating": "Tüm Puanlar",
+    "featuredFirst": "Öne Çıkanlar Önce",
+    "highestRated": "En Yüksek Puanlı",
+    "alphabetical": "Alfabetik",
+    "newest": "En Yeni",
+    "featuredOnly": "Yalnızca Öne Çıkanlar"
   },
   "bookings": {
     "myBookings": "Rezervasyonlarım",
