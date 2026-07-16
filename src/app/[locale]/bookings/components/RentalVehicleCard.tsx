@@ -50,7 +50,7 @@ export function RentalVehicleCard({
           <div className="flex-1 space-y-3">
 
             <div>
-              <h2 className="text-xl font-semibold cursor-pointer hover:underline" onClick={() => router.push(`/shops/${booking.shopId}`)}>
+              <h2 className="text-xl font-semibold cursor-pointer hover:underline" onClick={() => router.push(`/cars/${booking.carId}`)}>
                 {booking.car.brand}{" "}
                 {booking.car.model}
               </h2>

@@ -187,7 +187,7 @@ export const PaymentTxidSchema = (t: Translator) =>
       .regex(/^[A-Fa-f0-9]{64}$/, t('validation.txidInvalid')),
   });
 
-const StarRatingSchema = (t: Translator) =>
+export const StarRatingSchema = (t: Translator) =>
   z
     .number()
     .min(1, t('validation.ratingRequired'))
@@ -245,6 +245,7 @@ export const RatingSchema = (t: Translator) =>
   });
 
 // export type RatingFormValues = z.infer<typeof RatingSchema>;
+export type RatingFormValues = z.infer<ReturnType<typeof RatingSchema>>;
 
 export const ProfileSchema = (t: Translator) =>
   z.object({
