@@ -31,8 +31,23 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
-import {CarFilters} from "../cars/page";
 import {cn} from "@/lib/utils";
+
+interface CarFilters {
+  search: string;
+  city: string;
+  category: string;
+  currency: string;
+  maxPrice: number | null;
+  featuredOnly: boolean;
+  sort:
+  | "featured"
+  | "price-low"
+  | "price-high"
+  | "rating"
+  | "newest"
+  | "name";
+}
 
 interface HomeCarSearchProps {
   cities: string[];
