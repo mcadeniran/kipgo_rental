@@ -23,10 +23,9 @@ export default function NavLink({
       href={href}
       className={cn(
         "group relative py-2 text-sm font-medium transition-colors duration-300",
-
         active
           ? "text-k-primary"
-          : "text-muted-foreground hover:text-k-primary"
+          : "text-black/80 hover:text-k-primary"
       )}
     >
       {children}

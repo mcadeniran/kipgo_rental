@@ -94,18 +94,6 @@ export default function Navbar() {
                   render={<NotificationBell />}
                 />
               }
-              {/* {authenticated
-                ?
-                <ProfileMenu />
-                :
-                <Button
-                  variant='link'
-                  className='hover:underline cursor-pointer hover:text-k-primary decoration-k-primary'
-                  onClick={() => router.push('/auth/login')}
-                >
-                  Sign In
-                </Button>
-              } */}
             </>
           }
           <MobileNav />

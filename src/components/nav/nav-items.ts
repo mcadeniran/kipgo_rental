@@ -5,6 +5,9 @@ import {
   Phone,
   Home,
   UserCog,
+  BusFront,
+  Hotel,
+  Map,
 } from 'lucide-react';
 
 import { AuthStatus } from '@/types/auth';
@@ -29,9 +32,36 @@ export const navItems: NavItem[] = [
   },
 
   {
-    label: 'nav.rentals',
+    label: 'nav.shuttle',
+    href: '/shuttle',
+    icon: BusFront,
+    guest: true,
+    authenticated: true,
+    admin: true,
+  },
+
+  {
+    label: 'nav.carRental',
     href: '/cars',
     icon: CarFront,
+    guest: true,
+    authenticated: true,
+    admin: true,
+  },
+
+  {
+    label: 'nav.hotels',
+    href: '/hotels',
+    icon: Hotel,
+    guest: true,
+    authenticated: true,
+    admin: true,
+  },
+
+  {
+    label: 'nav.destinations',
+    href: '/tours',
+    icon: Map,
     guest: true,
     authenticated: true,
     admin: true,

@@ -25,8 +25,8 @@ export default function NavbarLogo() {
           KIPGO
         </h2>
 
-        <p className="text-xs text-muted-foreground">
-          Rentals
+        <p className="text-[10px] text-k-primary italic">
+          Travel made easy
         </p>
       </div>
     </Link>

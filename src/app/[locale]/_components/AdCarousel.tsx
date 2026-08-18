@@ -31,7 +31,7 @@ export default function AdCarousel({
               href={ad.linkUrl}
               target="_blank"
             >
-              <div className="relative h-55 md:h-80 overflow-hidden rounded-2xl">
+              <div className="relative h-55 md:h-55 overflow-hidden rounded-2xl">
                 {ad.bannerUrl && (
                   <Image
                     src={ad.bannerUrl}
@@ -41,20 +41,9 @@ export default function AdCarousel({
                   />
                 )}
 
-                <div className="
-                  absolute inset-0
-                  bg-linear-to-r
-                  from-black/70
-                  to-black/20
-                " />
+                <div className="absolute inset-0 bg-linear-to-r  from-black/70  to-black/20" />
 
-                <div className="
-                  absolute inset-0
-                  flex flex-col
-                  justify-center
-                  p-8
-                  text-white
-                ">
+                <div className="absolute inset-0 flex flex-col justify-center p-8  text-white">
                   <h2 className="text-2xl md:text-4xl font-bold">
                     {ad.title}
                   </h2>

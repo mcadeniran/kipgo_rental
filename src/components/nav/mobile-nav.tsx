@@ -73,7 +73,7 @@ export default function MobileNav() {
 
               <div>
                 <p className="font-semibold tracking-widest text-k-primary">KIPGO</p>
-                <p className="text-xs text-muted-foreground">Rentals</p>
+                <p className="text-[10px] italic text-k-primary">Travel made easy</p>
               </div>
             </Link>
           </div>
