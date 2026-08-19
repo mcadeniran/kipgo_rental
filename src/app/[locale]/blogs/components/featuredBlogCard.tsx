@@ -12,7 +12,7 @@ export default function FeaturedBlogCard({
   const t = useTranslations('blog');
   return (
     <Link
-      href={`/blogs/${blog.id}`}
+      href={`/blogs/${blog.slug}`}
       className="
         group
         overflow-hidden

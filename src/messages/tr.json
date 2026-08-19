@@ -836,5 +836,23 @@
   "homeSeo": {
     "title": "Kipgo – Kuzey Kıbrıs'ta Araç Kiralama, Havalimanı Transferleri ve Seyahat Hizmetleri",
     "description": "Kuzey Kıbrıs genelinde araç kiralama, havalimanı transferleri, servis hizmetleri, oteller ve seyahat hizmetlerini keşfedin. Kipgo ile kolayca rezervasyon yapın."
+  },
+  "carSeo": {
+    "carNotFound": "Araç Bulunamadı | Kipgo",
+    "title": "{location} Bölgesinde {carName} Kiralama",
+    "description": "Kuzey Kıbrıs'ın {location} bölgesinde {carName} aracını Kipgo ile kiralayın. Fiyatları, özellikleri, teknik özellikleri ve müsaitlik durumunu inceleyin.",
+    "nc": "Kuzey Kıbrıs"
+  },
+
+  "shopSeo": {
+    "shopNotFound": "Kiralama Şirketi Bulunamadı | Kipgo",
+    "title": "{location} Bölgesinde {shopName} Araç Kiralama",
+    "description": "Kuzey Kıbrıs'ın {location} bölgesinde {shopName} üzerinden Kipgo ile araç kiralayın. Müsait araçları, kiralama seçeneklerini ve hizmetleri keşfedin.",
+    "nc": "Kuzey Kıbrıs"
+  },
+
+  "blogSeo": {
+    "blogNotFound": "Blog Bulunamadı | Kipgo",
+    "description": "Kipgo seyahat blogunda {blogTitle} başlıklı yazıyı okuyun."
   }
 }

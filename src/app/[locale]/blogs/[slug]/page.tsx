@@ -1,96 +1,180 @@
-"use client";
+import type {Metadata} from "next";
+import {notFound} from "next/navigation";
 
-import {useParams} from "next/navigation";
-import {useQuery} from "@tanstack/react-query";
-import Image from "next/image";
-import {getBlogById} from "@/lib/services/blogService";
-import {Badge} from "@/components/ui/badge";
-import PageLoader from "@/components/general/PageLoader";
-import TranslatedBlogCategories from "@/lib/translations/translatedBlogCategories";
+import {getBlogBySlug} from "@/lib/services/blogService";
 
-export default function BlogDetailsPage() {
-  const params = useParams();
-  const id = params.slug as string;
+import {
+  getLanguageAlternates,
+  getLocalizedUrl,
+} from "@/lib/seo";
 
-  const {
-    data: blog,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["blog", id],
-    queryFn: () => getBlogById(id),
-    enabled: !!id,
+import BlogDetailsClient from "./BlogDetailsClient";
+import BlogStructuredData from "./BlogStructuredData";
+import {getTranslations} from "next-intl/server";
+
+interface PageProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const {locale, slug} = await params;
+
+  const t = await getTranslations({
+    locale,
+    namespace: "blogSeo",
   });
 
-  if (isLoading) return <PageLoader />;
+  const blog = await getBlogBySlug(slug);
 
-  if (isError || !blog) {
-    return (
-      <div className="p-6 text-red-500">
-        {error?.message || "Blog not found"}
-      </div>
-    );
+  if (!blog) {
+    return {
+      title: t('blogNotFound'),
+
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const title = blog.title;
+
+  const description =
+    blog.excerpt?.trim() ||
+    t('description', {blogTitle: blog.title});
+
+  const path = `/blogs/${blog.slug}`;
+
+  const url = getLocalizedUrl(
+    locale,
+    path
+  );
+
+  return {
+    title,
+
+    description,
+
+    authors: blog.authorName
+      ? [
+        {
+          name: blog.authorName,
+        },
+      ]
+      : undefined,
+
+    keywords:
+      blog.tags?.length
+        ? blog.tags
+        : undefined,
+
+    alternates: {
+      canonical: url,
+
+      languages: {
+        ...getLanguageAlternates(path),
+
+        "x-default":
+          getLocalizedUrl(
+            "en",
+            path
+          ),
+      },
+    },
+
+    openGraph: {
+      type: "article",
+
+      siteName: "Kipgo",
+
+      title,
+
+      description,
+
+      url,
+
+      ...(blog.coverUrl
+        ? {
+          images: [
+            {
+              url: blog.coverUrl,
+              alt: blog.title,
+            },
+          ],
+        }
+        : {}),
+
+      ...(blog.publishedAt
+        ? {
+          publishedTime:
+            blog.publishedAt.toISOString(),
+        }
+        : {}),
+
+      ...(blog.updatedAt
+        ? {
+          modifiedTime:
+            blog.updatedAt.toISOString(),
+        }
+        : {}),
+
+      ...(blog.authorName
+        ? {
+          authors: [
+            blog.authorName,
+          ],
+        }
+        : {}),
+
+      section: blog.category,
+    },
+
+    twitter: {
+      card: "summary_large_image",
+
+      title,
+
+      description,
+
+      ...(blog.coverUrl
+        ? {
+          images: [blog.coverUrl],
+        }
+        : {}),
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+export default async function BlogDetailsPage({
+  params,
+}: PageProps) {
+  const {slug} = await params;
+
+  const blog = await getBlogBySlug(slug);
+
+  if (!blog) {
+    notFound();
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      {/* HERO IMAGE */}
-      <div className="relative w-full aspect-video rounded-xl overflow-hidden">
-        <Image
-          src={blog.coverUrl}
-          alt={blog.title}
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
-      {/* META */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Badge className="capitalize">
-            <TranslatedBlogCategories category={blog.category} />
-          </Badge>
-
-          <span className="text-xs text-muted-foreground">
-            {blog.createdAt
-              ? new Date(
-                blog.createdAt
-              ).toLocaleDateString()
-              : ""}
-          </span>
-
-          {/* <span className="text-xs text-muted-foreground">
-            • {blog.viewCount} views
-          </span> */}
-        </div>
-
-        {/* TITLE */}
-        <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-          {blog.title}
-        </h1>
-
-        {/* EXCERPT */}
-        <p className="text-muted-foreground text-lg">
-          {blog.excerpt}
-        </p>
-      </div>
-
-      {/* CONTENT */}
-      <article
-        className="
-          prose
-          prose-lg
-          max-w-none
-          prose-headings:font-bold
-          prose-img:rounded-lg
-          prose-p:leading-relaxed
-        "
-        dangerouslySetInnerHTML={{
-          __html: blog.content,
-        }}
+    <>
+      <BlogStructuredData
+        blog={blog}
       />
-    </div>
+
+      <BlogDetailsClient
+        blog={blog}
+      />
+    </>
   );
 }

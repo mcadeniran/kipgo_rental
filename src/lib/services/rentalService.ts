@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { rentalShopConverter } from '../converters/rentalShopConverter';
 import { RentalShop } from '@/app/[locale]/models/RentalShop';
+import { getCarsByShop } from './carService';
 
 // ✅ Get All Rental Shops
 export async function getAllRentalShops(): Promise<RentalShop[]> {
@@ -54,4 +55,31 @@ export async function getFeaturedShops(): Promise<RentalShop[]> {
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => doc.data());
+}
+
+// export async function getShopPageData(shopId: string) {
+//   const shop = await getRentalShopById(shopId);
+
+//   if (!shop) {
+//     return null;
+//   }
+
+//   return {
+//     shop,
+//   };
+// }
+
+export async function getShopPageData(shopId: string) {
+  const shop = await getRentalShopById(shopId);
+
+  if (!shop) {
+    return null;
+  }
+
+  const cars = await getCarsByShop(shopId);
+
+  return {
+    shop,
+    cars,
+  };
 }

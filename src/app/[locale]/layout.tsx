@@ -145,7 +145,7 @@ export default async function RootLayout({
       lang={locale}
       className={`${openSans.variable} ${roboto.variable}`}
     >
-      <body className="antialiased min-h-screen flex flex-col">
+      <body className="antialiased min-h-screen flex flex-col" suppressHydrationWarning={true}>
         <AuthProvider>
           <NextIntlClientProvider>
             <QueryProvider>

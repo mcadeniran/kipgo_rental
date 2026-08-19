@@ -827,7 +827,20 @@
     "title": "Kipgo – Car Rentals, Airport Transfers & Travel Services in Northern Cyprus",
     "description": "Discover car rentals, airport transfers, shuttle services, hotels and travel services across Northern Cyprus. Book easily with Kipgo."
   },
-  "airportTransferDescription": "Book reliable airport transfers and shuttle services across Northern Cyprus.",
-  "exploreOurServices": "Explore Our Services",
-  "exploreOurServicesDescription": "Everything you need for a convenient trip across Northern Cyprus."
+  "carSeo": {
+    "carNotFound": "Car Not Found | Kipgo",
+    "title": "{carName} Rental in {location}",
+    "description": "Rent a {carName} in {location}, Northern Cyprus with Kipgo. View prices, features, specifications and availability.",
+    "nc": "Northern Cyprus"
+  },
+  "shopSeo": {
+    "shopNotFound": "Rental Shop Not Found | Kipgo",
+    "title": "{shopName} Car Rental in {location}",
+    "description": "Rent a car from {shopName} in {location}, Northern Cyprus with Kipgo. Explore available vehicles, rental options and services.",
+    "nc": "Northern Cyprus"
+  },
+  "blogSeo": {
+    "blogNotFound": "Blog Not Found | Kipgo",
+    "description": "Read {blogTitle} on the Kipgo travel blog."
+  }
 }

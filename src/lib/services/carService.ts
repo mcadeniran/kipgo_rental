@@ -68,10 +68,20 @@ export async function getFeaturedCars(): Promise<Car[]> {
 }
 
 export async function getCarWithShop(carId: string) {
+  const data = await getCarPageData(carId);
+
+  if (!data) {
+    throw new Error('Car not found');
+  }
+
+  return data;
+}
+
+export async function getCarPageData(carId: string) {
   const car = await getCarById(carId);
 
   if (!car) {
-    throw new Error('Car not found');
+    return null;
   }
 
   const shop = await getRentalShopById(car.shopId);

@@ -13,7 +13,7 @@ export default function BlogGridCard({blog}: {blog: Blog;}) {
   const t = useTranslations('home');
 
   return (
-    <div onClick={() => router.push(`/blogs/${blog.id}`)} className='flex flex-col h-full overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-lg'>
+    <div onClick={() => router.push(`/blogs/${blog.slug}`)} className='flex flex-col h-full overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-lg'>
       <div className="relative h-52 w-full">
         <Image
           src={blog.coverUrl}

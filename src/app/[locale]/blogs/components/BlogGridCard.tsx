@@ -11,7 +11,7 @@ export default function BlogGridCard({
 }) {
   return (
     <Link
-      href={`/blogs/${blog.id}`}
+      href={`/blogs/${blog.slug}`}
       className="
         group
         flex
