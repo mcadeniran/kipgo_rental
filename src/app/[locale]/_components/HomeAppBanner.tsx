@@ -10,6 +10,8 @@ import appleEn from '../../../../public/apple_en.svg';
 import appleTr from '../../../../public/apple_tr.svg';
 import appleRu from '../../../../public/apple_ru.svg';
 
+import qr from '../../../../public/images/app/kipgo-download-qr.png';
+
 interface AppFeature {
   title: string;
   icon: React.ElementType;
@@ -116,15 +118,15 @@ export default function HomeAppBanner() {
 
           {/* QR */}
 
-          {/* <div className="hidden h-12 w-12 shrink-0 rounded-md  bg-white p-1 sm:block">
+          <div className="hidden h-12 w-12 shrink-0 rounded-sm  bg-white p-0.5 sm:block">
             <Image
-              src="/images/app/kipgo-app-qr.png"
+              src={qr}
               alt={t("scanToDownloadTheApp")}
               width={48}
               height={48}
               className="h-full w-full object-contain"
             />
-          </div> */}
+          </div>
         </div>
       </div>
     </section>

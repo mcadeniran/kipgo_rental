@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import logo from "../../../public/logo.png";
+import {useTranslations} from "next-intl";
 
 export default function NavbarLogo() {
+  const h = useTranslations('home');
   return (
     <Link
       href="/"
@@ -26,7 +28,7 @@ export default function NavbarLogo() {
         </h2>
 
         <p className="text-[10px] text-k-primary italic">
-          Travel made easy
+          {h('travelMadeEasy')}
         </p>
       </div>
     </Link>

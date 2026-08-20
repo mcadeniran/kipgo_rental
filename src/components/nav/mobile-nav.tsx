@@ -22,6 +22,7 @@ import {Marker, MarkerContent} from "../ui/marker";
 
 export default function MobileNav() {
   const t = useTranslations('nav');
+  const h = useTranslations('home');
   const [open, setOpen] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [warningOpen, setWarningOpen] = useState(false);
@@ -73,7 +74,7 @@ export default function MobileNav() {
 
               <div>
                 <p className="font-semibold tracking-widest text-k-primary">KIPGO</p>
-                <p className="text-[10px] italic text-k-primary">Travel made easy</p>
+                <p className="text-[10px] italic text-k-primary">{h('travelMadeEasy')}</p>
               </div>
             </Link>
           </div>
